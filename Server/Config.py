@@ -63,8 +63,8 @@ class Config:
         res = self.get(switch)
         if not res:
             cursor.execute("INSERT INTO config VALUES(?, ?)", (switch, value))
-            self.conn.commit()
         else:
             cursor.execute("UPDATE config SET value=? WHERE switch=?", \
                                (value, switch))
-            self.conn.commit()            
+        self.conn.commit()            
+
