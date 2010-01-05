@@ -51,6 +51,14 @@ class Config:
             return None
         return res[0][1]
 
+    def getInteger(self, switch):
+        res = None
+        try:
+            res = int(self.get(switch))
+        except TypeError as te:
+            pass
+        return res
+
 
     def set(self, switch, value):
         """
