@@ -1,3 +1,5 @@
 *.pem
 *.crt
 *.pyc
+*.db2
+*.sql
