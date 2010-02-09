@@ -2,4 +2,6 @@
 *.crt
 *.pyc
 *.db2
-*.sql
+*.sql/apache/test.xml
+certs/
+Server/XML_Server_config.sql
