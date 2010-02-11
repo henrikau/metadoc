@@ -5,3 +5,4 @@
 *.sql/apache/test.xml
 certs/
 Server/XML_Server_config.sql
+/Client/metadoc.conf
