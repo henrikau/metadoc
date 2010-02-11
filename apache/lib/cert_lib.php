@@ -1,4 +1,26 @@
 <?php
+/**
+ * PHP version 5.
+ *
+ * LICENSE: GPLv3
+ *
+ *            cert_lib.php is part of MetaDoc
+ *
+ * All of MetaDoc is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * MetaDoc is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 
 /**
  * getHostFromCert return the name of the host owning the certificate.
@@ -30,7 +52,7 @@ function getHostFromCert($cert)
 	}
 
 	if (!is_readable($cert_path)) {
-		FW::addMsg("Cannot read $cert_path. Aborting. Please fix.");
+		echo "Cannot read $cert_path. Aborting. Please fix.";
 		return null;
 	}
 

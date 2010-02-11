@@ -20,10 +20,64 @@ if (is_null($host)) {
 
 	/* parse input */
 	if (isset($_POST['metadoc'])) {
-		header('Content-Type: text/xml');
-		$xml = stripslashes($_POST['metadoc']);
-		$xmlparser = new SimpleXMLElement($xml);
-		print_r($xmlparser);
+		$fullUpdate = false;
+		$xml = new SimpleXMLElement(stripslashes($_POST['metadoc']));
+
+		/* verify version */
+		$v = $xml['version'];
+		if ($v != "1.0") {
+			echo "Unsupported version ($v), 1.0 required, cannot continue.\n";
+			exit(0);
+		}
+
+		/* detect full/partial update */
+		switch(strtolower($xml['fullUpdate'])) {
+		case "yes":
+			$fullUpdate = true;
+			break;
+		case "no":
+			break;
+		default:
+			echo "unknown fullUpdate value, aborting.\n";
+			exit(0);
+			break;
+		}
+
+		header('Content-Type: text/plain');
+		if (isset($xml->users)) {
+			require_once 'Users.php';
+			$um = new Users($xml->users, $fullUpdate, $host);
+			$um->iterate();
+			/* handle_users($xml->users, $fullUpdate); */
+		}
+		if (isset($xml->projects)) {
+			require_once 'Projects.php';
+			$pm = new Projects($xml->projects, $fullUpdate, $host);
+			$pm->iterate();
+		}
+
+		if (isset($xml->allocations)) {
+			require_once 'Allocations.php';
+			$a = new Allocations($xml->allocations, $host);
+			$a->iterate();
+		}
+		if (isset($xml->events)) {
+			require_once 'Events.php';
+			$eu = new EventsUp($xml->events, $host);
+			$eu->iterate();
+			$ed = new EventsDown($xml->events, $host);
+			$ed->iterate();
+		}
+		if (isset($xml->siteInfo)) {
+			require_once 'SiteInfo.php';
+			$sw = new Software($xml->siteInfo, $host);
+			$sw->iterate();
+			$conf = new Software($xml->siteInfo, $host);
+			$conf->iterate();
+		}
+
+		/* print result to client */
+		/* print_r($xml); */
 	}
 }
 
