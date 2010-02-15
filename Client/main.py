@@ -81,7 +81,7 @@ def main():
     p = Projects()
     a = Allocations()
     e = Events("foo_site")
-    si = SiteInfo('foosite')
+    si = SiteInfo('foo_site')
 
     # --------------------------------------------------------- #
     # Example entries, edit/change at will
