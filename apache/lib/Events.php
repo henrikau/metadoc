@@ -6,18 +6,17 @@
  *
  *            Events.php is part of MetaDoc
  *
- * All of MetaDoc is free software: you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * All of MetaDoc is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * MetaDoc is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MetaDoc is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -55,6 +54,8 @@ abstract class Events extends Management
 		$xmlhost = $this->get_top_attrs();
 		$xmlhost = $xmlhost['name'];
 		if ($this->get_host() != $xmlhost) {
+			echo "Host in xml does not match owner of certificate, ".
+				"this entry is not valid.\n";
 			$this->valid = False;
 		}
 	}
@@ -65,7 +66,9 @@ abstract class Events extends Management
 	protected function handle_entry($entry)
 	{
 		if (!$this->valid) {
-			/* not valid host, do not match keypair, won't update host. */
+			/* not valid host, do not match keypair, won't update
+			 * host. */
+			echo "host not valid, aborting\n";
 			return false;
 		}
 
@@ -97,7 +100,11 @@ abstract class Events extends Management
 		if (isset($entry->remarks)) {
 			$remarks = htmlentities($entry->remarks);
 		}
-		return $this->handle_event($reason, $date_down, $date_up, $share_down, $remarks);
+		return $this->handle_event($reason,
+					   $date_down,
+					   $date_up,
+					   $share_down,
+					   $remarks);
 	}
 
 	/**
