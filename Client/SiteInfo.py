@@ -45,7 +45,7 @@ class SiteInfo(MetaElement):
         infoURL         : URL where more information can be found for
                           the given program (optional)
         """
-        if type(version).__name__ = 'int':
+        if type(version).__name__ == 'int':
             version = "%d" % (version)
         entry = xml.etree.ElementTree.Element("software", progName=progName, version=version)
         if license:
@@ -82,7 +82,7 @@ class SiteInfo(MetaElement):
             return
         if type(volume).__name__ == "int":
             volume = "%d" % (volume)
-        else if type(volume).__name__ == "float":
+        elif type(volume).__name__ == "float":
             volume = "%f" % (volume)
 
         entry = xml.etree.ElementTree.Element("config",

@@ -68,7 +68,7 @@ class Events(MetaElement):
         """
         if type(shareDown).__name__ == "int":
             shareDown = "%d" % (shareDown)
-        else if type(shareDown).__name__ == "float":
+        elif type(shareDown).__name__ == "float":
             shareDown = "%f" % (shareDown)
 
         entry = xml.etree.ElementTree.Element("resourceDown",
