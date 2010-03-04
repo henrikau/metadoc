@@ -34,6 +34,11 @@ class Events(MetaElement):
     def addUp(self, date_up, reason=None, remarks=None):
         """
         addUp - notification about a system bein back up again.
+
+        param:
+        date_up         : When it was up and fully operational
+        reason          : The reason for coming back up (if changed from going down)
+        remarks         : Any other remarks.
         """
         entry = xml.etree.ElementTree.Element("resourceUp",
                                               dateUp=date_up)
@@ -47,7 +52,25 @@ class Events(MetaElement):
     def addDown(self, reason, dateDown, dateUp, shareDown, remarks=None):
         """
         addDown() add notice about a planned (or not so planned) downtime.
+
+        param:
+        reason          : The reason why the system is going down
+        dateDown        : When it's going down
+        dateUp          : When it's planned to be back online
+        shareDown       : How large share of the system that will be down.
+                          This value should be on integer-form and be in
+                          percent-representation:
+                          e.g. '90' means that 90% of the system will be down
+
+                          It can be in either string, int or float
+
+        remarks         : Any remarks
         """
+        if type(shareDown).__name__ == "int":
+            shareDown = "%d" % (shareDown)
+        else if type(shareDown).__name__ == "float":
+            shareDown = "%f" % (shareDown)
+
         entry = xml.etree.ElementTree.Element("resourceDown",
                                               reason=reason,
                                               dateDown=dateDown,

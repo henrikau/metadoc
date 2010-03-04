@@ -63,7 +63,10 @@ class Users(MetaElement):
         if full_name:
             userEntry.set('full_name', full_name)
         if uid:
-            userEntry.set('uid', uid)
+            if type(uid).__name__ == "int":
+                userEntry.set('uid', "%d" %uid)
+            else:
+                userEntry.set('uid', uid)
         if password:
             userEntry.set('password', password)
         if default_group:
@@ -75,7 +78,10 @@ class Users(MetaElement):
         if email:
             userEntry.set('email',email)
         if phone:
-            userEntry.set('phone',phone)
+            if type(phone).__name__ == "int":
+                userEntry.set('phone',"%d" % phone)
+            else:
+                userEntry.set('phone',phone)
         if status:
             if status in self.legalStatus:
                 userEntry.set('status',status)

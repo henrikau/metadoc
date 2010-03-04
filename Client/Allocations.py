@@ -32,10 +32,18 @@ class Allocations(MetaElement):
     def addEntry(self, account_nmb, hours, all_class, period):
         """
         add an allocation-entry to the list of allocations.
+
+        param:
+        account_nmb     : the account-identifier (e.g. 'NN12345)
+        hours           : the number of hours to log. Can be either String or int
+        all_class       : Allocation class ('pri' or 'nonpri')
+        period          : The period (e.g. '2010.1')
         """
         if not all_class in self.legalClass:
             print "Illegal class \"%s\" for Allocations (%s). Use one of %s." % (all_class, account_nmb, self.legalClass)
             return
+        if type(hours).__name__ == 'int':
+            hours = "%d" % (hours)
         entry = xml.etree.ElementTree.Element("all_entry",
                                               account_nmb=account_nmb,
                                               hours=hours,

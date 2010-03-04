@@ -86,21 +86,21 @@ def main():
     # --------------------------------------------------------- #
     # Example entries, edit/change at will
     # --------------------------------------------------------- #
-    # u.addEntry(username='foo',
-    #            full_name='Foo Bar',
-    #            uid='1001',
-    #            password="234",
-    #            default_group="admins",
-    #            special_path="/home",
-    #            shell="/usr/bin/zsh",
-    #            email="foo@example.org",
-    #            status="new",
-    #            phone="555-12345")
-    # u.addEntry(username='bar',
-    #            password="xxyyzz",
-    #            status="existing")
-    # u.addEntry(username='admin',
-    #            status="delete")
+    u.addEntry(username='foo',
+               full_name='Foo Bar',
+               uid='1001',
+               password="234",
+               default_group="admins",
+               special_path="/home",
+               shell="/usr/bin/zsh",
+               email="foo@example.org",
+               status="new",
+               phone="555-12345")
+    u.addEntry(username='bar',
+               password="xxyyzz",
+               status="existing")
+    u.addEntry(username='admin',
+               status="delete")
     # users = ['foo', 'bar']
     # p.addEntry(name="Test-project",
     #            gid="123",
@@ -130,7 +130,7 @@ def main():
     # si.addSW('gcc', '4.3.3', license="GPLv3", infoURL="http://www.google.com")
     # si.addConfig('cores', 'count', '100')
 
-    # Register the elements witht he main document.
+    # Register the elements witht he main documen.thttp://www.kernel.org/pub/software/scm/git/docs/RelNotes-1.6.6.txt
     m.regMetaElement(u)
     m.regMetaElement(p)
     m.regMetaElement(a)

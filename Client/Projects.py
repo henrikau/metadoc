@@ -58,6 +58,8 @@ class Projects(MetaElement):
         """
         if not status in self.legalStatus:
             print "Illegal status \"%s\" for project (%s). Use one of %s." % (status, name, self.legalStatus)
+        if type(gid).__name__ == 'int':
+            gid = "%d" % (gid)
         entry = xml.etree.ElementTree.Element("project_entry",
                                               name=name,
                                               gid=gid,
