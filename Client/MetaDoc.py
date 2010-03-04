@@ -39,8 +39,8 @@ class MetaDoc:
         """
         if not me:
             return False
-        if me.getElement():
-            self.mes[me.getName()] = me.getElement()
+        if me.getName():
+            self.mes[me.getName()] = me
         return True
 
     def getXML(self):
