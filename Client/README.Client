@@ -1,0 +1,34 @@
+	README
+
+To use the library, start with the following:
+
+from sys import path
+path.append('/path/to/metadoc-api/Client')
+from MetaDoc     import MetaDoc
+from Users       import Users
+from Projects    import Projects
+from Allocations import Allocations
+from Events      import Events
+from SiteInfo	 import SiteInfo
+
+m  = MetaDoc()
+u  = Users()
+p  = Projects()
+a  = Allocations()
+e  = Events("foo_site")
+si = SiteInfo("foo_site")
+
+# You can now start to add data to the various elements
+u.addEntry('henrikau')
+m.regMetaElement(u)
+
+m.regMetaElement(p)
+
+# when you are done, register the elements
+# Note that you can register the elements *before* you add entries.
+
+# finally, create the XML
+xml = m.getXML()
+
+# Now you can create the client and ship it off. For a better example,
+# see main.py
