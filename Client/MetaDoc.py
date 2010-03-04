@@ -28,10 +28,13 @@ class MetaDoc:
             self.fullUpdate = "yes"
         else:
             self.fullUpdate = "no"
+        self.mes = {}
+
+    def _create_root(self):
+        self.root = None
         self.root = xml.etree.ElementTree.Element("MetaDoc",
                                                   version="1.0",
                                                   fullUpdate=self.fullUpdate)
-        self.mes = {}
 
     def regMetaElement(self, me):
         """
@@ -49,16 +52,28 @@ class MetaDoc:
 
         The result should be valid XML and ready to export to the recipient.
         """
-        if 'users' in self.mes:
-            self.root.append(self.mes['users'])
-        if 'projects' in self.mes:
-            self.root.append(self.mes['projects'])
-        if 'allocations' in self.mes:
-            self.root.append(self.mes['allocations'])
-        if 'events' in self.mes:
-            self.root.append(self.mes['events'])
-        if 'siteInfo' in self.mes:
-            self.root.append(self.mes['siteInfo'])
+        self._create_root()
+
+        if 'users' in self.mes and \
+                xml.etree.ElementTree.iselement(self.mes['users'].getElement()):
+                self.root.append(self.mes['users'].getElement())
+
+        if 'projects' in self.mes and \
+                xml.etree.ElementTree.iselement(self.mes['projects'].getElement()):
+                self.root.append(self.mes['projects'].getElement())
+
+        if 'allocations' in self.mes and \
+                xml.etree.ElementTree.iselement(self.mes['allocations'].getElement()):
+                self.root.append(self.mes['allocations'].getElement())
+
+        if 'events' in self.mes and \
+                xml.etree.ElementTree.iselement(self.mes['events'].getElement()):
+                self.root.append(self.mes['events'].getElement())
+
+        if 'siteInfo' in self.mes and \
+                xml.etree.ElementTree.iselement(self.mes['siteInfo'].getElement()):
+                self.root.append(self.mes['siteInfo'].getElement())
+
         return xml.etree.ElementTree.tostring(self.root, "UTF-8")
 
 
