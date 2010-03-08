@@ -48,7 +48,6 @@ if (is_null($host)) {
 			require_once 'Users.php';
 			$um = new Users($xml->users, $fullUpdate, $host);
 			$um->iterate();
-			/* handle_users($xml->users, $fullUpdate); */
 		}
 		if (isset($xml->projects)) {
 			require_once 'Projects.php';
@@ -75,9 +74,6 @@ if (is_null($host)) {
 			$conf = new Software($xml->siteInfo, $host);
 			$conf->iterate();
 		}
-
-		/* print result to client */
-		/* print_r($xml); */
 	}
 }
 
