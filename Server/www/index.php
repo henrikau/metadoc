@@ -8,11 +8,11 @@ require_once 'logger.php';
 assertEnvironment();
 
 /* get hostname for user (from certificate) */
-$host = getHostFromCert($_SERVER['SSL_CLIENT_CERT']);
+$host = getHostFromCert($_SERVER['SSL_CLIENT_CERT'], $error);
 
 if (is_null($host)) {
 	header('Content-Type: text/plain');
-	echo "Did not find a host for the provided certificate. Cannot continue.";
+	echo $error
 	exit(0);
 } else {
 	Logger::logEvent(LOG_NOTICE, "accepted client for $host from IP " .

@@ -28,7 +28,7 @@
  * @param String $cert the pem-encoded certificate
  * @return String|Null $owner the host (name) of the owner of the certifiate
  */
-function getHostFromCert($cert)
+function getHostFromCert($cert, &$error)
 {
 	if (is_null($cert)) {
 		return null;
@@ -47,7 +47,9 @@ function getHostFromCert($cert)
 	$path = dirname(dirname(__FILE__));
 	$cert_path = $path . "/certs/" . $hash;
 	if (!file_exists($cert_path)) {
-		echo "Certificate with hash $hash does not exist in the cert-dir! Looking for $cert_path";
+		$error  = "Certificate with hash $hash does not exist in the cert-dir! ";
+		$error .= "Looking for $cert_path";
+		$error .= "Certificate is:\n$cert";
 		return null;
 	}
 
