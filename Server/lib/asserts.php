@@ -47,21 +47,6 @@ function assertEnvironment()
 				  "[RI] ($log_error_code) Server is not running on SSL. Blocking robot-connections.");
 		exit(0);
 	}
-	/*
-	 * SSLv3
-	 */
-	if (is_null($_SERVER['SSL_PROTOCOL'])) {
-		Logger::logEvent(LOG_NOTICE,
-				  "[RI] ($log_error_code) Environment-variable 'SSL_PROTOCL' not available.");
-		exit(0);
-	}
-	$protocol = strtolower($_SERVER['SSL_PROTOCOL']);
-	if (!($protocol == 'sslv3' || $protocol == 'tlsv1')) {
-		Logger::logEvent(LOG_NOTICE,
-				  "[RI] ($log_error_code) Not on proper ssl protocol. Need SSLv3/TLS. Got " .
-				  $_SERVER['SSL_PROTOCOL']);
-		exit(0);
-	}
 
 	/*
 	 * do we have a client certificate?
