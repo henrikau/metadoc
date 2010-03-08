@@ -12,7 +12,7 @@ $host = getHostFromCert($_SERVER['SSL_CLIENT_CERT'], $error);
 
 if (is_null($host)) {
 	header('Content-Type: text/plain');
-	echo $error
+	echo $error;
 	exit(0);
 } else {
 	Logger::logEvent(LOG_NOTICE, "accepted client for $host from IP " .
