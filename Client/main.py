@@ -37,6 +37,7 @@ def write_sample_config():
     f.write("key   = userkey.pem\n")
     f.write("cert  = usercert.pem\n")
     f.write("valid = False\n")
+    f.write("verbose = False\n")
     f.close()
 
 def testConfig(vals):
@@ -138,6 +139,10 @@ def main():
     m.regMetaElement(si)
 
     # Get ready to send the data
+    if "verbose" in vals and vals['verbose'].lower() == "true":
+        print vals['host']
+        print vals['key']
+        print vals['cert']
     cli = MetaHTTP.XML_Client(vals['host'], vals['key'], vals['cert'])
     res = cli.send(m.getXML())
     if res:
