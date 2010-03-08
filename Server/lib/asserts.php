@@ -63,14 +63,5 @@ function assertEnvironment()
 				  ") without certificate. Dropping connection. Make sure apache is configured with SSLVerifyClient optional_no_ca");
 		exit(0);
 	}
-
-	/*
-	 * Is the certificate properly constructed (can Apache find the DN)?
-	 */
-	if (is_null($_SERVER['SSL_CLIENT_I_DN'])) {
-		Logger::logEvent(LOG_NOTICE, "Malformed certificate from " . $_SERVER['REMOTE_ADDR'] . ". Aborting.");
-		exit(0);
-	}
-
 } /* end assertEnvironment() */
 ?>
