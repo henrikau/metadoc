@@ -43,7 +43,11 @@ def write_sample_config():
 def testConfig(vals):
     if 'valid' in vals:
         if vals['valid'].lower() == "false" or vals['valid'].lower() == "no":
-            print "Config not valid. Please configure the program properly."
+            print "The config is not valid. "
+            print "You need to explicitly set the config-switch 'valid' to 'True'."
+            print "You can also remove the switch completely from the file"
+            print ""
+            print "It is included as a fail-safe to stop auto-configured programs from running."
             return False
     if 'host' not in vals or vals['host'] == "":
         print "Need a valid host. Aborting"
