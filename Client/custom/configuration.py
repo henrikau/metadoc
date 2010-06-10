@@ -2,7 +2,7 @@
 Custom
 """
 
-from Abstract import MetaOutput
+from abstract import MetaOutput
 #### Testing Purposes ####
 import random
 #### Testing Purposes end ####

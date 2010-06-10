@@ -32,14 +32,14 @@ Usage:
 """
     #optstr = "hvqecual:"
 
-import MetaHTTP
-from MetaDoc import MetaDoc
-from Users import Users
-from Projects import Projects
-from Allocations import Allocations
-from Events import Events
-from SiteInfo import SiteInfo
-from custom.Configuration import SiteConfiguration
+import metahttp 
+from metadoc import MetaDoc
+from users import Users
+from projects import Projects
+from allocations import Allocations
+from events import Events
+from siteinfo import SiteInfo
+from custom.configuration import SiteConfiguration
 import ConfigParser
 import sys
 import getopt
@@ -153,15 +153,23 @@ def main():
     # ready for main processing.
     m = MetaDoc(True)
     if configuration:
-        import custom.Configuration
-        import Configuration
-        xmlConfiguration = Configuration.Configuration()
-        siteconfig = custom.Configuration.SiteConfiguration()
+        import custom.configuration
+        import configuration
+        xmlConfiguration = configuration.Configuration()
+        siteconfig = custom.configuration.SiteConfiguration()
         siteconfig.populate()
-        configItems = siteconfig.fetch()
-        for configItem in configItems:
-            xmlConfiguration.addEntry(**configItem.todict())
+        config_items = siteconfig.fetch()
+        for config_item in config_items:
+            xmlConfiguration.addEntry(**config_item.todict())
         m.regMetaElement(xmlConfiguration)
+    if events:
+        import custom.events
+
+        site_events = custom.events.Events()
+        site_events.populate()
+        event_items = site_events.fetch()
+        for site_item in site_items:
+            pass
     # u = Users()
     # p = Projects()
     # a = Allocations()
@@ -180,7 +188,7 @@ def main():
         print vals['host']
         print vals['key']
         print vals['cert']
-    cli = MetaHTTP.XML_Client(vals['host'], vals['key'], vals['cert'])
+    cli = metahttp.XML_Client(vals['host'], vals['key'], vals['cert'])
     res = cli.send(m.getXML())
     print m.getXML()
     if res:

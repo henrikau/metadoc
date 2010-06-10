@@ -16,6 +16,37 @@
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 # The API interface
 
+class Error(Exception):
+    """
+    Base Error class for MetaElements.
+    """
+    pass
+
+class IllegalAttributeValueError(Error):
+    """
+    Error given when an illegal value is passed as a value for an attribute.
+    """
+    def __init__(self, attrib, used_value, allowed_values, element):
+        self.attrib = attrib
+        self.used_value = used_value
+        self.allowed_values = allowed_values
+        self.element = element
+    def __str__(self):
+        return repr("Illegal value \"%s\" used for attribute \"%s\" in element \"%s\". Allowed values: %s." % (self.used_value, self.attrib, self.element, self.allowed_values))
+
+
+class IllegalAttributeTypeError(Error):
+    """
+    Error given when an attribute is passed a value in an illegal format. 
+    """
+    def __init__(self, attrib, used_type, element, allowed_formats):
+        self.attrib = attrib
+        self.allowed_formats = allowed_formats
+        self.used_type = used_type
+        self.element = element
+    def __str__(self):
+        return repr("Illegal type used for \"%s\" attribute in \"%s\". Allowed types: %s. Recieved type: \"%s\"" % (self.attrib, self.element, self.allowed_formats, self.used_type.__name__))
+
 class MetaElement(object):
     """
     MetaElement - an individual element in the MetaDoc tree.

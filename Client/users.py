@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
-from MetaElement import MetaElement
+from metaelement import MetaElement
 import xml.etree.ElementTree
 
 class Users(MetaElement):

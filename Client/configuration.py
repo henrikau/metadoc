@@ -15,12 +15,10 @@
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from MetaElement import MetaElement
+import metaelement
 import xml.etree.ElementTree
 
-class Configuration(MetaElement):
-    """
-    """
+class Configuration(metaelement.MetaElement):
     def __init__(self, *args, **kwargs):
         super(Configuration, self).__init__("config")
         self.element = xml.etree.ElementTree.Element(self.getName())
@@ -37,17 +35,17 @@ class Configuration(MetaElement):
 
     def cleanElement(self, element):
         if not element in self.legalElement:
-            raise Exception("Illegal element \"%s\" for Configuration. Use one of %s." % (element, self.legalElement))
+            raise metaelement.IllegalAttributeValueError("element", element, self.legalElement, "Configuration")
         return element
     def cleanMetric(self, metric):
         if not metric in self.legalMetric:
-            raise Exception("Illegal metric \"%s\" for Configuration. Use one of %s." % (metric, self.legalMetric))
+            raise metaelement.IllegalAttributeValueError("metric", metric, self.legalMetric, "Configuration")
         return metric
     def cleanVolume(self, volume):
-        if type(volume) == int:
+        if isinstance(volume, int):
             volume = "%d" % (volume)
-        if not type(volume) == str and not type(volume) == unicode:
-            raise Exception("Illegal volume for Configuration. Must be int or string. Recieved type \"%s\"." % type(volume).__name__)
+        if not isinstance(volume, basestring):
+            raise metaelement.IllegalAttributeTypeError("volume", type(volume), "Configuration", ['str', 'int'])
         return volume
 
     def addEntry(self, *args, **kwargs):
