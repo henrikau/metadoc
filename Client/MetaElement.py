@@ -16,7 +16,7 @@
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 # The API interface
 
-class MetaElement:
+class MetaElement(object):
     """
     MetaElement - an individual element in the MetaDoc tree.
 
@@ -24,9 +24,10 @@ class MetaElement:
     abstract classes in python).
     """
     def __init__(self, name):
-        self.attribs = None
-        self.element = None
-        self.name    = name
+        self.attribs        = None
+        self.element        = None
+        self.name           = name
+        self.entryAttribs   = ()
 
     def getName(self):
         """
@@ -50,3 +51,22 @@ class MetaElement:
         """
         raise Exception("%s has not implemented addEntry, and function cannot be used!" % self.name)
 
+    def checkEntries(self, *args, **kwargs):
+        """
+        Checks the recieved attributes for the entry against entryAttribs
+
+        Each attribute recieved will be cleaned with it's respective clean function. 
+        Raises an error if any required attributes are missing.
+        """
+        attributeList = {}
+        for attrib in self.entryAttribs:
+            if attrib['name'] in kwargs.keys():
+                if attrib['cleanFunction'] is not None:
+                    # FIXME : Catch getattr error
+                    print kwargs[attrib['name']]
+                    attributeList[attrib['name']] = getattr(self, attrib['cleanFunction'])(kwargs[attrib['name']])
+            else:
+                if attrib['required']:
+                    # We're missing a required attribute
+                    raise Exception("Entry added to \"%s\" is missing required attribute \"%s\"." % (self.name, attrib['name']))
+        return attributeList
