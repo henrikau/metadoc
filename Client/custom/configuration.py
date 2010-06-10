@@ -15,6 +15,7 @@ class ConfigItem:
         self.element = element
         self.metric = metric
         self.volume = volume
+        self.entry_type = "config_entry"
     def __str__(self):
         return "ConfigItem: %s (%d %s)" % (self.element, self.volume, self.metric)
     def todict(self):

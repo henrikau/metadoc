@@ -15,7 +15,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
-"""main.py - 
+"""main.py - Runs the synchronization procedure
+
+Information sent and recieved depends on handles passed to main.py
 
 Usage:
 
@@ -29,9 +31,8 @@ Usage:
 -a                      Fetch allocation data
 -l <log level>          Sets log level
 --loglevel=<log level>  
-"""
-    #optstr = "hvqecual:"
 
+"""
 import metahttp 
 from metadoc import MetaDoc
 from users import Users
@@ -64,15 +65,18 @@ def write_sample_config():
 
 def testConfig(vals):
     """
-    Tests configuration file to see that it contains the necessary information to run the script.
+    Tests configuration file to see that it contains the necessary 
+    information to run the script.
     """
     if 'valid' in vals:
         if vals['valid'].lower() == "false" or vals['valid'].lower() == "no":
             print "The config is not valid. "
-            print "You need to explicitly set the config-switch 'valid' to 'True'."
+            print "You need to explicitly set the \
+                    config-switch 'valid' to 'True'."
             print "You can also remove the switch completely from the file"
             print ""
-            print "It is included as a fail-safe to stop auto-configured programs from running."
+            print "It is included as a fail-safe to stop \
+                    auto-configured programs from running."
             return False
     if 'host' not in vals or vals['host'] == "":
         print "Need a valid host. Aborting"
@@ -160,7 +164,7 @@ def main():
         siteconfig.populate()
         config_items = siteconfig.fetch()
         for config_item in config_items:
-            xmlConfiguration.addEntry(**config_item.todict())
+            xmlConfiguration.addEntry(config_item.entry_type, **config_item.todict())
         m.regMetaElement(xmlConfiguration)
     if events:
         import custom.events
