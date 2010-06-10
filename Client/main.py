@@ -154,7 +154,14 @@ def main():
     m = MetaDoc(True)
     if configuration:
         import custom.Configuration
-        siteconfig = SiteConfiguration()
+        import Configuration
+        xmlConfiguration = Configuration.Configuration()
+        siteconfig = custom.Configuration.SiteConfiguration()
+        siteconfig.populate()
+        configItems = siteconfig.fetch()
+        for configItem in configItems:
+            xmlConfiguration.addEntry(**configItem.todict())
+        m.regMetaElement(xmlConfiguration)
     # u = Users()
     # p = Projects()
     # a = Allocations()
@@ -175,6 +182,7 @@ def main():
         print vals['cert']
     cli = MetaHTTP.XML_Client(vals['host'], vals['key'], vals['cert'])
     res = cli.send(m.getXML())
+    print m.getXML()
     if res:
         print res.read()
 

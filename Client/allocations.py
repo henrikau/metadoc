@@ -34,7 +34,7 @@ class Allocations(MetaElement):
         add an allocation-entry to the list of allocations.
 
         param:
-        account_nmb     : the account-identifier (e.g. 'NN12345)
+        account_nmb     : the account-identifier (e.g. 'NN12345')
         hours           : the number of hours to log. Can be either String or int
         all_class       : Allocation class ('pri' or 'nonpri')
         period          : The period (e.g. '2010.1')
@@ -50,5 +50,3 @@ class Allocations(MetaElement):
                                               all_class=all_class,
                                               period=period)
         self.element.append(entry)
-
-

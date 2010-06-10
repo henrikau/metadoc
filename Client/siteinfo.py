@@ -19,7 +19,7 @@ import xml.etree.ElementTree
 
 class SiteInfo(MetaElement):
     """
-    Register site-info and pack it in XMl.
+    Register site-info and pack it in XML.
     """
     def __init__(self, host):
         MetaElement.__init__(self, "siteInfo")

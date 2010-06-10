@@ -20,7 +20,7 @@ import xml.etree.ElementTree
 
 class Events(MetaElement):
     """
-    Register Events and pack it in XMl.
+    Register Events and pack it in XML.
     """
     def __init__(self, host):
         MetaElement.__init__(self, "events")

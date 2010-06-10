@@ -21,7 +21,7 @@ class MetaDoc:
     """
     Class for handling the MetaDoc.
 
-    A nice way of adding information and exporting to the MetaDoc-xml standard.
+    A nice way of adding information and exporting to the MetaDoc-XML standard.
     """
     def __init__(self, fullUpdate=False):
         if fullUpdate:
@@ -73,6 +73,10 @@ class MetaDoc:
         if 'siteInfo' in self.mes and \
                 xml.etree.ElementTree.iselement(self.mes['siteInfo'].getElement()):
                 self.root.append(self.mes['siteInfo'].getElement())
+
+        if 'config' in self.mes and \
+                xml.etree.ElementTree.iselement(self.mes['config'].getElement()):
+                self.root.append(self.mes['config'].getElement())
 
         return xml.etree.ElementTree.tostring(self.root, "UTF-8")
 

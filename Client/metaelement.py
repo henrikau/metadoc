@@ -62,8 +62,7 @@ class MetaElement(object):
         for attrib in self.entryAttribs:
             if attrib['name'] in kwargs.keys():
                 if attrib['cleanFunction'] is not None:
-                    # FIXME : Catch getattr error
-                    print kwargs[attrib['name']]
+                    # FIXME - Catch getattr error
                     attributeList[attrib['name']] = getattr(self, attrib['cleanFunction'])(kwargs[attrib['name']])
             else:
                 if attrib['required']:

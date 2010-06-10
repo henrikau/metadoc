@@ -22,7 +22,7 @@ class Configuration(MetaElement):
     """
     """
     def __init__(self, *args, **kwargs):
-        super(Configuration, self).__init__(*args, **kwargs)
+        super(Configuration, self).__init__("config")
         self.element = xml.etree.ElementTree.Element(self.getName())
         self.legalMetric = ['count', 'MB', 'GB', 'TB']
         self.legalElement = ['cores','nodes','totalDisk',
@@ -47,7 +47,7 @@ class Configuration(MetaElement):
         if type(volume) == int:
             volume = "%d" % (volume)
         if not type(volume) == str and not type(volume) == unicode:
-            raise Exception("Illegal volume for Configuration. Must be int or string")
+            raise Exception("Illegal volume for Configuration. Must be int or string. Recieved type \"%s\"." % type(volume).__name__)
         return volume
 
     def addEntry(self, *args, **kwargs):
@@ -59,7 +59,7 @@ class Configuration(MetaElement):
         metric          : The metric used to measure element (count, MB, GB, TB)
         volume          : Number of <metric> for the element described. Can be int or str.
         """
-        # FIXME - Verbose mode sier ifra om 
+        # FIXME - Verbose mode gives a message if more kwargs than entryAttribs allows.
         attributeList = self.checkEntries(*args, **kwargs)
         entry = xml.etree.ElementTree.Element("config_entry",
                                                 attributeList)
