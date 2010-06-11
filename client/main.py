@@ -27,6 +27,7 @@ Usage:
                         critical errors
 -e                      Send event data
 -c                      Send config data
+-s                      Send software data
 -u                      Fetch user data
 -a                      Fetch allocation data
 -l <log level>          Sets log level
@@ -35,14 +36,14 @@ Usage:
 """
 import metahttp 
 from metadoc import MetaDoc
-from users import Users
-from projects import Projects
-from allocations import Allocations
+
 from events import Events
-from siteinfo import SiteInfo
-from custom.siteconfiguration import SiteConfiguration
-from configuration import Configuration
 from custom.siteevents import SiteEvent
+from configuration import Configuration
+from custom.siteconfiguration import SiteConfiguration
+from software import Software
+from custom.sitesoftware import SiteSoftware
+
 import ConfigParser
 import sys
 import getopt
@@ -92,7 +93,7 @@ def testConfig(vals):
     return True
 
 def main():
-    optstr = "hvqecual:"
+    optstr = "hvqecsual:"
     optlist = ['help', 'dry-run', 'loglevel=']
     # Default settings
     # Will be altered depending on passed options
@@ -103,6 +104,7 @@ def main():
     # Information to send
     events = False
     configuration = False
+    software = False
     # Fetch information from server
     user = False
     allocation = False
@@ -125,6 +127,8 @@ def main():
             events = True
         elif opt == '-c':
             configuration = True
+        elif opt == '-s':
+            software = True
         elif opt == '-u':
             user = True
         elif opt == '-a':
@@ -159,21 +163,29 @@ def main():
     # ready for main processing.
     m = MetaDoc(True)
     if configuration:
-        xmlConfiguration = Configuration()
+        xml_configuration = Configuration()
         siteconfig = SiteConfiguration()
         siteconfig.populate()
         config_entries = siteconfig.fetch()
         for config_entry in config_entries:
-            xmlConfiguration.add_element(config_entry)
-        m.reg_meta_element(xmlConfiguration)
+            xml_configuration.add_element(config_entry)
+        m.reg_meta_element(xml_configuration)
     if events:
-        xmlEvent = Events("bjornar")
+        xml_event = Events("bjornar")
         site_events = SiteEvent()
         site_events.populate()
         event_entries = site_events.fetch()
         for event_entry in event_entries:
-            xmlEvent.add_element(event_entry)
-        m.reg_meta_element(xmlEvent)
+            xml_event.add_element(event_entry)
+        m.reg_meta_element(xml_event)
+    if software:
+        xml_software = Software()
+        site_software = SiteSoftware()
+        site_software.populate()
+        software_entries = site_software.fetch()
+        for software_entry in software_entries:
+            xml_software.add_element(software_entry)
+        m.reg_meta_element(xml_software)
     # u = Users()
     # p = Projects()
     # a = Allocations()

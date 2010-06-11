@@ -73,6 +73,9 @@ class MetaDoc:
         if 'config' in self.mes and \
                 xml.etree.ElementTree.iselement(self.mes['config'].get_xml_element()):
                 self.root.append(self.mes['config'].get_xml_element())
+        if 'software' in self.mes and \
+                xml.etree.ElementTree.iselement(self.mes['software'].get_xml_element()):
+                self.root.append(self.mes['software'].get_xml_element())
 
         return xml.etree.ElementTree.tostring(self.root, "UTF-8")
 

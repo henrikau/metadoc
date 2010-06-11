@@ -1,5 +1,5 @@
 #
-#            Configuration.py is part of MetaDoc (Client).
+#            configuration.py is part of MetaDoc (Client).
 #
 # All of MetaDoc is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -25,7 +25,7 @@ class Configuration(metaelement.MetaElement):
     expected values. 
 
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         """ Initialites the MetaElement and specifies legal values for attributes. """
         super(Configuration, self).__init__("config")
         self.legal_element_types = (ConfigEntry,)
