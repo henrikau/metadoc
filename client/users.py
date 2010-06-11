@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#            Users.py is part of MetaDoc (Client).
+#            users.py is part of MetaDoc (Client).
 #
 # All of MetaDoc is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -14,79 +14,51 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
-from metaelement import MetaElement
+
+import metaelement
 import xml.etree.ElementTree
 
-class Users(MetaElement):
+class Users(metaelement.MetaElement):
     """
     List of users tied to a system.
     """
-    def __init__(self):
-        """
-        """
-        MetaElement.__init__(self, "users")
-        self.element = xml.etree.ElementTree.Element(self.getName())
-        self.legalStatus = ['new', 'existing', 'delete']
+    xml_tag_name = "users"
 
-    def addEntry(self,
-                 username,
-                 full_name=None,
-                 uid=None,
-                 password=None,
-                 default_group=None,
-                 special_path=None,
-                 shell=None,
-                 email=None,
-                 phone=None,
-                 status=None):
+    def __init__(self, type, date, fullUpdate = None):
         """
-        Add a user to the system.
+        """
+        attributes = {
+            'type': type,
+            'date': date,
+        }
+        if fullUpdate:
+            attributes['fullUpdate'] = fullUpdate
+        super(Users, self).__init__(Users.xml_tag_name, attributes)
+        self.legal_element_types = (UserEntry,)
 
-        param:
-        - username              : username of the person
-        - full_name             : The full name of the person
-        - uid                   : User ID at the system.
-        - password              : initial password
-        - default_group         : initial group
-        - special_path          : if the home-share should be located elsewhere
-                                  than /home/username
-        - shell                 : the shell for the user
-        - email                 : email
-        - phone                 : contact phone
-        - status
-                - new           : add new user
-                - existing      : update existing user with new vals
-                - delete        : delete the user.
-        """
-        userEntry = xml.etree.ElementTree.Element("user_entry",
-                                                  username=username)
-        if full_name:
-            userEntry.set('full_name', full_name)
+class UserEntry(metaelement.MetaElement):
+    """
+    """
+    xml_tag_name = "user_entry"
+
+    def __init__(self, username, uid=None, full_name=None, password=None, default_group=None, special_path=None, shell=None, email=None, phone=None, status=None):
+        attributes = {'username': username}
         if uid:
-            if type(uid).__name__ == "int":
-                userEntry.set('uid', "%d" %uid)
-            else:
-                userEntry.set('uid', uid)
+            attributes['uid'] = uid
+        if full_name:
+            attributes['full_name'] = full_name
         if password:
-            userEntry.set('password', password)
+            attributes['password'] = password
         if default_group:
-            userEntry.set('default_group',default_group)
+            attributes['default_group'] = default_group
         if special_path:
-            userEntry.set('special_path',special_path)
+            attributes['special_path'] = special_path
         if shell:
-            userEntry.set('shell',shell)
+            attributes['shell'] = shell
         if email:
-            userEntry.set('email',email)
+            attributes['email'] = email
         if phone:
-            if type(phone).__name__ == "int":
-                userEntry.set('phone',"%d" % phone)
-            else:
-                userEntry.set('phone',phone)
+            attributes['phone'] = phone
         if status:
-            if status in self.legalStatus:
-                userEntry.set('status',status)
-            else:
-                print "Illegal status \"%s\" for entry (%s). Use one of %s" % (status, username, self.legalStatus)
-                userEntry = None
-                return
-        self.element.append(userEntry)
+            attributes['status'] = status
+        super(UserEntry, self).__init__(UserEntry.xml_tag_name, attributes)

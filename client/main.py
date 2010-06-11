@@ -34,8 +34,14 @@ Usage:
 --loglevel=<log level>  
 
 """
+import ConfigParser
+import sys
+import getopt
+import xml.etree.ElementTree
+
 import metahttp 
 from metadoc import MetaDoc
+from metaelement import MetaElement
 
 from events import Events
 from custom.siteevents import SiteEvent
@@ -44,9 +50,12 @@ from custom.siteconfiguration import SiteConfiguration
 from software import Software
 from custom.sitesoftware import SiteSoftware
 
-import ConfigParser
-import sys
-import getopt
+from allocations import Allocations
+from users import Users
+from projects import Projects
+
+fetch_elements = (Allocations,Users,Projects,)
+
 
 def write_sample_config():
     """
@@ -171,8 +180,7 @@ def main():
             xml_configuration.add_element(config_entry)
         m.reg_meta_element(xml_configuration)
     if events:
-        # FIXME - Parameter to events should be removed once the DTD is fixed.
-        xml_event = Events("bjornar")
+        xml_event = Events()
         site_events = SiteEvent()
         site_events.populate()
         event_entries = site_events.fetch()
@@ -190,15 +198,32 @@ def main():
 
     # Get ready to send the data
     if verbose:
-        print vals['host']
-        print vals['key']
-        print vals['cert']
+        print "-" * 70
+        print "Connecting to host: %s" % vals['host']
+        print "Using key: %s" % vals['key']
+        print "Using certificate: %s" % vals['cert']
+        print "-" * 70
     cli = metahttp.XMLClient(vals['host'], vals['key'], vals['cert'])
     res = cli.send(m.get_xml())
-    print m.get_xml()
+    if verbose:
+        print "%s\nSent data:\n%s" % ("-" * 70, "-" * 70)
+        print m.get_xml()
     if res:
         xml_data = res.read()
-        print xml_data
+        if verbose:
+            print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
+            print xml_data
+        # FIXME - Error catching
+        return_data = xml.etree.ElementTree.fromstring(xml_data)
+        elmnts = []
+        for element in fetch_elements:
+            found_elements = return_data.findall(element.xml_tag_name)
+            for found_element in found_elements:
+                elmnts.append(MetaElement.from_xml_element(found_element, element))
+        for ele in elmnts:
+            print ele.xml_tag_name, ele.attributes
+            for ell in ele.sub_elements:
+                print ell.xml_tag_name, ell.attributes
     else:
         # FIXME - No data returned, log event
         pass

@@ -25,13 +25,16 @@ class Configuration(metaelement.MetaElement):
     expected values. 
 
     """
+    xml_tag_name = "config"
+
     def __init__(self):
         """ Initialites the MetaElement and specifies legal values for attributes. """
-        super(Configuration, self).__init__("config")
+        super(Configuration, self).__init__(Configuration.xml_tag_name)
         self.legal_element_types = (ConfigEntry,)
 
 
 class ConfigEntry(metaelement.MetaElement):
+    xml_tag_name = "config_entry"
     def __init__(self, element, metric, volume):
         """ Creates a config_entry 
         
@@ -46,7 +49,7 @@ class ConfigEntry(metaelement.MetaElement):
             'metric': metric,
             'volume': volume,
         }
-        super(ConfigEntry, self).__init__("config_entry", self.attributes)
+        super(ConfigEntry, self).__init__(ConfigEntry.xml_tag_name, self.attributes)
         self.legal_metric = ('count', 'MB', 'GB', 'TB')
         self.legal_element = ('cores','nodes','totalDisk',
                                 'usedDisk','totalSwap','usedSwap',

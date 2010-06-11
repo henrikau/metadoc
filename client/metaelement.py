@@ -28,6 +28,8 @@ class MetaElement(object):
     abstract classes in python).
 
     """
+    xml_tag_name = ""
+
     def __init__(self, name, attributes = {}):
         self.attributes = attributes
         self.name = name
@@ -77,6 +79,21 @@ class MetaElement(object):
         for attribute in self.attributes.keys():
             if hasattr(self, "clean_%s" % attribute):
                 self.attributes[attribute] = getattr(self, "clean_%s" % attribute)(self.attributes[attribute])
+
+    @staticmethod
+    def from_xml_element(xml_element, element_class):
+        """ Creates a MetaElement from an xml.etree.ElementTree.Element instance. 
+        
+        Recursively checks for sub-elements from legal sub-classes.
+
+        """
+        # FIXME - Missing attribute error
+        element = element_class(**xml_element.attrib)
+        for sub_class in element.legal_element_types:
+            sub_elements = xml_element.findall(sub_class.xml_tag_name)
+            for sub_element in sub_elements:
+                element.sub_elements.append(MetaElement.from_xml_element(sub_element, sub_class))
+        return element
 
 # Error classes
 

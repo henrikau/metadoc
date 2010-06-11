@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#            Events.py is part of MetaDoc (Client).
+#            events.py is part of MetaDoc (Client).
 #
 # All of MetaDoc is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -19,20 +19,26 @@ import metaelement
 import xml.etree.ElementTree
 
 class Events(metaelement.MetaElement):
-    """
-    Register Events and pack it in XML.
-    """
-    def __init__(self, host):
-        """ Initialites the MetaElement and specifies legal values for attributes. """
-        super(Events, self).__init__("events")
-        self.host = host
-        self.element = xml.etree.ElementTree.Element(self.get_name(), name=self.host)
+    """ Register Events and pack it in XML. """
+    xml_tag_name = "events"
+
+    def __init__(self):
+        """ Initializes the MetaElement and specifies legal values for attributes. 
+        
+        Allows for both ResourceUpEntry and ResourceDownEntry sub-elements.
+
+        """
+        super(Events, self).__init__(Events.xml_tag_name)
         self.legal_element_types = (ResourceUpEntry, ResourceDownEntry,)
 
-# FIXME - remarks need to be availible for addition. 
-
 class ResourceUpEntry(metaelement.MetaElement):
+    """ Describes a resourceUp entry. """
     def __init__(self, date_up, reason=None, remarks=None):
+        """ Initializes the MetaElement and specifies legal values for attributes.
+
+        Allows for RemarksEntry sub-elements.
+
+        """
         self.attributes = {
             'dateUp': date_up,
         }
@@ -50,7 +56,13 @@ class ResourceUpEntry(metaelement.MetaElement):
         return dateUp
 
 class ResourceDownEntry(metaelement.MetaElement):
+    """ Describes a resourceDown entry. """
     def __init__(self, reason, date_down, date_up, share_down, remarks=None):
+        """ Initializes the MetaElement and specifies legal values for attributes.
+
+        Allows for RemarksEntry sub-elements.
+
+        """
         self.attributes = {
             'reason': reason,
             'dateDown': date_down,
@@ -71,6 +83,12 @@ class ResourceDownEntry(metaelement.MetaElement):
         return share_down
 
 class RemarksEntry(metaelement.MetaElement):
+    """ Describes a remarks entry. """
     def __init__(self, content):
+        """ Initializes the MetaElement.
+        
+        Remarks have no attributes, but contains PCDATA.
+
+        """
         super(RemarksEntry, self).__init__("remarks")
         self.text = content

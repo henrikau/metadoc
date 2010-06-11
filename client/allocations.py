@@ -14,39 +14,36 @@
 # You should have received a copy of the GNU General Public License
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 #
-from metaelement import MetaElement
+
+import metaelement
 import xml.etree.ElementTree
 
-class Allocations(MetaElement):
+class Allocations(metaelement.MetaElement):
     """
     Allocations - the granted resources for a project.
     """
+    xml_tag_name = "allocations"
+
     def __init__(self):
         """
         init()
         """
-        MetaElement.__init__(self, "allocations")
-        self.element = xml.etree.ElementTree.Element(self.getName())
-        self.legalClass = ["pri", "nonpri"]
+        super(Allocations, self).__init__(Allocations.xml_tag_name)
+        self.legal_element_types = (AllocationEntry,)
 
-    def addEntry(self, account_nmb, hours, all_class, period):
-        """
-        add an allocation-entry to the list of allocations.
+class AllocationEntry(metaelement.MetaElement):
+    """
+    """
+    xml_tag_name = "all_entry"
 
-        param:
-        account_nmb     : the account-identifier (e.g. 'NN12345')
-        hours           : the number of hours to log. Can be either String or int
-        all_class       : Allocation class ('pri' or 'nonpri')
-        period          : The period (e.g. '2010.1')
+    def __init__(self, account_nmb, volume, metric, all_class, period):
         """
-        if not all_class in self.legalClass:
-            print "Illegal class \"%s\" for Allocations (%s). Use one of %s." % (all_class, account_nmb, self.legalClass)
-            return
-        if type(hours).__name__ == 'int':
-            hours = "%d" % (hours)
-        entry = xml.etree.ElementTree.Element("all_entry",
-                                              account_nmb=account_nmb,
-                                              hours=hours,
-                                              all_class=all_class,
-                                              period=period)
-        self.element.append(entry)
+        """
+        attributes = {
+            'account_nmb': account_nmb,
+            'volume': volume,
+            'metric': metric,
+            'all_class': all_class,
+            'period': period,
+        }
+        super(AllocationEntry, self).__init__(AllocationEntry.xml_tag_name, attributes)

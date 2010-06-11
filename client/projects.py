@@ -14,62 +14,40 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
-from metaelement import MetaElement
+
+import metaelement
 import xml.etree.ElementTree
 
-class Projects(MetaElement):
+class Projects(metaelement.MetaElement):
     """
     Information about projects tied to a system.
     """
-    def __init__(self):
+    xml_tag_name = "projects"
+
+    def __init__(self, type, date, fullUpdate=None):
         """
         init()
         """
-        MetaElement.__init__(self, "projects")
-        self.element = xml.etree.ElementTree.Element(self.getName())
-        self.legalStatus = ['new', 'existing', 'delete']
+        attributes = {
+            'type': type,
+            'date': date,
+        }
+        if fullUpdate:
+            attributes['fullUpdate'] = fullUpdate
+        super(Projects, self).__init__(Projects.xml_tag_name, attributes)
+        self.legal_element_types = (ProjectEntry,)
 
-    def addEntry(self,
-                 name,
-                 gid,
-                 status,
-                 account_nmb,
-                 valid_from,
-                 valid_to = None,
-                 usernames=None):
-        """
-        Add a project to the list of projects.
-
-        param:
-        - name of project
-        - gid (Group ID)
-        - status:
-                - new           : add new project
-                - existing      : update existing project
-                - delete        : delete a project.
-        - account_nmb           : Associated account-number.
-        - valid_from            : The project should not be available before
-                                  this date.
-        - valid_to              : timeout switch. After this date, the project
-                                  should be disabled.
-        - usernames             : a list of usernames to associate with the
-                                  project on the form ['foo', 'bar']. This only
-                                  applies to new and existing projects.
-        """
-        if not status in self.legalStatus:
-            print "Illegal status \"%s\" for project (%s). Use one of %s." % (status, name, self.legalStatus)
-        if type(gid).__name__ == 'int':
-            gid = "%d" % (gid)
-        entry = xml.etree.ElementTree.Element("project_entry",
-                                              name=name,
-                                              gid=gid,
-                                              status=status,
-                                              account_nmb=account_nmb,
-                                              valid_from=valid_from)
+class ProjectEntry(metaelement.MetaElement):
+    xml_tag_name = "project_entry"
+    
+    def __init__(self, name, gid, status, account_nmb, valid_from, valid_to=None):
+        attributes = {
+            'name': name,
+            'gid': gid,
+            'status': status,
+            'account_nmb': account_nmb,
+            'valid_from': valid_from,
+        }
         if valid_to:
-            entry.set('valid_to', valid_to)
-        if usernames:
-            for user in usernames:
-                xml.etree.ElementTree.SubElement(entry, "user_entry", username=user)
-        self.element.append(entry)
-
+            attributes['valid_to'] = valid_to
+        super(ProjectEntry, self).__init__(ProjectEntry.xml_tag_name, attributes)
