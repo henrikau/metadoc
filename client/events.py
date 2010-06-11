@@ -15,68 +15,62 @@
 # You should have received a copy of the GNU General Public License
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 
-from metaelement import MetaElement
+import metaelement
 import xml.etree.ElementTree
 
-class Events(MetaElement):
+class Events(metaelement.MetaElement):
     """
     Register Events and pack it in XML.
     """
     def __init__(self, host):
-        MetaElement.__init__(self, "events")
+        """ Initialites the MetaElement and specifies legal values for attributes. """
+        super(Events, self).__init__("events")
         self.host = host
-        self.element = xml.etree.ElementTree.Element(self.getName(), name=self.host)
+        self.element = xml.etree.ElementTree.Element(self.get_name(), name=self.host)
+        self.legal_element_types = (ResourceUpEntry, ResourceDownEntry,)
 
-    def addEntry(self):
-        print "Events::addEntry(): NA,  use addUp() or addDown() instead."
-        pass
+# FIXME - remarks need to be availible for addition. 
 
-    def addUp(self, date_up, reason=None, remarks=None):
-        """
-        addUp - notification about a system bein back up again.
-
-        param:
-        date_up         : When it was up and fully operational
-        reason          : The reason for coming back up (if changed from going down)
-        remarks         : Any other remarks.
-        """
-        entry = xml.etree.ElementTree.Element("resourceUp",
-                                              dateUp=date_up)
+class ResourceUpEntry(metaelement.MetaElement):
+    def __init__(self, date_up, reason=None, remarks=None):
+        self.attributes = {
+            'dateUp': date_up,
+        }
         if reason:
-            entry.set('reason', reason)
+            self.attributes['reason'] = reason
+        super(ResourceUpEntry, self).__init__("resourceUp", self.attributes)
+        
+        self.legal_element_types = (RemarksEntry,)
+
         if remarks:
-            rem = xml.etree.ElementTree.SubElement(entry, "remarks")
-            rem.text = remarks
-        self.element.append(entry)
+            self.add_element(RemarksEntry(remarks))
 
-    def addDown(self, reason, dateDown, dateUp, shareDown, remarks=None):
-        """
-        addDown() add notice about a planned (or not so planned) downtime.
+    def clean_dateUp(self, dateUp):
+        """ Makes sure the date is in the correct format """
+        return dateUp
 
-        param:
-        reason          : The reason why the system is going down
-        dateDown        : When it's going down
-        dateUp          : When it's planned to be back online
-        shareDown       : How large share of the system that will be down.
-                          This value should be on integer-form and be in
-                          percent-representation:
-                          e.g. '90' means that 90% of the system will be down
+class ResourceDownEntry(metaelement.MetaElement):
+    def __init__(self, reason, date_down, date_up, share_down, remarks=None):
+        self.attributes = {
+            'reason': reason,
+            'dateDown': date_down,
+            'dateUp': date_up,
+            'shareDown': share_down,
+        }
+        super(ResourceDownEntry, self).__init__("resourceDown", self.attributes)
 
-                          It can be in either string, int or float
+        self.legal_element_types = (RemarksEntry, )
 
-        remarks         : Any remarks
-        """
-        if type(shareDown).__name__ == "int":
-            shareDown = "%d" % (shareDown)
-        elif type(shareDown).__name__ == "float":
-            shareDown = "%f" % (shareDown)
-
-        entry = xml.etree.ElementTree.Element("resourceDown",
-                                              reason=reason,
-                                              dateDown=dateDown,
-                                              dateUp=dateUp,
-                                              shareDown=shareDown)
         if remarks:
-            rem = xml.etree.ElementTree.SubElement(entry, "remarks")
-            rem.text = remarks
-        self.element.append(entry)
+            self.add_element(RemarksEntry(remarks))
+    def clean_shareDown(self, share_down):
+        if isinstance(share_down, int):
+            share_down = "%d" % share_down
+        elif isinstance(share_down, float):
+            share_down = "%f" % share_down
+        return share_down
+
+class RemarksEntry(metaelement.MetaElement):
+    def __init__(self, content):
+        super(RemarksEntry, self).__init__("remarks")
+        self.text = content

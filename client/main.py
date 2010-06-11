@@ -40,7 +40,9 @@ from projects import Projects
 from allocations import Allocations
 from events import Events
 from siteinfo import SiteInfo
-from custom.configuration import SiteConfiguration
+from custom.siteconfiguration import SiteConfiguration
+from configuration import Configuration
+from custom.siteevents import SiteEvent
 import ConfigParser
 import sys
 import getopt
@@ -157,23 +159,21 @@ def main():
     # ready for main processing.
     m = MetaDoc(True)
     if configuration:
-        import custom.configuration
-        import configuration
-        xmlConfiguration = configuration.Configuration()
-        siteconfig = custom.configuration.SiteConfiguration()
+        xmlConfiguration = Configuration()
+        siteconfig = SiteConfiguration()
         siteconfig.populate()
-        config_items = siteconfig.fetch()
-        for config_item in config_items:
-            xmlConfiguration.addEntry(config_item.entry_type, **config_item.todict())
-        m.regMetaElement(xmlConfiguration)
+        config_entries = siteconfig.fetch()
+        for config_entry in config_entries:
+            xmlConfiguration.add_element(config_entry)
+        m.reg_meta_element(xmlConfiguration)
     if events:
-        import custom.events
-
-        site_events = custom.events.Events()
+        xmlEvent = Events("bjornar")
+        site_events = SiteEvent()
         site_events.populate()
-        event_items = site_events.fetch()
-        for site_item in site_items:
-            pass
+        event_entries = site_events.fetch()
+        for event_entry in event_entries:
+            xmlEvent.add_element(event_entry)
+        m.reg_meta_element(xmlEvent)
     # u = Users()
     # p = Projects()
     # a = Allocations()
@@ -193,8 +193,8 @@ def main():
         print vals['key']
         print vals['cert']
     cli = metahttp.XML_Client(vals['host'], vals['key'], vals['cert'])
-    res = cli.send(m.getXML())
-    print m.getXML()
+    res = cli.send(m.get_xml())
+    print m.get_xml()
     if res:
         print res.read()
 

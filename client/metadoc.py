@@ -36,17 +36,17 @@ class MetaDoc:
                                                   version="1.0",
                                                   fullUpdate=self.fullUpdate)
 
-    def regMetaElement(self, me):
+    def reg_meta_element(self, me):
         """
         regMetaElement: add a new element to the base MetaDoc elemeent.
         """
         if not me:
             return False
-        if me.getName():
-            self.mes[me.getName()] = me
+        if me.get_name():
+            self.mes[me.get_name()] = me
         return True
 
-    def getXML(self):
+    def get_xml(self):
         """
         Return the XML-string of the registred information.
 
@@ -54,29 +54,25 @@ class MetaDoc:
         """
         self._create_root()
 
-        if 'users' in self.mes and \
-                xml.etree.ElementTree.iselement(self.mes['users'].getElement()):
-                self.root.append(self.mes['users'].getElement())
-
-        if 'projects' in self.mes and \
-                xml.etree.ElementTree.iselement(self.mes['projects'].getElement()):
-                self.root.append(self.mes['projects'].getElement())
-
-        if 'allocations' in self.mes and \
-                xml.etree.ElementTree.iselement(self.mes['allocations'].getElement()):
-                self.root.append(self.mes['allocations'].getElement())
+#        if 'users' in self.mes and \
+#                xml.etree.ElementTree.iselement(self.mes['users'].get_xml_element()):
+#                self.root.append(self.mes['users'].get_xml_element())
+#
+#        if 'projects' in self.mes and \
+#                xml.etree.ElementTree.iselement(self.mes['projects'].get_xml_element()):
+#                self.root.append(self.mes['projects'].get_xml_element())
+#
+#        if 'allocations' in self.mes and \
+#                xml.etree.ElementTree.iselement(self.mes['allocations'].get_xml_element()):
+#                self.root.append(self.mes['allocations'].get_xml_element())
 
         if 'events' in self.mes and \
-                xml.etree.ElementTree.iselement(self.mes['events'].getElement()):
-                self.root.append(self.mes['events'].getElement())
-
-        if 'siteInfo' in self.mes and \
-                xml.etree.ElementTree.iselement(self.mes['siteInfo'].getElement()):
-                self.root.append(self.mes['siteInfo'].getElement())
+                xml.etree.ElementTree.iselement(self.mes['events'].get_xml_element()):
+                self.root.append(self.mes['events'].get_xml_element())
 
         if 'config' in self.mes and \
-                xml.etree.ElementTree.iselement(self.mes['config'].getElement()):
-                self.root.append(self.mes['config'].getElement())
+                xml.etree.ElementTree.iselement(self.mes['config'].get_xml_element()):
+                self.root.append(self.mes['config'].get_xml_element())
 
         return xml.etree.ElementTree.tostring(self.root, "UTF-8")
 

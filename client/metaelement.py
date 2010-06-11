@@ -16,6 +16,70 @@
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 # The API interface
 
+import xml.etree.ElementTree
+
+class MetaElement(object):
+    """ MetaElement - an individual element in the MetaDoc tree.
+
+    An element roughly equates to a tag in the XML document. It contains 
+    information about which subelements and attributes are allwoed. 
+
+    This is a semi-abstract class (semi since we don't have the notion of
+    abstract classes in python).
+
+    """
+    def __init__(self, name, attributes = {}):
+        self.attributes = attributes
+        self.name = name
+        self.legal_element_types = ()
+        self.sub_elements = []
+        self.text = None
+        
+        self.create_xml_element()
+
+    def get_name(self):
+        """ Return the name of the element. """
+        return self.name
+
+    def get_attributes(self):
+        """ Returns the attributes of the element. """
+        return self.attributes
+
+    def create_xml_element(self):
+        """ Creates the XML-element """
+        # FIXME - Catch exceptions
+        # Return None if exception?
+        self.element = xml.etree.ElementTree.Element(self.get_name(), **self.attributes)
+        if self.text:
+            self.element.text = self.text
+
+    def get_xml_element(self):
+        """ element is an xml.etree.Element with the values. It can be a hierarchy """
+        if not self.element:
+            self.create_xml_element()
+        return self.element
+
+    def add_element(self, element):
+        """ add_element: add an entry to the element, this is typically a sub-entry. """
+        valid_element = False
+        for element_type in self.legal_element_types:
+            if isinstance(element, element_type):
+                valid_element = True
+        if not valid_element:
+            raise Exception("Illegal element type")
+        
+        element.clean()
+        self.sub_elements.append(element)
+        self.element.append(element.get_xml_element())
+
+    def clean(self):
+        """ Runs clean functions on every attribute if they exist. """
+        for attribute in self.attributes.keys():
+            if hasattr(self, "clean_%s" % attribute):
+                self.attributes[attribute] = getattr(self, "clean_%s" % attribute)(self.attributes[attribute])
+
+# Error classes
+
 class Error(Exception):
     """
     Base Error class for MetaElements.
@@ -47,56 +111,7 @@ class IllegalAttributeTypeError(Error):
     def __str__(self):
         return repr("Illegal type used for \"%s\" attribute in \"%s\". Allowed types: %s. Recieved type: \"%s\"" % (self.attrib, self.element, self.allowed_formats, self.used_type.__name__))
 
-class MetaElement(object):
-    """
-    MetaElement - an individual element in the MetaDoc tree.
 
-    This is a semi-abstract class (semi since we don' have the notion of
-    abstract classes in python).
-    """
-    def __init__(self, name):
-        self.attribs        = None
-        self.element        = None
-        self.name           = name
-        self.entryAttribs   = ()
-
-    def getName(self):
-        """
-        getName - return the name of the element
-        """
-        return self.name
-
-    def getElement(self):
-        """
-        element is an xml.etree.Element with the values. It can be a hierarchy
-        """
-        if self.element:
-            return self.element
-
-    def addEntry(self):
-        """
-        addEntry: add an entry to the element, this is typically a sub-entry.
-
-        At the MetaElement level, this will raise an error, so classes
-        inheriting from MetaElement must override this method.
-        """
-        raise Exception("%s has not implemented addEntry, and function cannot be used!" % self.name)
-
-    def checkEntries(self, *args, **kwargs):
-        """
-        Checks the recieved attributes for the entry against entryAttribs
-
-        Each attribute recieved will be cleaned with it's respective clean function. 
-        Raises an error if any required attributes are missing.
-        """
-        attributeList = {}
-        for attrib in self.entryAttribs:
-            if attrib['name'] in kwargs.keys():
-                if attrib['cleanFunction'] is not None:
-                    # FIXME - Catch getattr error
-                    attributeList[attrib['name']] = getattr(self, attrib['cleanFunction'])(kwargs[attrib['name']])
-            else:
-                if attrib['required']:
-                    # We're missing a required attribute
-                    raise Exception("Entry added to \"%s\" is missing required attribute \"%s\"." % (self.name, attrib['name']))
-        return attributeList
+class NotImplementedError(Error):
+    """ Error given when a call to an abstract function is made. """
+    pass
