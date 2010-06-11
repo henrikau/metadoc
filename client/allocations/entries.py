@@ -16,22 +16,6 @@
 #
 
 import metaelement
-import xml.etree.ElementTree
-from custom.updateallocations import UpdateAllocations
-
-class Allocations(metaelement.MetaElement):
-    """
-    Allocations - the granted resources for a project.
-    """
-    xml_tag_name = "allocations"
-    update_handler = UpdateAllocations
-
-    def __init__(self):
-        """
-        init()
-        """
-        super(Allocations, self).__init__(Allocations.xml_tag_name)
-        self.legal_element_types = (AllocationEntry,)
 
 class AllocationEntry(metaelement.MetaElement):
     """

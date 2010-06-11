@@ -77,6 +77,10 @@ class MetaElement(object):
         element.clean()
         self.sub_elements.append(element)
         self.element.append(element.get_xml_element())
+    def add_elements(self, elements):
+        """ Adds a list of elements. """
+        for element in elements:
+            self.add_element(element)
 
     def clean(self):
         """ Runs clean functions on every attribute if they exist. """

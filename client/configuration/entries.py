@@ -16,22 +16,6 @@
 #
 
 import metaelement
-import xml.etree.ElementTree
-
-class Configuration(metaelement.MetaElement):
-    """ Registers events and packs to XML. 
-
-    Specifies cleaning methods for attributes to make sure they conform with 
-    expected values. 
-
-    """
-    xml_tag_name = "config"
-
-    def __init__(self):
-        """ Initialites the MetaElement and specifies legal values for attributes. """
-        super(Configuration, self).__init__(Configuration.xml_tag_name)
-        self.legal_element_types = (ConfigEntry,)
-
 
 class ConfigEntry(metaelement.MetaElement):
     xml_tag_name = "config_entry"

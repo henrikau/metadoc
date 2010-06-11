@@ -16,8 +16,8 @@
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 
 import metaelement
-import xml.etree.ElementTree
 from custom.updateprojects import UpdateProjects
+from projects.entries import ProjectEntry
 
 class Projects(metaelement.MetaElement):
     """
@@ -38,18 +38,3 @@ class Projects(metaelement.MetaElement):
             attributes['fullUpdate'] = fullUpdate
         super(Projects, self).__init__(Projects.xml_tag_name, attributes)
         self.legal_element_types = (ProjectEntry,)
-
-class ProjectEntry(metaelement.MetaElement):
-    xml_tag_name = "project_entry"
-    
-    def __init__(self, name, gid, status, account_nmb, valid_from, valid_to=None):
-        attributes = {
-            'name': name,
-            'gid': gid,
-            'status': status,
-            'account_nmb': account_nmb,
-            'valid_from': valid_from,
-        }
-        if valid_to:
-            attributes['valid_to'] = valid_to
-        super(ProjectEntry, self).__init__(ProjectEntry.xml_tag_name, attributes)

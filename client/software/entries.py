@@ -16,20 +16,6 @@
 #
 
 import metaelement
-import xml.etree.ElementTree
-
-class Software(metaelement.MetaElement):
-    """ Registers software and packs to XML. """
-    xml_tag_name = "software"
-
-    def __init__(self):
-        """ Initializes the MetaElement. 
-
-        Allowed sub-elements is SoftwareEntry.
-
-        """
-        super(Software, self).__init__(Software.xml_tag_name)
-        self.legal_element_types = (SoftwareEntry,)
 
 class SoftwareEntry(metaelement.MetaElement):
     """ Registers software_entry and packs to XML. """

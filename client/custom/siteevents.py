@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta
 
 from abstract import MetaOutput
-from events import ResourceUpEntry, ResourceDownEntry
+from events.entries import ResourceUpEntry, ResourceDownEntry
 #### Testing Purposes ####
 import random
 #### Testing Purposes end ####
 
-class SiteEvent(MetaOutput):
+class SiteEvents(MetaOutput):
     def populate(self):
         """
         Function to populate self.items with ConfigItem

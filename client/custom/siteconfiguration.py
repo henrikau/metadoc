@@ -1,5 +1,5 @@
 from abstract import MetaOutput
-from configuration import ConfigEntry
+from configuration.entries import ConfigEntry
 #### Testing Purposes ####
 import random
 #### Testing Purposes end ####

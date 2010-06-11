@@ -16,23 +16,11 @@
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 
 import metaelement
-import xml.etree.ElementTree
-
-class Events(metaelement.MetaElement):
-    """ Register Events and pack it in XML. """
-    xml_tag_name = "events"
-
-    def __init__(self):
-        """ Initializes the MetaElement and specifies legal values for attributes. 
-        
-        Allows for both ResourceUpEntry and ResourceDownEntry sub-elements.
-
-        """
-        super(Events, self).__init__(Events.xml_tag_name)
-        self.legal_element_types = (ResourceUpEntry, ResourceDownEntry,)
 
 class ResourceUpEntry(metaelement.MetaElement):
     """ Describes a resourceUp entry. """
+    xml_tag_name = "resourceUp"
+
     def __init__(self, date_up, reason=None, remarks=None):
         """ Initializes the MetaElement and specifies legal values for attributes.
 
@@ -44,7 +32,7 @@ class ResourceUpEntry(metaelement.MetaElement):
         }
         if reason:
             self.attributes['reason'] = reason
-        super(ResourceUpEntry, self).__init__("resourceUp", self.attributes)
+        super(ResourceUpEntry, self).__init__(ResourceUpEntry.xml_tag_name, self.attributes)
         
         self.legal_element_types = (RemarksEntry,)
 
@@ -57,6 +45,8 @@ class ResourceUpEntry(metaelement.MetaElement):
 
 class ResourceDownEntry(metaelement.MetaElement):
     """ Describes a resourceDown entry. """
+    xml_tag_name = "resourceDown"
+
     def __init__(self, reason, date_down, date_up, share_down, remarks=None):
         """ Initializes the MetaElement and specifies legal values for attributes.
 
@@ -69,7 +59,7 @@ class ResourceDownEntry(metaelement.MetaElement):
             'dateUp': date_up,
             'shareDown': share_down,
         }
-        super(ResourceDownEntry, self).__init__("resourceDown", self.attributes)
+        super(ResourceDownEntry, self).__init__(ResourceDownEntry.xml_tag_name, self.attributes)
 
         self.legal_element_types = (RemarksEntry, )
 
@@ -84,11 +74,13 @@ class ResourceDownEntry(metaelement.MetaElement):
 
 class RemarksEntry(metaelement.MetaElement):
     """ Describes a remarks entry. """
+    xml_tag_name = "remarks"
+
     def __init__(self, content):
         """ Initializes the MetaElement.
         
         Remarks have no attributes, but contains PCDATA.
 
         """
-        super(RemarksEntry, self).__init__("remarks")
+        super(RemarksEntry, self).__init__(RemarksEntry.xml_tag_name)
         self.text = content

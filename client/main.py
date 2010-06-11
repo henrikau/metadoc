@@ -30,6 +30,7 @@ Usage:
 -s                      Send software data
 -u                      Fetch user data
 -a                      Fetch allocation data
+-p                      Fetch project data
 -l <log level>          Sets log level
 --loglevel=<log level>  
 
@@ -43,16 +44,13 @@ import metahttp
 from metadoc import MetaDoc
 from metaelement import MetaElement
 
-from events import Events
-from custom.siteevents import SiteEvent
-from configuration import Configuration
-from custom.siteconfiguration import SiteConfiguration
-from software import Software
-from custom.sitesoftware import SiteSoftware
+from events.definition import Events
+from configuration.definition import Configuration
+from software.definition import Software
 
-from allocations import Allocations
-from users import Users
-from projects import Projects
+from allocations.definition import Allocations
+from users.definition import Users
+from projects.definition import Projects
 
 def write_sample_config():
     """
@@ -108,9 +106,7 @@ def main():
     dryrun = False
     loglevel = 2
     # Information to send
-    events = False
-    configuration = False
-    software = False
+    send_elements = []
     # Fetch information from server
     fetch_elements = []
 
@@ -129,11 +125,11 @@ def main():
         elif opt == '-q':
             quiet = True
         elif opt == '-e':
-            events = True
+            send_elements.append(Events)
         elif opt == '-c':
-            configuration = True
+            send_elements.append(Configuration)
         elif opt == '-s':
-            software = True
+            send_elements.append(Software)
         elif opt == '-u':
             fetch_elements.append(Users)
         elif opt == '-a':
@@ -169,30 +165,12 @@ def main():
 
     # ready for main processing.
     m = MetaDoc(True)
-    if configuration:
-        xml_configuration = Configuration()
-        siteconfig = SiteConfiguration()
-        siteconfig.populate()
-        config_entries = siteconfig.fetch()
-        for config_entry in config_entries:
-            xml_configuration.add_element(config_entry)
-        m.reg_meta_element(xml_configuration)
-    if events:
-        xml_event = Events()
-        site_events = SiteEvent()
-        site_events.populate()
-        event_entries = site_events.fetch()
-        for event_entry in event_entries:
-            xml_event.add_element(event_entry)
-        m.reg_meta_element(xml_event)
-    if software:
-        xml_software = Software()
-        site_software = SiteSoftware()
-        site_software.populate()
-        software_entries = site_software.fetch()
-        for software_entry in software_entries:
-            xml_software.add_element(software_entry)
-        m.reg_meta_element(xml_software)
+    for element in send_elements:
+        element_processor = element()
+        site_element = element.site_handler()
+        site_element.populate()
+        element_processor.add_elements(site_element.fetch())
+        m.reg_meta_element(element_processor)
 
     # Get ready to send the data
     if verbose:

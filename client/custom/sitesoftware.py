@@ -1,5 +1,5 @@
 from abstract import MetaOutput
-from software import SoftwareEntry
+from software.entries import SoftwareEntry
 #### Testing Purposes ####
 import random
 #### Testing Purposes end ####
