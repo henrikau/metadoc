@@ -23,13 +23,14 @@
 import urllib, urllib2, httplib
 
 """
-XML_Client. Simple client for pushing XML over HTTPS
+XMLClient. Simple client for pushing XML over HTTPS
 """
 class HTTPSClientAuthHandler(urllib2.HTTPSHandler):
     """
     HTTPSClientAuthHandler extends HTTPSHandler
 
     Client code for a http-handler capable of SSL and X.509 authN
+
     """
     def __init__(self, key, cert):
         """
@@ -38,6 +39,7 @@ class HTTPSClientAuthHandler(urllib2.HTTPSHandler):
         cert: the certificate
 
         both to use with the AuthN/AuthZ
+
         """
         urllib2.HTTPSHandler.__init__(self)
         self.key  = key
@@ -47,9 +49,9 @@ class HTTPSClientAuthHandler(urllib2.HTTPSHandler):
         """
         Open the connection.
         """
-        return self.do_open(self.getConncetion, req)
+        return self.do_open(self.get_conncetion, req)
 
-    def getConncetion(self, host, timeout=300):
+    def get_conncetion(self, host, timeout=300):
         """
         Get the connection.
         """
@@ -57,13 +59,14 @@ class HTTPSClientAuthHandler(urllib2.HTTPSHandler):
                                        cert_file=self.cert)
 
 
-class XML_Client:
+class XMLClient:
     """
     Send XML over HTTPS + X.509 authN channel
+
     """
     def __init__(self, addr, key, cert):
         """
-        XML_Client()
+        XMLClient()
 
         addr: the address we are going to send data to
         key, cert: keypair to use for authentication.
@@ -75,7 +78,7 @@ class XML_Client:
         pretty hard. No logic to handle this has been added yet.
         """
         self.https_client = HTTPSClientAuthHandler(key, cert)
-        self.url          = addr
+        self.url = addr
 
     def send(self, xml_data):
         """
@@ -87,8 +90,8 @@ class XML_Client:
         The result is returned raw without parsing it.
 
         """
-        post    = { 'metadoc' : xml_data }
-        data    = urllib.urlencode(post)
-        opener  = urllib2.build_opener(self.https_client)
+        post = {'metadoc' : xml_data}
+        data = urllib.urlencode(post)
+        opener = urllib2.build_opener(self.https_client)
         return opener.open(self.url, data)
 

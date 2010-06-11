@@ -171,6 +171,7 @@ def main():
             xml_configuration.add_element(config_entry)
         m.reg_meta_element(xml_configuration)
     if events:
+        # FIXME - Parameter to events should be removed once the DTD is fixed.
         xml_event = Events("bjornar")
         site_events = SiteEvent()
         site_events.populate()
@@ -186,29 +187,21 @@ def main():
         for software_entry in software_entries:
             xml_software.add_element(software_entry)
         m.reg_meta_element(xml_software)
-    # u = Users()
-    # p = Projects()
-    # a = Allocations()
-    # e = Events("foo_site")
-    # si = SiteInfo('foo_site')
-
-    # Register the elements with the main document http://www.kernel.org/pub/software/scm/git/docs/RelNotes-1.6.6.txt
-    # m.regMetaElement(u)
-    # m.regMetaElement(p)
-    # m.regMetaElement(a)
-    # m.regMetaElement(e)
-    # m.regMetaElement(si)
 
     # Get ready to send the data
     if verbose:
         print vals['host']
         print vals['key']
         print vals['cert']
-    cli = metahttp.XML_Client(vals['host'], vals['key'], vals['cert'])
+    cli = metahttp.XMLClient(vals['host'], vals['key'], vals['cert'])
     res = cli.send(m.get_xml())
     print m.get_xml()
     if res:
-        print res.read()
+        xml_data = res.read()
+        print xml_data
+    else:
+        # FIXME - No data returned, log event
+        pass
 
 if __name__ == "__main__":
     main()
