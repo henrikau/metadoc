@@ -20,29 +20,43 @@ Abstract classes for site specific parsing of input and output data.
 """
 
 class MetaOutput:
-    """
-    Abstract class
+    """ Abstract class defining an interface for sending information from the
+    site to the server. 
+
     """
     def __init__(self):
-        """
+        """ Creates self.items that should be populated with MetaElement 
+        sub-classes that should be sent to the server. 
+
         """
         self.items = []
     def populate(self):
-        """
-        populate : Populates self.items
+        """ populate : Populates self.items
         
         Has to be populated in the inherited class.
+
         """
         raise Exception("populate has not been implemented, and function cannot be used!")
     def fetch(self):
-        """
-        Returns a list of items to be sent.
-        """
+        """ Returns a list of items to be sent. """
         return self.items
 
 class MetaInput:
+    """ Abstract class defining an interface for processing recieved data
+    from the server.
+
     """
-    Abstract class
-    """
-    def __init__(self):
-        self.items = []
+    def __init__(self, items):
+        """ Creates self.items populated with MetaElement sub-classes 
+        recieved from the server. 
+
+        """
+        self.items = items
+
+    def process(self):
+        """ process : Processes self.items
+
+        Has to be created in the inherited class.
+
+        """
+        raise Exception("process has not been implemented, and function cannot be used!")

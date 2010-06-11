@@ -17,12 +17,14 @@
 
 import metaelement
 import xml.etree.ElementTree
+from custom.updateprojects import UpdateProjects
 
 class Projects(metaelement.MetaElement):
     """
     Information about projects tied to a system.
     """
     xml_tag_name = "projects"
+    update_handler = UpdateProjects
 
     def __init__(self, type, date, fullUpdate=None):
         """

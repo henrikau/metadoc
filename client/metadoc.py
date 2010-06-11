@@ -28,7 +28,7 @@ class MetaDoc:
             self.fullUpdate = "yes"
         else:
             self.fullUpdate = "no"
-        self.mes = {}
+        self.metaelements = []
 
     def _create_root(self):
         self.root = None
@@ -43,7 +43,7 @@ class MetaDoc:
         if not me:
             return False
         if me.get_name():
-            self.mes[me.get_name()] = me
+            self.metaelements.append(me)
         return True
 
     def get_xml(self):
@@ -53,29 +53,9 @@ class MetaDoc:
         The result should be valid XML and ready to export to the recipient.
         """
         self._create_root()
+        for me in self.metaelements:
+            self.root.append(me.get_xml_element())
 
-#        if 'users' in self.mes and \
-#                xml.etree.ElementTree.iselement(self.mes['users'].get_xml_element()):
-#                self.root.append(self.mes['users'].get_xml_element())
-#
-#        if 'projects' in self.mes and \
-#                xml.etree.ElementTree.iselement(self.mes['projects'].get_xml_element()):
-#                self.root.append(self.mes['projects'].get_xml_element())
-#
-#        if 'allocations' in self.mes and \
-#                xml.etree.ElementTree.iselement(self.mes['allocations'].get_xml_element()):
-#                self.root.append(self.mes['allocations'].get_xml_element())
-
-        if 'events' in self.mes and \
-                xml.etree.ElementTree.iselement(self.mes['events'].get_xml_element()):
-                self.root.append(self.mes['events'].get_xml_element())
-
-        if 'config' in self.mes and \
-                xml.etree.ElementTree.iselement(self.mes['config'].get_xml_element()):
-                self.root.append(self.mes['config'].get_xml_element())
-        if 'software' in self.mes and \
-                xml.etree.ElementTree.iselement(self.mes['software'].get_xml_element()):
-                self.root.append(self.mes['software'].get_xml_element())
 
         return xml.etree.ElementTree.tostring(self.root, "UTF-8")
 

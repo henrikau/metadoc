@@ -17,12 +17,14 @@
 
 import metaelement
 import xml.etree.ElementTree
+from custom.updateallocations import UpdateAllocations
 
 class Allocations(metaelement.MetaElement):
     """
     Allocations - the granted resources for a project.
     """
     xml_tag_name = "allocations"
+    update_handler = UpdateAllocations
 
     def __init__(self):
         """

@@ -54,9 +54,6 @@ from allocations import Allocations
 from users import Users
 from projects import Projects
 
-fetch_elements = (Allocations,Users,Projects,)
-
-
 def write_sample_config():
     """
     Creates a default configuration file.
@@ -102,7 +99,7 @@ def testConfig(vals):
     return True
 
 def main():
-    optstr = "hvqecsual:"
+    optstr = "hvqecaspul:"
     optlist = ['help', 'dry-run', 'loglevel=']
     # Default settings
     # Will be altered depending on passed options
@@ -115,8 +112,7 @@ def main():
     configuration = False
     software = False
     # Fetch information from server
-    user = False
-    allocation = False
+    fetch_elements = []
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], optstr, optlist)
@@ -139,9 +135,11 @@ def main():
         elif opt == '-s':
             software = True
         elif opt == '-u':
-            user = True
+            fetch_elements.append(Users)
         elif opt == '-a':
-            allocation = True
+            fetch_elements.append(Allocations)
+        elif opt == '-p':
+            fetch_elements.append(Projects)
         elif opt == '--dry-run':
             dryrun = True
         elif opt in ('-l', '--loglevel'):
@@ -215,15 +213,15 @@ def main():
             print xml_data
         # FIXME - Error catching
         return_data = xml.etree.ElementTree.fromstring(xml_data)
-        elmnts = []
+        element_handlers = []
         for element in fetch_elements:
             found_elements = return_data.findall(element.xml_tag_name)
+            sub_elements = []
             for found_element in found_elements:
-                elmnts.append(MetaElement.from_xml_element(found_element, element))
-        for ele in elmnts:
-            print ele.xml_tag_name, ele.attributes
-            for ell in ele.sub_elements:
-                print ell.xml_tag_name, ell.attributes
+                sub_elements.append(MetaElement.from_xml_element(found_element, element))
+            element_handlers.append(element.update_handler(sub_elements))
+        for handler in element_handlers:
+            handler.process()
     else:
         # FIXME - No data returned, log event
         pass

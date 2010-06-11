@@ -17,12 +17,14 @@
 
 import metaelement
 import xml.etree.ElementTree
+from custom.updateusers import UpdateUsers
 
 class Users(metaelement.MetaElement):
     """
     List of users tied to a system.
     """
     xml_tag_name = "users"
+    update_handler = UpdateUsers
 
     def __init__(self, type, date, fullUpdate = None):
         """

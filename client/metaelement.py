@@ -28,7 +28,11 @@ class MetaElement(object):
     abstract classes in python).
 
     """
-    xml_tag_name = ""
+    xml_tag_name = ""       # XML-tag name of the described element
+    update_handler = None   # Handler that will handle all recieved elements
+                            # of this type (custom.abstract.MetaInput)
+    site_handler = None     # Handler that populates information for this type
+                            # from the site (custom.abstract.MetaOutput)
 
     def __init__(self, name, attributes = {}):
         self.attributes = attributes
