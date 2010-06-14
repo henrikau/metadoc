@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#            MetaElement.py is part of MetaDoc (Client).
+#            metaelement.py is part of MetaDoc (Client).
 #
 # All of MetaDoc is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -97,6 +97,8 @@ class MetaElement(object):
         """
         # FIXME - Missing attribute error
         element = element_class(**xml_element.attrib)
+        if xml_element.text:
+            element.text = xml_element.text
         for sub_class in element.legal_element_types:
             sub_elements = xml_element.findall(sub_class.xml_tag_name)
             for sub_element in sub_elements:

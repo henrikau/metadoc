@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#            MetaElement.py is part of MetaDoc (Client).
+#            abstract.py is part of MetaDoc (Client).
 #
 # All of MetaDoc is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 # The API interface
+
 """
 Abstract classes for site specific parsing of input and output data.
 """
