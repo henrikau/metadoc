@@ -36,6 +36,7 @@ Usage:
 
 """
 import ConfigParser
+import logging
 import sys
 import getopt
 import xml.etree.ElementTree

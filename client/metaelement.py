@@ -29,10 +29,14 @@ class MetaElement(object):
 
     """
     xml_tag_name = ""       # XML-tag name of the described element
+    # The following three variables need only be implemented for root 
+    # elements in the document. They will not be accessed for sub-entries. 
     update_handler = None   # Handler that will handle all recieved elements
                             # of this type (custom.abstract.MetaInput)
     site_handler = None     # Handler that populates information for this type
                             # from the site (custom.abstract.MetaOutput)
+    url = None              # URL that will be accessed to send or recieve 
+                            # information regarding this element type.
 
     def __init__(self, name, attributes = {}):
         self.attributes = attributes

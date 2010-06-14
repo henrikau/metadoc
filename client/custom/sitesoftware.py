@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-#            sitesoftware.py is part of MetaDoc (Client).
+#            custom/sitesoftware.py is part of MetaDoc (Client).
 #
 # All of MetaDoc is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
