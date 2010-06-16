@@ -16,6 +16,7 @@
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 # The API interface
 
+import logging
 import xml.etree.ElementTree
 
 class MetaElement(object):
@@ -44,7 +45,7 @@ class MetaElement(object):
         self.legal_element_types = ()
         self.sub_elements = []
         self.text = None
-        
+
         self.create_xml_element()
 
     def get_name(self):
@@ -100,7 +101,10 @@ class MetaElement(object):
 
         """
         # FIXME - Missing attribute error
-        element = element_class(**xml_element.attrib)
+        try:
+            element = element_class(**xml_element.attrib)
+        except TypeError, terr:
+            logging.error("Unable to convert XML element \"%s\". Missing required attributes." % (xml_element.tag))
         if xml_element.text:
             element.text = xml_element.text
         for sub_class in element.legal_element_types:

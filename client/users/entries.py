@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 import metaelement
 
 class UserEntry(metaelement.MetaElement):
@@ -43,3 +45,4 @@ class UserEntry(metaelement.MetaElement):
         if status:
             attributes['status'] = status
         super(UserEntry, self).__init__(UserEntry.xml_tag_name, attributes)
+        logging.info("Recieved user \"%s\"." % (username))

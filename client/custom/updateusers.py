@@ -16,6 +16,8 @@
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 # The API interface
 
+import logging
+
 from abstract import MetaInput
 
 class UpdateUsers(MetaInput):
