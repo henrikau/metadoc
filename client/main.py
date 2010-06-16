@@ -33,6 +33,7 @@ Usage:
 -p                      Fetch project data
 -l <log level>          Sets log level, availible levels are:
 --loglevel=<log level>  debug, info, warning, error, critical
+-n, --no-cache          Will not send any cached data
 
 """
 import ConfigParser
@@ -40,7 +41,7 @@ import logging
 import logging.handlers
 import sys
 import getopt
-import xml.etree.ElementTree
+import lxml.etree
 import urllib2
 
 import metahttp 
@@ -70,6 +71,7 @@ def write_sample_config():
     f.write("host  = https://localhost/metadoc_api/\n")
     f.write("key   = userkey.pem\n")
     f.write("cert  = usercert.pem\n")
+    f.write("trailing_slash = True\n")
     f.write("valid = False\n")
     f.close()
 
@@ -100,13 +102,14 @@ def testConfig(vals):
     return True
 
 def main():
-    optstr = "hvqecaspul:"
-    optlist = ['help', 'dry-run', 'loglevel=']
+    optstr = "hvqecaspunl:"
+    optlist = ['help', 'dry-run', 'loglevel=', 'no-cache']
     # Default settings
     # Will be altered depending on passed options
     verbose = False
     quiet = False
     dryrun = False
+    send_cache = True
     loglevel = 2
     # Information to send
     send_elements = []
@@ -153,6 +156,8 @@ def main():
             dryrun = True
         elif opt in ('-l', '--loglevel'):
             log_level = LOG_LEVELS.get(arg.lower(), logging.NOTSET)
+        elif opt in ('-l', '--no-cache'):
+            send_cache = False
 
     logging.basicConfig(level=log_level, format=LOG_FORMAT)
     
@@ -167,6 +172,7 @@ def main():
         print "Need a configuration-file. "
         print "A sample file has been created for you in metadoc.conf"
         print "Please edit this file carefully and re-run the program."
+        logging.info("Creating default configuration file.")
         write_sample_config()
         return
 
@@ -185,19 +191,22 @@ def main():
         site_element.populate()
         element_processor.add_elements(site_element.fetch())
         m.reg_meta_element(element_processor)
-        cli = metahttp.XMLClient("%s%s/" % (vals['host'], element.url), vals['key'], vals['cert'])
+        url = "%s%s" % (vals['host'], element.url)
+        if vals['trailing_slash'].lower() == 'true' or vals['trailing_slash'].lower() == 'yes':
+            url = "%s/" % url
+        cli = metahttp.XMLClient(url, vals['key'], vals['cert'])
         if verbose:
             print "-" * 70
-            print "Connecting to host: %s%s" % (vals['host'], element.url)
+            print "Connecting to host: %s" % url
             print "Using key: %s" % vals['key']
             print "Using certificate: %s" % vals['cert']
             print "-" * 70
-            print "%s\nSent data:\n%s" % ("-" * 70, "-" * 70)
+            print "Sent data:\n%s" % ("-" * 70)
             print m.get_xml()
         try:
             res = cli.send(m.get_xml())
         except (urllib2.HTTPError, urllib2.URLError) as httperror:
-            logging.critical("Unable to connect to server address \"%s%s\", error: %s" % (vals['host'], element.url, httperror))
+            logging.critical("Unable to connect to server address \"%s\", error: %s" % (url, httperror))
         else:
             if res:
                 # FIXME - Check that the server accepted the data
@@ -205,6 +214,8 @@ def main():
                 if verbose:
                     print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
                     print xml_data
+                    print "-" * 70
+                m.check_response(xml_data)
             else:
                 # FIXME - Error, no data returned.
                 pass
@@ -224,12 +235,13 @@ def main():
         else:
             if res:
                 xml_data = res.read()
-                print xml_data
+                if verbose:
+                    print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
+                    print xml_data
                 try:
-                    return_data = xml.etree.ElementTree.fromstring(xml_data)
-                except:
-                    # FIXME - What errors can fromstring give? Catch them!
-                    pass
+                    return_data = lxml.etree.fromstring(xml_data)
+                except lxml.XMLSyntaxError, e:
+                    logging.error("Error parsing XML document from server: ", e)
                 else:
                     found_elements = return_data.findall(element.xml_tag_name)
                     sub_elements = []
