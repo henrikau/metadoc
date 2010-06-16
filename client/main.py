@@ -47,14 +47,19 @@ import urllib2
 import metahttp 
 from metadoc import MetaDoc
 from metaelement import MetaElement
+from cacher import Cacher
 
+# Classes that send information to server
 from events.definition import Events
 from configuration.definition import Configuration
 from software.definition import Software
 
+# Classes that retrieve information from server
 from allocations.definition import Allocations
 from users.definition import Users
 from projects.definition import Projects
+
+possible_send_elements = (Events, Configuration, Software,)
 
 def write_sample_config():
     """
@@ -186,10 +191,16 @@ def main():
     # ready for main processing.
     for element in send_elements:
         m = MetaDoc(True)
-        element_processor = element()
+        c = Cacher(element.xml_tag_name)
+        cached_data = c.get_cache()
+        if cached_data is not None:
+            element_processor = element.from_xml_element(cached_data, element)
+        else:
+            element_processor = element()
         site_element = element.site_handler()
         site_element.populate()
         element_processor.add_elements(site_element.fetch())
+        # Let's see if we have some cached data to add
         m.reg_meta_element(element_processor)
         url = "%s%s" % (vals['host'], element.url)
         if vals['trailing_slash'].lower() == 'true' or vals['trailing_slash'].lower() == 'yes':
@@ -207,6 +218,9 @@ def main():
             res = cli.send(m.get_xml())
         except (urllib2.HTTPError, urllib2.URLError) as httperror:
             logging.critical("Unable to connect to server address \"%s\", error: %s" % (url, httperror))
+            # Since we're unable to send the document to the server, we will 
+            # cache it so that we can send it at a later date.
+            Cacher(element.xml_tag_name, m)
         else:
             if res:
                 # FIXME - Check that the server accepted the data

@@ -48,7 +48,7 @@ class MetaDoc:
             self.metaelements.append(me)
         return True
 
-    def get_xml(self):
+    def get_xml(self, with_id=True):
         """
         Return the XML-string of the registred information.
 
@@ -56,7 +56,7 @@ class MetaDoc:
         """
         self._create_root()
         for me in self.metaelements:
-            self.root.append(me.get_xml_element())
+            self.root.append(me.get_xml_element(with_id))
 
 
         return lxml.etree.tostring(self.root, encoding=unicode)

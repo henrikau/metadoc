@@ -17,12 +17,14 @@
 
 import logging
 import os
+import lxml.etree
 
 class Cacher(object):
-    def __init__(self, file_type, metadoc = None):
+    def __init__(self, element_type, metadoc = None):
         """ Receives a metadoc.MetaDoc that should be cached. """
         self.metadoc = metadoc
-        self.file_path = "cache/%s.xml" % file_type
+        self.file_path = "cache/%s.xml" % element_type
+        self.element_type = element_type
         if not os.path.isdir("cache"):
             logging.info("Cache not preset, attempting to create.")
             try:
@@ -33,8 +35,45 @@ class Cacher(object):
             else:
                 logging.info("Created cache directory.")
 
-        # Cache dir should exist when we've reached this point 
-        # FIXME - File already exists, we do not want to overwrite
-        cache_file = open(self.file_path, "w")
-        cache_file.write(metadoc.get_xml())
-        cache_file.close()
+        if metadoc:
+            # Cache dir should exist when we've reached this point 
+            # FIXME - File already exists, we do not want to overwrite
+            cache_file = open(self.file_path, "w")
+            cache_file.write(metadoc.get_xml(False))
+            cache_file.close()
+
+    def get_cache(self):
+        """ Returns a lxml.etree.Element of self.element_type """
+        cache_string = self._get_cache_string()
+        if not cache_string:
+            return None
+        try:
+            element = lxml.etree.fromstring(cache_string)
+        except lxml.etree.XMLSyntaxError:
+            logging.error("Cached file \"%s\" contains invalid XML." % self.file_path)
+            return None
+        try:
+            # We've retrived the cached data, let's remove it so it wont 
+            # be sent twice. If the data can't be sent it will be recached.
+            os.remove(self.file_path)
+        except:
+            # FIXME - IOError
+            pass
+        return element.find(self.element_type)
+
+    def _get_cache_string(self):
+        """ Returns cached data, if any. 
+        
+        Returns a string with the XML document if existent.
+
+        """
+        if not os.path.isfile(self.file_path):
+            # No cached data for this type
+            return None
+        try:
+            cached_file = open(self.file_path, "r")
+        except:
+            # FIXME - IOError
+            return None
+        cached_string = cached_file.read()
+        return cached_string

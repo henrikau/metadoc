@@ -38,6 +38,8 @@ class MetaElement(object):
                             # from the site (custom.abstract.MetaOutput)
     url = None              # URL that will be accessed to send or recieve 
                             # information regarding this element type.
+    resend_cache = True     # If any cached data for this element should be
+                            # sent when another call to send this type is run.
 
     def __init__(self, name, attributes = {}):
         for attrib in attributes.keys():
@@ -48,8 +50,6 @@ class MetaElement(object):
         self.sub_elements = []
         self.text = None
 
-        self.create_xml_element()
-
     def get_name(self):
         """ Return the name of the element. """
         return self.name
@@ -58,19 +58,26 @@ class MetaElement(object):
         """ Returns the attributes of the element. """
         return self.attributes
 
-    def create_xml_element(self):
-        """ Creates the XML-element """
+    def get_xml_element(self, with_id=True):
+        """ element is an xml.etree.Element with the values. It can be a hierarchy """
         # FIXME - Catch exceptions
         # Return None if exception?
-        self.element = lxml.etree.Element(self.get_name(), **self.attributes)
-        if self.text:
-            self.element.text = self.text
+        temp_id = False
+        if not with_id:
+            if "id" in self.attributes.keys():
+                temp_id = self.attributes.get("id")
+                del self.attributes['id']
+        
+        element = lxml.etree.Element(self.get_name(), **self.attributes)
+        for el in self.sub_elements:
+            element.append(el.get_xml_element(with_id))
+        
+        if not with_id and temp_id:
+            self.attributes['id'] = temp_id
 
-    def get_xml_element(self):
-        """ element is an xml.etree.Element with the values. It can be a hierarchy """
-        if not self.element:
-            self.create_xml_element()
-        return self.element
+        if self.text:
+            element.text = self.text
+        return element
 
     def add_element(self, element):
         """ add_element: add an entry to the element, this is typically a sub-entry. """
@@ -83,7 +90,6 @@ class MetaElement(object):
         
         element.clean()
         self.sub_elements.append(element)
-        self.element.append(element.get_xml_element())
     def add_elements(self, elements):
         """ Adds a list of elements. """
         for element in elements:
@@ -122,6 +128,7 @@ class MetaElement(object):
             element = element_class(**xml_element.attrib)
         except TypeError, terr:
             logging.error("Unable to convert XML element \"%s\". Missing required attributes." % (xml_element.tag))
+            return None
         if xml_element.text:
             element.text = xml_element.text
         for sub_class in element.legal_element_types:
