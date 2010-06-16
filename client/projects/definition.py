@@ -25,6 +25,7 @@ class Projects(metaelement.MetaElement):
     """
     xml_tag_name = "projects"
     update_handler = UpdateProjects
+    url = "projects"
 
     def __init__(self, type, date, fullUpdate=None):
         """

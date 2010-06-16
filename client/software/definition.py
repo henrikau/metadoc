@@ -24,6 +24,7 @@ class Software(metaelement.MetaElement):
     """ Registers software and packs to XML. """
     xml_tag_name = "software"
     site_handler = SiteSoftware
+    url = "software"
 
     def __init__(self):
         """ Initializes the MetaElement. 

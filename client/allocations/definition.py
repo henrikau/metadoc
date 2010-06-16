@@ -26,6 +26,7 @@ class Allocations(metaelement.MetaElement):
     """
     xml_tag_name = "allocations"
     update_handler = UpdateAllocations
+    url = "allocations"
 
     def __init__(self):
         """

@@ -23,6 +23,7 @@ class Events(metaelement.MetaElement):
     """ Register Events and pack it in XML. """
     xml_tag_name = "events"
     site_handler = SiteEvents
+    url = "events"
 
     def __init__(self):
         """ Initializes the MetaElement and specifies legal values for attributes. 

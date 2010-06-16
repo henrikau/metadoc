@@ -29,6 +29,7 @@ class Configuration(metaelement.MetaElement):
     """
     xml_tag_name = "config"
     site_handler = SiteConfiguration
+    url = "config"
 
     def __init__(self):
         """ Initialites the MetaElement and specifies legal values for attributes. """
