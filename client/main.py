@@ -31,15 +31,17 @@ Usage:
 -u                      Fetch user data
 -a                      Fetch allocation data
 -p                      Fetch project data
--l <log level>          Sets log level
---loglevel=<log level>  
+-l <log level>          Sets log level, availible levels are:
+--loglevel=<log level>  debug, info, warning, error, critical
 
 """
 import ConfigParser
 import logging
+import logging.handlers
 import sys
 import getopt
 import xml.etree.ElementTree
+import urllib2
 
 import metahttp 
 from metadoc import MetaDoc
@@ -111,6 +113,16 @@ def main():
     # Fetch information from server
     fetch_elements = []
 
+    LOG_LEVELS = {
+        'debug': logging.DEBUG,
+        'info': logging.INFO,
+        'warning': logging.WARNING,
+        'error': logging.ERROR,
+        'critical': logging.CRITICAL
+    }
+    LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
+    log_level = logging.NOTSET
+
     try:
         opts, args = getopt.getopt(sys.argv[1:], optstr, optlist)
     except getopt.GetoptError, goe:
@@ -140,9 +152,10 @@ def main():
         elif opt == '--dry-run':
             dryrun = True
         elif opt in ('-l', '--loglevel'):
-            loglevel = arg
+            log_level = LOG_LEVELS.get(arg.lower(), logging.NOTSET)
 
-
+    logging.basicConfig(level=log_level, format=LOG_FORMAT)
+    
 
     conf = ConfigParser.ConfigParser()
     conf.read("metadoc.conf")
@@ -165,45 +178,64 @@ def main():
         return
 
     # ready for main processing.
-    m = MetaDoc(True)
     for element in send_elements:
+        m = MetaDoc(True)
         element_processor = element()
         site_element = element.site_handler()
         site_element.populate()
         element_processor.add_elements(site_element.fetch())
         m.reg_meta_element(element_processor)
-
-    # Get ready to send the data
-    if verbose:
-        print "-" * 70
-        print "Connecting to host: %s" % vals['host']
-        print "Using key: %s" % vals['key']
-        print "Using certificate: %s" % vals['cert']
-        print "-" * 70
-    cli = metahttp.XMLClient(vals['host'], vals['key'], vals['cert'])
-    res = cli.send(m.get_xml())
-    if verbose:
-        print "%s\nSent data:\n%s" % ("-" * 70, "-" * 70)
-        print m.get_xml()
-    if res:
-        xml_data = res.read()
+        cli = metahttp.XMLClient("%s%s/" % (vals['host'], element.url), vals['key'], vals['cert'])
         if verbose:
-            print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
-            print xml_data
-        # FIXME - Error catching
-        return_data = xml.etree.ElementTree.fromstring(xml_data)
-        element_handlers = []
-        for element in fetch_elements:
-            found_elements = return_data.findall(element.xml_tag_name)
-            sub_elements = []
-            for found_element in found_elements:
-                sub_elements.append(MetaElement.from_xml_element(found_element, element))
-            element_handlers.append(element.update_handler(sub_elements))
-        for handler in element_handlers:
-            handler.process()
-    else:
-        # FIXME - No data returned, log event
-        pass
+            print "-" * 70
+            print "Connecting to host: %s%s" % (vals['host'], element.url)
+            print "Using key: %s" % vals['key']
+            print "Using certificate: %s" % vals['cert']
+            print "-" * 70
+            print "%s\nSent data:\n%s" % ("-" * 70, "-" * 70)
+            print m.get_xml()
+        try:
+            res = cli.send(m.get_xml())
+        except (urllib2.HTTPError, urllib2.URLError) as httperror:
+            logging.critical("Unable to connect to server address \"%s%s\", error: %s" % (vals['host'], element.url, httperror))
+        else:
+            if res:
+                # FIXME - Check that the server accepted the data
+                xml_data = res.read()
+                if verbose:
+                    print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
+                    print xml_data
+            else:
+                # FIXME - Error, no data returned.
+                pass
+
+    for element in fetch_elements:
+        cli = metahttp.XMLClient("%s%s" % (vals['host'], element.url), vals['key'], vals['cert'])
+        if verbose:
+            print "-" * 70
+            print "Connecting to host: %s%s" % (vals['host'], element.url)
+            print "Using key: %s" % vals['key']
+            print "Using certificate: %s" % vals['cert']
+            print "-" * 70
+        try:
+            res = cli.send()
+        except (urllib2.HTTPError, urllib2.URLError) as httperror:
+            logging.critical("Unable to connect to server address \"%s%s\", error: %s" % (vals['host'], element.url, httperror))
+        else:
+            if res:
+                xml_data = res.read()
+                print xml_data
+                try:
+                    return_data = xml.etree.ElementTree.fromstring(xml_data)
+                except:
+                    # FIXME - What errors can fromstring give? Catch them!
+                    pass
+                else:
+                    found_elements = return_data.findall(element.xml_tag_name)
+                    sub_elements = []
+                    for found_element in found_elements:
+                        sub_elements.append(MetaElement.from_xml_element(found_element, element))
+                    element.update_handler(sub_elements).process()
 
 if __name__ == "__main__":
     main()
