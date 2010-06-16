@@ -17,15 +17,18 @@
 #
 
 import metaelement
+from utils import UniqueID
 
 class SoftwareEntry(metaelement.MetaElement):
     """ Registers software_entry and packs to XML. """
     xml_tag_name = "sw_entry"
 
     def __init__(self, program_name, version, license = None, info_url = None):
+        u = UniqueID()
         self.attributes = {
             'progName': program_name,
             'version': version,
+            'id': u.get_id()
         }
         if license:
             self.attributes['version'] = version

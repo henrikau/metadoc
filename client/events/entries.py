@@ -16,6 +16,7 @@
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 
 import metaelement
+from utils import UniqueID
 
 class ResourceUpEntry(metaelement.MetaElement):
     """ Describes a resourceUp entry. """
@@ -27,8 +28,10 @@ class ResourceUpEntry(metaelement.MetaElement):
         Allows for RemarksEntry sub-elements.
 
         """
+        u = UniqueID()
         self.attributes = {
             'dateUp': date_up,
+            'id': u.get_id(),
         }
         if reason:
             self.attributes['reason'] = reason
@@ -53,11 +56,13 @@ class ResourceDownEntry(metaelement.MetaElement):
         Allows for RemarksEntry sub-elements.
 
         """
+        u = UniqueID()
         self.attributes = {
             'reason': reason,
             'dateDown': date_down,
             'dateUp': date_up,
             'shareDown': share_down,
+            'id': u.get_id(),
         }
         super(ResourceDownEntry, self).__init__(ResourceDownEntry.xml_tag_name, self.attributes)
 

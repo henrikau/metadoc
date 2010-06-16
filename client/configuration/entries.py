@@ -17,6 +17,7 @@
 #
 
 import metaelement
+from utils import UniqueID
 
 class ConfigEntry(metaelement.MetaElement):
     xml_tag_name = "config_entry"
@@ -29,10 +30,12 @@ class ConfigEntry(metaelement.MetaElement):
         volume          : Number of <metric> for the element described. Can be int or str.
 
         """
+        u = UniqueID()
         self.attributes = {
             'element': element,
             'metric': metric,
             'volume': volume,
+            'id': u.get_id(),
         }
         super(ConfigEntry, self).__init__(ConfigEntry.xml_tag_name, self.attributes)
         self.legal_metric = ('count', 'MB', 'GB', 'TB')
