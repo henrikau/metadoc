@@ -25,6 +25,7 @@ class Software(metaelement.MetaElement):
     xml_tag_name = "software"
     site_handler = SiteSoftware
     url = "software"
+    resend_cache = False
 
     def __init__(self):
         """ Initializes the MetaElement. 
