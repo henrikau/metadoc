@@ -80,7 +80,7 @@ class XMLClient:
         self.https_client = HTTPSClientAuthHandler(key, cert)
         self.url = addr
 
-    def send(self, xml_data):
+    def send(self, xml_data = None):
         """
         Send XML-data to the host.
 
@@ -90,8 +90,11 @@ class XMLClient:
         The result is returned raw without parsing it.
 
         """
-        post = {'metadoc' : xml_data}
-        data = urllib.urlencode(post)
         opener = urllib2.build_opener(self.https_client)
-        return opener.open(self.url, data)
+        if xml_data:
+            post = {'metadoc' : xml_data}
+            data = urllib.urlencode(post)
+            return opener.open(self.url, data)
+        else:
+            return opener.open(self.url)
 
