@@ -17,7 +17,7 @@
 # The API interface
 
 import logging
-import xml.etree.ElementTree
+import lxml.etree
 
 class MetaElement(object):
     """ MetaElement - an individual element in the MetaDoc tree.
@@ -40,6 +40,8 @@ class MetaElement(object):
                             # information regarding this element type.
 
     def __init__(self, name, attributes = {}):
+        for attrib in attributes.keys():
+            attributes[attrib] = str(attributes[attrib])
         self.attributes = attributes
         self.name = name
         self.legal_element_types = ()
@@ -60,7 +62,7 @@ class MetaElement(object):
         """ Creates the XML-element """
         # FIXME - Catch exceptions
         # Return None if exception?
-        self.element = xml.etree.ElementTree.Element(self.get_name(), **self.attributes)
+        self.element = lxml.etree.Element(self.get_name(), **self.attributes)
         if self.text:
             self.element.text = self.text
 
@@ -110,7 +112,7 @@ class MetaElement(object):
 
     @staticmethod
     def from_xml_element(xml_element, element_class):
-        """ Creates a MetaElement from an xml.etree.ElementTree.Element instance. 
+        """ Creates a MetaElement from an lxml.etree.Element instance. 
         
         Recursively checks for sub-elements from legal sub-classes.
 
