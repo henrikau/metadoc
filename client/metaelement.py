@@ -92,6 +92,21 @@ class MetaElement(object):
         for attribute in self.attributes.keys():
             if hasattr(self, "clean_%s" % attribute):
                 self.attributes[attribute] = getattr(self, "clean_%s" % attribute)(self.attributes[attribute])
+    
+    def find_id(self, locate_id):
+        """ Attempts to find element with a given ID inside element. """
+        # Is this the element?
+        if "id" in self.attributes.keys():
+            if self.attributes.get("id") == locate_id:
+                return self
+        # Check sub-elements for the id
+        if self.sub_elements:
+            for element in self.sub_elements:
+                sub_element_found = element.find_id(locate_id)
+                if sub_element_found:
+                    return sub_element_found
+        # Neither this or subelements has the ID, let's return nothing.
+        return None
 
     @staticmethod
     def from_xml_element(xml_element, element_class):
