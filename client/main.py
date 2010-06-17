@@ -17,7 +17,9 @@
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 """main.py - Runs the synchronization procedure
 
-Information sent and recieved depends on handles passed to main.py
+Information sent and recieved depends on handles passed to main.py.
+If main.py is run without any handles it will attempt to send any cached 
+information to the server.
 
 Usage:
 
@@ -59,6 +61,7 @@ from allocations.definition import Allocations
 from users.definition import Users
 from projects.definition import Projects
 
+# This list is used to check for cached items for elements within the list.
 possible_send_elements = (Events, Configuration, Software,)
 
 def write_sample_config():
