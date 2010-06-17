@@ -52,6 +52,11 @@ class Cacher(object):
         except lxml.etree.XMLSyntaxError:
             logging.error("Cached file \"%s\" contains invalid XML." % self.file_path)
             return None
+        return element.find(self.element_type)
+
+    def remove_cache(self):
+        """ Removes the file containing the cached data. """
+        logging.info("Removing cached file \"%s\"." % self.file_path)
         try:
             # We've retrived the cached data, let's remove it so it wont 
             # be sent twice. If the data can't be sent it will be recached.
@@ -59,7 +64,6 @@ class Cacher(object):
         except:
             # FIXME - IOError
             pass
-        return element.find(self.element_type)
 
     def _get_cache_string(self):
         """ Returns cached data, if any. 
