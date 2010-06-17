@@ -62,9 +62,9 @@ from projects.definition import Projects
 possible_send_elements = (Events, Configuration, Software,)
 
 def write_sample_config():
-    """
-    Creates a default configuration file.
+    """ Creates a default configuration file.
     Used if the config file is missing to create a base to work from.
+
     """
     f = open("metadoc.conf", "w")
     f.write("# This is a sample configuration file for MetaDoc\n")
@@ -81,8 +81,7 @@ def write_sample_config():
     f.close()
 
 def testConfig(vals):
-    """
-    Tests configuration file to see that it contains the necessary 
+    """ Tests configuration file to see that it contains the necessary 
     information to run the script.
     """
     if 'valid' in vals:
@@ -339,6 +338,8 @@ def main():
                     for found_element in found_elements:
                         sub_elements.append(MetaElement.from_xml_element(found_element, element))
                     element.update_handler(sub_elements).process()
+            else:
+                logging.critical("Recieved empty response from server when attempting to fetch \"%s\"." % element.xml_tag_name)
 
 if __name__ == "__main__":
     main()
