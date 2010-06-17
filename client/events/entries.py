@@ -81,7 +81,7 @@ class RemarksEntry(metaelement.MetaElement):
     """ Describes a remarks entry. """
     xml_tag_name = "remarks"
 
-    def __init__(self, content):
+    def __init__(self, content=None):
         """ Initializes the MetaElement.
         
         Remarks have no attributes, but contains PCDATA.
