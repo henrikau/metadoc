@@ -253,6 +253,64 @@ def main():
                 # them.
                 Cacher(element.xml_tag_name, m)
 
+    # Checking if we have any cached items that should be sent
+    if send_cache:
+        for element in possible_send_elements:
+            m = MetaDoc(True)
+            c = Cacher(element.xml_tag_name)
+            cached_data = c.get_cache()
+            if cached_data is not None:
+                element_processor = element.from_xml_element(cached_data, element)
+                logging.info("Found cached data for \"%s\"." % element.xml_tag_name)
+                if element_processor is not None:
+                    logging.info("Loaded cached data for \"%s\"." % element.xml_tag_name)
+                    # We will remove the cache, even though it's not sent yet
+                    # since it will be recached later if it can't be 
+                    # transferred.
+                    c.remove_cache()
+                else:
+                    logging.error("Unable to load cached data for \"%s\". Please check file \"%s\"." % (element.xml_tag_name, c.file_path))
+                    continue
+            else:
+                continue
+            m.reg_meta_element(element_processor)
+            url = "%s%s" % (vals['host'], element.url)
+            if vals['trailing_slash'].lower() == 'true' or vals['trailing_slash'].lower() == 'yes':
+                url = "%s/" % url
+            cli = metahttp.XMLClient(url, vals['key'], vals['cert'])
+            if verbose:
+                print "-" * 70
+                print "Connecting to host: %s" % url
+                print "Using key: %s" % vals['key']
+                print "Using certificate: %s" % vals['cert']
+                print "-" * 70
+                print "Sent data:\n%s" % ("-" * 70)
+                print m.get_xml()
+            try:
+                res = cli.send(m.get_xml())
+            except (urllib2.HTTPError, urllib2.URLError) as httperror:
+                logging.critical("Unable to connect to server address \"%s\", error: %s" % (url, httperror))
+                # Since we're unable to send the document to the server, we will 
+                # cache it so that we can send it at a later date.
+                Cacher(element.xml_tag_name, m)
+            else:
+                if res:
+                    xml_data = res.read()
+                    if verbose:
+                        print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
+                        print xml_data
+                        print "-" * 70
+                    m.check_response(xml_data)
+                else:
+                    logging.error("Server returned an empty response when \
+                        attempting to send \"%s\". Caching data." % 
+                        element.xml_tag_name)
+                    # Since we recieved an empty response from the server we have 
+                    # not recieved any reciept for any elements and must cache
+                    # them.
+                    Cacher(element.xml_tag_name, m)
+            
+
     for element in fetch_elements:
         cli = metahttp.XMLClient("%s%s" % (vals['host'], element.url), vals['key'], vals['cert'])
         if verbose:
@@ -273,8 +331,8 @@ def main():
                     print xml_data
                 try:
                     return_data = lxml.etree.fromstring(xml_data)
-                except lxml.XMLSyntaxError, e:
-                    logging.error("Error parsing XML document from server: ", e)
+                except lxml.etree.XMLSyntaxError, e:
+                    logging.error("Error parsing XML document from server: %s" % e)
                 else:
                     found_elements = return_data.findall(element.xml_tag_name)
                     sub_elements = []
