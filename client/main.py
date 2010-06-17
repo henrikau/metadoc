@@ -194,7 +194,19 @@ def main():
         c = Cacher(element.xml_tag_name)
         cached_data = c.get_cache()
         if cached_data is not None:
-            element_processor = element.from_xml_element(cached_data, element)
+            if element.resend_cache:
+                element_processor = element.from_xml_element(cached_data, element)
+            else:
+                logging.info("Found cached data for \"%s\", but element type declares not to resend this cache. Cache removed." % element.xml_tag_name)
+                c.remove_cache()
+                element_processor = element()
+            if element_processor is None:
+                logging.error("Found cached data for \"%s\", but unable to load. Check file \"%s\" for possible errors." % (element.xml_tag_name, c.file_path))
+                element_processor = element()
+            else:
+                # We have successfully loaded the cached data.
+                if element.resend_cache:
+                    c.remove_cache()
         else:
             element_processor = element()
         site_element = element.site_handler()
@@ -223,7 +235,6 @@ def main():
             Cacher(element.xml_tag_name, m)
         else:
             if res:
-                # FIXME - Check that the server accepted the data
                 xml_data = res.read()
                 if verbose:
                     print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
@@ -231,8 +242,10 @@ def main():
                     print "-" * 70
                 m.check_response(xml_data)
             else:
-                # FIXME - Error, no data returned.
-                pass
+                logging.error("Server returned an empty response when \
+                    attempting to send \"%s\". Caching data." % 
+                    element.xml_tag_name)
+                Cacher(element.xml_tag_name, m)
 
     for element in fetch_elements:
         cli = metahttp.XMLClient("%s%s" % (vals['host'], element.url), vals['key'], vals['cert'])
