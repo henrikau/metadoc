@@ -134,7 +134,11 @@ class MetaElement(object):
         for sub_class in element.legal_element_types:
             sub_elements = xml_element.findall(sub_class.xml_tag_name)
             for sub_element in sub_elements:
-                element.sub_elements.append(MetaElement.from_xml_element(sub_element, sub_class))
+                me = MetaElement.from_xml_element(sub_element, sub_class)
+                if me is not None:
+                    element.sub_elements.append(me)
+                else:
+                    logging.error("Unable to add sub element to \"%s\"." % element.xml_tag_name)
         return element
 
 # Error classes

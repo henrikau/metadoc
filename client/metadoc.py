@@ -78,7 +78,7 @@ class MetaDoc:
         try:
             response = lxml.etree.fromstring(xml_response)
         except lxml.etree.XMLSyntaxError, e:
-            logging.error("Error parsing server response: ", e)
+            logging.error("Error parsing server XML response: %s" % e)
         else:
             receipt = response.find("receipt")
             r_entries = receipt.findall("r_entry")
