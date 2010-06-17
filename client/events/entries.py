@@ -22,7 +22,7 @@ class ResourceUpEntry(metaelement.MetaElement):
     """ Describes a resourceUp entry. """
     xml_tag_name = "resourceUp"
 
-    def __init__(self, date_up, reason=None, remarks=None):
+    def __init__(self, dateUp, reason=None, remarks=None):
         """ Initializes the MetaElement and specifies legal values for attributes.
 
         Allows for RemarksEntry sub-elements.
@@ -30,7 +30,7 @@ class ResourceUpEntry(metaelement.MetaElement):
         """
         u = UniqueID()
         self.attributes = {
-            'dateUp': date_up,
+            'dateUp': dateUp,
             'id': u.get_id(),
         }
         if reason:
@@ -50,7 +50,7 @@ class ResourceDownEntry(metaelement.MetaElement):
     """ Describes a resourceDown entry. """
     xml_tag_name = "resourceDown"
 
-    def __init__(self, reason, date_down, date_up, share_down, remarks=None):
+    def __init__(self, reason, dateDown, dateUp, shareDown, remarks=None):
         """ Initializes the MetaElement and specifies legal values for attributes.
 
         Allows for RemarksEntry sub-elements.
@@ -59,9 +59,9 @@ class ResourceDownEntry(metaelement.MetaElement):
         u = UniqueID()
         self.attributes = {
             'reason': reason,
-            'dateDown': date_down,
-            'dateUp': date_up,
-            'shareDown': share_down,
+            'dateDown': dateDown,
+            'dateUp': dateUp,
+            'shareDown': shareDown,
             'id': u.get_id(),
         }
         super(ResourceDownEntry, self).__init__(ResourceDownEntry.xml_tag_name, self.attributes)
