@@ -40,7 +40,7 @@ class SoftwareEntry(metaelement.MetaElement):
         }
         if license:
             self.attributes['version'] = version
-        if info_url:
+        if infoURL:
             self.attributes['infoURL'] = infoURL
 
         super(SoftwareEntry, self).__init__(SoftwareEntry.xml_tag_name, self.attributes)
