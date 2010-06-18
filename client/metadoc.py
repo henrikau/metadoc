@@ -20,10 +20,10 @@ import logging
 import lxml.etree
 
 class MetaDoc:
-    """
-    Class for handling the MetaDoc.
+    """ Class for handling the MetaDoc.
 
     A nice way of adding information and exporting to the MetaDoc-XML standard.
+
     """
     def __init__(self, fullUpdate=False):
         if fullUpdate:
@@ -39,9 +39,7 @@ class MetaDoc:
                                         fullUpdate=self.fullUpdate)
 
     def reg_meta_element(self, me):
-        """
-        regMetaElement: add a new element to the base MetaDoc elemeent.
-        """
+        """ Add a new element to the base MetaDoc element. """
         if not me:
             return False
         if me.get_name():
@@ -49,10 +47,10 @@ class MetaDoc:
         return True
 
     def get_xml(self, with_id=True):
-        """
-        Return the XML-string of the registred information.
+        """ Return the XML-string of the registred information.
 
         The result should be valid XML and ready to export to the recipient.
+
         """
         self._create_root()
         for me in self.metaelements:

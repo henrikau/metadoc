@@ -42,6 +42,11 @@ class MetaElement(object):
                             # sent when another call to send this type is run.
 
     def __init__(self, name, attributes = {}):
+        """ Initializes a MetaElement. 
+        
+        Sets the elements name (usually xml_tag_name) and attributes. 
+
+        """
         for attrib in attributes.keys():
             attributes[attrib] = str(attributes[attrib])
         self.attributes = attributes
@@ -59,7 +64,11 @@ class MetaElement(object):
         return self.attributes
 
     def get_xml_element(self, with_id=True):
-        """ element is an xml.etree.Element with the values. It can be a hierarchy """
+        """ element is an lxml.etree.Element with the values. 
+        
+        It can be a hierarchy 
+        
+        """
         # FIXME - Catch exceptions
         # Return None if exception?
         temp_id = False
@@ -80,7 +89,7 @@ class MetaElement(object):
         return element
 
     def add_element(self, element):
-        """ add_element: add an entry to the element, this is typically a sub-entry. """
+        """ Add an entry to the element, this is typically a sub-entry. """
         valid_element = False
         for element_type in self.legal_element_types:
             if isinstance(element, element_type):
@@ -144,14 +153,13 @@ class MetaElement(object):
 # Error classes
 
 class Error(Exception):
-    """
-    Base Error class for MetaElements.
-    """
+    """ Base Error class for MetaElements. """
     pass
 
 class IllegalAttributeValueError(Error):
-    """
-    Error given when an illegal value is passed as a value for an attribute.
+    """ Error given when an illegal value is passed as a value for an 
+    attribute.
+
     """
     def __init__(self, attrib, used_value, allowed_values, element):
         self.attrib = attrib
@@ -163,8 +171,9 @@ class IllegalAttributeValueError(Error):
 
 
 class IllegalAttributeTypeError(Error):
-    """
-    Error given when an attribute is passed a value in an illegal format. 
+    """ Error given when an attribute is passed a value in an illegal 
+    format. 
+
     """
     def __init__(self, attrib, used_type, element, allowed_formats):
         self.attrib = attrib
