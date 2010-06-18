@@ -204,13 +204,18 @@ def main():
             cached_data = c.get_cache()
             if cached_data is not None:
                 if element.resend_cache:
-                    element_processor = element.from_xml_element(cached_data, element)
+                    element_processor = element.from_xml_element(cached_data,
+                                                                    element)
                 else:
-                    logging.info("Found cached data for \"%s\", but element type declares not to resend this cache. Cache removed." % element.xml_tag_name)
+                    logging.info("Found cached data for \"%s\", but element \
+                        type declares not to resend this cache. \
+                        Cache removed." % element.xml_tag_name)
                     c.remove_cache()
                     element_processor = element()
                 if element_processor is None:
-                    logging.error("Found cached data for \"%s\", but unable to load. Check file \"%s\" for possible errors." % (element.xml_tag_name, c.file_path))
+                    logging.error("Found cached data for \"%s\", but unable to \
+                        load. Check file \"%s\" for possible errors." % 
+                                    (element.xml_tag_name, c.file_path))
                     element_processor = element()
                 else:
                     # We have successfully loaded the cached data.
@@ -226,7 +231,8 @@ def main():
         # Let's see if we have some cached data to add
         m.reg_meta_element(element_processor)
         url = "%s%s" % (vals['host'], element.url)
-        if vals['trailing_slash'].lower() == 'true' or vals['trailing_slash'].lower() == 'yes':
+        if vals['trailing_slash'].lower() == 'true'\
+            or vals['trailing_slash'].lower() == 'yes':
             url = "%s/" % url
         cli = metahttp.XMLClient(url, vals['key'], vals['cert'])
         if verbose:
@@ -240,7 +246,8 @@ def main():
         try:
             res = cli.send(m.get_xml())
         except (urllib2.HTTPError, urllib2.URLError) as httperror:
-            logging.critical("Unable to connect to server address \"%s\", error: %s" % (url, httperror))
+            logging.critical("Unable to connect to server address \"%s\", \
+                error: %s" % (url, httperror))
             # Since we're unable to send the document to the server, we will 
             # cache it so that we can send it at a later date.
             Cacher(element.xml_tag_name, m)
@@ -268,22 +275,28 @@ def main():
             c = Cacher(element.xml_tag_name)
             cached_data = c.get_cache()
             if cached_data is not None:
-                element_processor = element.from_xml_element(cached_data, element)
-                logging.info("Found cached data for \"%s\"." % element.xml_tag_name)
+                element_processor = element.from_xml_element(cached_data,
+                                                                element)
+                logging.info("Found cached data for \"%s\"." % 
+                                                    element.xml_tag_name)
                 if element_processor is not None:
-                    logging.info("Loaded cached data for \"%s\"." % element.xml_tag_name)
+                    logging.info("Loaded cached data for \"%s\"." % 
+                                                    element.xml_tag_name)
                     # We will remove the cache, even though it's not sent yet
                     # since it will be recached later if it can't be 
                     # transferred.
                     c.remove_cache()
                 else:
-                    logging.error("Unable to load cached data for \"%s\". Please check file \"%s\"." % (element.xml_tag_name, c.file_path))
+                    logging.error("Unable to load cached data for \"%s\". \
+                        Please check file \"%s\"." % 
+                        (element.xml_tag_name, c.file_path))
                     continue
             else:
                 continue
             m.reg_meta_element(element_processor)
             url = "%s%s" % (vals['host'], element.url)
-            if vals['trailing_slash'].lower() == 'true' or vals['trailing_slash'].lower() == 'yes':
+            if vals['trailing_slash'].lower() == 'true' \
+                or vals['trailing_slash'].lower() == 'yes':
                 url = "%s/" % url
             cli = metahttp.XMLClient(url, vals['key'], vals['cert'])
             if verbose:
@@ -297,7 +310,8 @@ def main():
             try:
                 res = cli.send(m.get_xml())
             except (urllib2.HTTPError, urllib2.URLError) as httperror:
-                logging.critical("Unable to connect to server address \"%s\", error: %s" % (url, httperror))
+                logging.critical("Unable to connect to server address \"%s\", \
+                                                error: %s" % (url, httperror))
                 # Since we're unable to send the document to the server, we will 
                 # cache it so that we can send it at a later date.
                 Cacher(element.xml_tag_name, m)
@@ -320,7 +334,8 @@ def main():
             
 
     for element in fetch_elements:
-        cli = metahttp.XMLClient("%s%s" % (vals['host'], element.url), vals['key'], vals['cert'])
+        cli = metahttp.XMLClient("%s%s" % 
+            (vals['host'], element.url), vals['key'], vals['cert'])
         if verbose:
             print "-" * 70
             print "Connecting to host: %s%s" % (vals['host'], element.url)
@@ -330,7 +345,8 @@ def main():
         try:
             res = cli.send()
         except (urllib2.HTTPError, urllib2.URLError) as httperror:
-            logging.critical("Unable to connect to server address \"%s%s\", error: %s" % (vals['host'], element.url, httperror))
+            logging.critical("Unable to connect to server address \"%s%s\", \
+                        error: %s" % (vals['host'], element.url, httperror))
         else:
             if res:
                 xml_data = res.read()
@@ -340,15 +356,19 @@ def main():
                 try:
                     return_data = lxml.etree.fromstring(xml_data)
                 except lxml.etree.XMLSyntaxError, e:
-                    logging.error("Error parsing XML document from server: %s" % e)
+                    logging.error("Error parsing XML document from server: \
+                                        %s" % e)
                 else:
                     found_elements = return_data.findall(element.xml_tag_name)
                     sub_elements = []
                     for found_element in found_elements:
-                        sub_elements.append(MetaElement.from_xml_element(found_element, element))
+                        sub_elements.append(MetaElement.from_xml_element(
+                                            found_element, element)
+                                            )
                     element.update_handler(sub_elements).process()
             else:
-                logging.critical("Recieved empty response from server when attempting to fetch \"%s\"." % element.xml_tag_name)
+                logging.critical("Recieved empty response from server when \
+                            attempting to fetch \"%s\"." % element.xml_tag_name)
 
 if __name__ == "__main__":
     main()
