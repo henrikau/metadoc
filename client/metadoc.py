@@ -18,6 +18,7 @@
 
 import logging
 import lxml.etree
+from cacher import Cacher
 
 class MetaDoc:
     """ Class for handling the MetaDoc.
@@ -67,6 +68,19 @@ class MetaDoc:
                 return element
         return None
 
+    def remove_element(self, element):
+        """ Attempts to remove element from sub-elements. """
+        if element in self.metaelements:
+            try:
+                self.metaelements.remove(element)
+            except ValueError, ve:
+                # Will do nothing as it might still be in a sub-element
+                pass
+        for me in self.metaelements:
+            if me.remove_element(element):
+                return True
+        return False
+
     def check_response(self, xml_response):
         """ Function that checks the response from server.
         xml_response should be the XML response from the server when self was 
@@ -77,28 +91,58 @@ class MetaDoc:
             response = lxml.etree.fromstring(xml_response)
         except lxml.etree.XMLSyntaxError, e:
             logging.error("Error parsing server XML response: %s" % e)
+            raise InvalidXMLResponseError()
         else:
             receipt = response.find("receipt")
-            r_entries = receipt.findall("r_entry")
-            for r_entry in r_entries:
-                element = self.find_id(r_entry.attrib.get("id"))
-                if not r_entry.attrib.get("code") == '1000':
-                    if element:
-                        err_str = "Error %s on \"%s\" element.\nElement attributes: %s" % (
+            if receipt is not None:
+                r_entries = receipt.findall("r_entry")
+                for r_entry in r_entries:
+                    element = self.find_id(r_entry.attrib.get("id"))
+                    r_code = r_entry.attrib.get("code")
+                    try:
+                        r_code = int(r_code)
+                    except ValueError, e:
+                        logging.error("Recieved a non-integer error code from server: \"%s\"." % str(r_code))
+                        continue
+                    if not (r_code >= 1000 and r_code < 2000):
+                        if r_code < 5000:
+                            # Got an error that will NOT be fixed by 
+                            # resending element. No point in caching.
+                            self.remove_element(element)
+                        err_str = "Error %s on \"%s\" element. Element attributes: %s" % (
                                         r_entry.attrib.get("code"),
                                         element.xml_tag_name,
                                         element.attributes
                                         )
+                        if r_entry.attrib.get("note"):
+                            err_str = "%s    \nError note: %s" % (err_str, r_entry.attrib.get("note"))
+                        if r_entry.text:
+                            err_str = "%s    \nError message:\n%s" % (err_str, r_entry.text)
+                        logging.error(err_str)
                     else:
-                        err_str = "Error %s on element. " % r_entry.attrib.get("code")
-                    if r_entry.attrib.get("note"):
-                        err_str = "%s\nError note: %s" % (err_str, r_entry.attrib.get("note"))
-                    if r_entry.text:
-                        err_str = "%s\nError message:\n%s" % (err_str, r_entry.text)
-                    logging.error(err_str)
-                else:
-                    if element:
                         info_str = "Element \"%s\" successfully added. (Attributes: %s)" % (element.xml_tag_name, element.attributes)
-                    else:
-                        info_str = "Element successfully added."
-                    logging.info(info_str)
+                        logging.info(info_str)
+                        self.remove_element(element)
+            else:
+                raise NoReceiptReturnedError()
+        sub_element_count = 0
+        for me in self.metaelements:
+            sub_element_count = sub_element_count + len(me.sub_elements)
+        if sub_element_count > 0:
+            raise NotAllAcceptedError()
+
+class Error(Exception):
+    """ Base class for MetaDoc errors. """
+    pass
+
+class NoReceiptReturnedError(Error):
+    """ Error raised when no receipt is returned. """
+    pass
+
+class InvalidXMLResponseError(Error):
+    """ Error raised when repsonse XML cannot be parsed. """
+    pass
+
+class NotAllAcceptedError(Error):
+    """ Error raised if not all elements are accepted. """
+    pass

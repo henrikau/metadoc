@@ -69,17 +69,31 @@ class MetaElement(object):
         It can be a hierarchy 
         
         """
-        # FIXME - Catch exceptions
-        # Return None if exception?
         temp_id = False
         if not with_id:
             if "id" in self.attributes.keys():
                 temp_id = self.attributes.get("id")
                 del self.attributes['id']
         
-        element = lxml.etree.Element(self.get_name(), **self.attributes)
+        if not isinstance(self.attributes, dict):
+            logging.info("Attributes for \"%s\" is not dict. Attempting to convert." % (self.get_name()))
+            try:
+                self.attributes = dict(self.attributes)
+            except ValueError, ve:
+                logging.error("Cannot create XML element from \"%s\" because attributes are of type \"%s\". Must be dict." % (self.get_name(), type(self.attributes)))
+                return None
+        try:
+            element = lxml.etree.Element(self.get_name(), **self.attributes)
+        except Exception, e:
+            # FIXME - What errors can we produce?
+            logging.error("Unable to create XML element from metaelement.MetaElement. XML tag \"%s\" with attributes \"%s\"." % (self.get_name(), self.attributes))
+            return None
         for el in self.sub_elements:
-            element.append(el.get_xml_element(with_id))
+            append_element = el.get_xml_element(with_id)
+            if append_element is not None:
+                element.append(append_element)
+            else:
+                logging.error("Unable to add sub-element \"%s\" to \"%s\" because it could not retrieve XML element. " % (el.xml_tag_name, self.xml_tag_name))
         
         if not with_id and temp_id:
             self.attributes['id'] = temp_id
@@ -95,20 +109,40 @@ class MetaElement(object):
             if isinstance(element, element_type):
                 valid_element = True
         if not valid_element:
-            raise Exception("Illegal element type")
+            logging.error("Recieved illegal element type \"%s\" for element \"%s\". Allowed elements: \"%s\"." % (type(element), type(self), self.legal_element_types))
+            return False
         
         element.clean()
         self.sub_elements.append(element)
+
     def add_elements(self, elements):
         """ Adds a list of elements. """
         for element in elements:
             self.add_element(element)
 
+    def remove_element(self, element):
+        """ Removes an element from list of sub-elements. """
+        if element in self.sub_elements:
+            try:
+                self.sub_elements.remove(element)
+                return True
+            except ValueError, ve:
+                # Should occur only if element not in list, which we've 
+                # checked for. But to be sure.
+                logging.warning("Attemting to remove non-existing element from \"%s\"." % self.get_name())
+                return False
+        else:
+            logging.warning("Attemting to remove non-existing element from \"%s\"." % self.get_name())
+            return False
+
     def clean(self):
         """ Runs clean functions on every attribute if they exist. """
         for attribute in self.attributes.keys():
             if hasattr(self, "clean_%s" % attribute):
-                self.attributes[attribute] = getattr(self, "clean_%s" % attribute)(self.attributes[attribute])
+                try:
+                    self.attributes[attribute] = getattr(self, "clean_%s" % attribute)(self.attributes[attribute])
+                except IllegalAttributeError, attrerr:
+                    logging.error("%s" % attrerr)
     
     def find_id(self, locate_id):
         """ Attempts to find element with a given ID inside element. """
@@ -132,7 +166,6 @@ class MetaElement(object):
         Recursively checks for sub-elements from legal sub-classes.
 
         """
-        # FIXME - Missing attribute error
         try:
             element = element_class(**xml_element.attrib)
         except TypeError, terr:
@@ -170,7 +203,12 @@ class IllegalAttributeValueError(Error):
         return repr("Illegal value \"%s\" used for attribute \"%s\" in element \"%s\". Allowed values: %s." % (self.used_value, self.attrib, self.element, self.allowed_values))
 
 
-class IllegalAttributeTypeError(Error):
+class IllegalAttributeError(Error):
+    """ Base class for problems with attributes. """
+    pass
+
+
+class IllegalAttributeTypeError(IllegalAttributeError):
     """ Error given when an attribute is passed a value in an illegal 
     format. 
 
@@ -183,6 +221,18 @@ class IllegalAttributeTypeError(Error):
     def __str__(self):
         return repr("Illegal type used for \"%s\" attribute in \"%s\". Allowed types: %s. Recieved type: \"%s\"" % (self.attrib, self.element, self.allowed_formats, self.used_type.__name__))
 
+class IllegalElementError(Error):
+    """ Error given when attempting to add a sub-element of a type that is not
+    allowed by the element definition.
+
+    """
+    def __init__(self, element_type, sub_element_type, allowed_sub_elements):
+        self.element_type = element_type
+        self.sub_element_type = sub_element_type
+        self.allowed_sub_elements = allowed_sub_elements
+
+    def __str__(self):
+        return repr("Illegal sub-element for \"%s\". Got \"%s\", must be \"%s\"." % (self.element_type, self.sub_element_type, self.allowed_sub_elements))
 
 class NotImplementedError(Error):
     """ Error given when a call to an abstract function is made. """

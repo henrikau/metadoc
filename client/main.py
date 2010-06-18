@@ -45,8 +45,11 @@ import sys
 import getopt
 import lxml.etree
 import urllib2
+import StringIO
 
 import metahttp 
+import metadoc
+import utils
 from metadoc import MetaDoc
 from metaelement import MetaElement
 from cacher import Cacher
@@ -62,7 +65,7 @@ from users.definition import Users
 from projects.definition import Projects
 
 # This list is used to check for cached items for elements within the list.
-possible_send_elements = (Events, Configuration, Software,)
+possible_send_elements = [Events, Configuration, Software,]
 
 def write_sample_config():
     """ Creates a default configuration file.
@@ -86,6 +89,7 @@ def write_sample_config():
 def testConfig(vals):
     """ Tests configuration file to see that it contains the necessary 
     information to run the script.
+
     """
     if 'valid' in vals:
         if vals['valid'].lower() == "false" or vals['valid'].lower() == "no":
@@ -114,7 +118,6 @@ def main():
     # Default settings
     # Will be altered depending on passed options
     verbose = False
-    quiet = False
     dryrun = False
     send_cache = True
     loglevel = 2
@@ -146,7 +149,8 @@ def main():
         elif opt == '-v':
             verbose = True
         elif opt == '-q':
-            quiet = True
+            a = StringIO.StringIO()
+            sys.stdout = a
         elif opt == '-e':
             send_elements.append(Events)
         elif opt == '-c':
@@ -166,6 +170,7 @@ def main():
         elif opt in ('-l', '--no-cache'):
             send_cache = False
 
+    # FIXME - Create log dir if non-existent
     logging.basicConfig(level=log_level, format=LOG_FORMAT)
     
 
@@ -192,6 +197,7 @@ def main():
 
     # ready for main processing.
     for element in send_elements:
+        possible_send_elements.remove(element)
         m = MetaDoc(True)
         if send_cache:
             c = Cacher(element.xml_tag_name)
@@ -245,7 +251,7 @@ def main():
                     print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
                     print xml_data
                     print "-" * 70
-                m.check_response(xml_data)
+                utils.check_response(element.xml_tag_name, m, xml_data)
             else:
                 logging.error("Server returned an empty response when \
                     attempting to send \"%s\". Caching data." % 
@@ -302,7 +308,7 @@ def main():
                         print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
                         print xml_data
                         print "-" * 70
-                    m.check_response(xml_data)
+                    utils.check_response(element.xml_tag_name, m, xml_data)
                 else:
                     logging.error("Server returned an empty response when \
                         attempting to send \"%s\". Caching data." % 

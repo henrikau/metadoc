@@ -26,18 +26,16 @@ class Cacher(object):
         self.file_path = "cache/%s.xml" % element_type
         self.element_type = element_type
         if not os.path.isdir("cache"):
-            logging.info("Cache not preset, attempting to create.")
+            logging.info("Cache directory not present, attempting to create.")
             try:
                 os.mkdir("cache")
-            except:
-                # FIXME - What errors can this produce?
+            except IOError, e:
+                logging.error("Unable to create cache directory. Please check access rights. (%s)" % e)
                 return
             else:
                 logging.info("Created cache directory.")
 
         if metadoc:
-            # Cache dir should exist when we've reached this point 
-            # FIXME - File already exists, we do not want to overwrite
             cache_file = open(self.file_path, "w")
             cache_file.write(metadoc.get_xml(False))
             cache_file.close()
@@ -61,9 +59,9 @@ class Cacher(object):
             # We've retrived the cached data, let's remove it so it wont 
             # be sent twice. If the data can't be sent it will be recached.
             os.remove(self.file_path)
-        except:
-            # FIXME - IOError
-            pass
+        except IOError, e:
+            logging.error("Unable to remove cache file \"%s\". Please remove to ensure data is not resent." % self.file_path)
+            return
 
     def _get_cache_string(self):
         """ Returns cached data, if any. 
@@ -76,8 +74,8 @@ class Cacher(object):
             return None
         try:
             cached_file = open(self.file_path, "r")
-        except:
-            # FIXME - IOError
+        except IOError, e:
+            logging.error("Found cache file \"%s\" but unable to open. Check access rights. (%s)" % (self.file_path, e))
             return None
         cached_string = cached_file.read()
         return cached_string
