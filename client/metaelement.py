@@ -19,6 +19,9 @@
 import logging
 import lxml.etree
 
+import utils
+import datetime
+
 class MetaElement(object):
     """ MetaElement - an individual element in the MetaDoc tree.
 
@@ -47,8 +50,6 @@ class MetaElement(object):
         Sets the elements name (usually xml_tag_name) and attributes. 
 
         """
-        for attrib in attributes.keys():
-            attributes[attrib] = str(attributes[attrib])
         self.attributes = attributes
         self.name = name
         self.legal_element_types = ()
@@ -57,6 +58,12 @@ class MetaElement(object):
 
     def get_name(self):
         """ Return the name of the element. """
+        return self.name
+    def __str__(self):
+        """ We want the string representation of MetaElements to be its 
+        XML tag. 
+        
+        """
         return self.name
 
     def get_attributes(self):
@@ -104,6 +111,7 @@ class MetaElement(object):
 
     def add_element(self, element):
         """ Add an entry to the element, this is typically a sub-entry. """
+        logging.debug("Adding element \"%s\" to \"%s\"." % (element.xml_tag_name, self.xml_tag_name))
         valid_element = False
         for element_type in self.legal_element_types:
             if isinstance(element, element_type):
@@ -112,8 +120,15 @@ class MetaElement(object):
             logging.error("Recieved illegal element type \"%s\" for element \"%s\". Allowed elements: \"%s\"." % (type(element), type(self), self.legal_element_types))
             return False
         
-        element.clean()
-        self.sub_elements.append(element)
+        try:
+            valid_element = element.clean()
+        except Error, e:
+            logging.error("%s" % e)
+            return False
+        else:
+            if valid_element:
+                logging.debug("Recieved valid element \"%s\" to append to \"%s\"." % (element.xml_tag_name, self.xml_tag_name))
+                self.sub_elements.append(element)
 
     def add_elements(self, elements):
         """ Adds a list of elements. """
@@ -136,14 +151,23 @@ class MetaElement(object):
             return False
 
     def clean(self):
-        """ Runs clean functions on every attribute if they exist. """
+        """ Runs clean functions on every attribute if they exist. 
+        
+        clean functions raise `IllegalAttributeError` when unable to clean 
+        attribute values properly.
+
+        """
+        valid = True
         for attribute in self.attributes.keys():
             if hasattr(self, "clean_%s" % attribute):
                 try:
                     self.attributes[attribute] = getattr(self, "clean_%s" % attribute)(self.attributes[attribute])
                 except IllegalAttributeError, attrerr:
+                    valid = False
                     logging.error("%s" % attrerr)
-    
+            else:
+                logging.debug("Found no clean function for \"%s\" on element \"%s\"." % (attribute, self.xml_tag_name))
+        return valid
     def find_id(self, locate_id):
         """ Attempts to find element with a given ID inside element. """
         # Is this the element?
@@ -158,6 +182,61 @@ class MetaElement(object):
                     return sub_element_found
         # Neither this or subelements has the ID, let's return nothing.
         return None
+
+    def _clean_date(self, date, attribute_name, element):
+        """ Helper function that will clean a date. Returns a string in valid 
+        RFC3339 form (with seconds granularity).
+
+        Can take dates in time.time(), datetime.datetime or string form.
+        String form must be valid RFC3339.
+
+        """
+        if isinstance(date, float) or isinstance(date, int) \
+                or isinstance(date, datetime.datetime):
+            return utils.date_to_rfc3339(date)
+        elif isinstance(date, basestring):
+            rfc_date = utils.rfc3339_to_date(date)
+            if rfc_date is not False:
+                return rfc_date
+
+        raise IllegalAttributeValueError(attribute_name, date, ['float', 'datetime.datetime', 'RFC3339 String'], element)
+
+    def _clean_types(self, value, allowed_types, attribute_name, element):
+        """ Checks that `value` is one of `allowed_types`. """
+        try:
+            iter(allowed_types)
+        except TypeError:
+            try:
+                if isinstance(value, allowed_types):
+                    return True
+            except TypeError:
+                # If allowed_types is not a type, we will get a TypeError for 
+                # get instance.
+                logging.critical("Element \"%s\" attempts to type check against a non-type. Please check code." % element)
+        else:
+            for allowed_type in allowed_types:
+                try:
+                    if isinstance(value, allowed_type):
+                        return True
+                except TypeError:
+                    # See comment above.
+                    logging.critical("Element \"%s\" attempts to type check against a non-type. Please check code." % element)
+        raise IllegalAttributeTypeError(attribute_name, type(value), element, allowed_types)
+
+    def _clean_allowed_values(self, value, allowed_values, attribute_name, element, case_sensitive = True):
+        """ Checks value against a list of allowed values. """
+        valid = True
+        if case_sensitive:
+            if value not in allowed_values:
+                valid = False
+        else:
+            if value.lower() not in [a.lower() for a in allowed_values]:
+                valid = False
+        if not valid:
+            raise IllegalAttributeValueError(attribute_name, value, allowed_values, element)
+        return valid
+
+
 
     @staticmethod
     def from_xml_element(xml_element, element_class):
@@ -189,7 +268,11 @@ class Error(Exception):
     """ Base Error class for MetaElements. """
     pass
 
-class IllegalAttributeValueError(Error):
+class IllegalAttributeError(Error):
+    """ Base class for problems with attributes. """
+    pass
+
+class IllegalAttributeValueError(IllegalAttributeError):
     """ Error given when an illegal value is passed as a value for an 
     attribute.
 
@@ -200,12 +283,7 @@ class IllegalAttributeValueError(Error):
         self.allowed_values = allowed_values
         self.element = element
     def __str__(self):
-        return repr("Illegal value \"%s\" used for attribute \"%s\" in element \"%s\". Allowed values: %s." % (self.used_value, self.attrib, self.element, self.allowed_values))
-
-
-class IllegalAttributeError(Error):
-    """ Base class for problems with attributes. """
-    pass
+        return "Illegal value \"%s\" used for attribute \"%s\" in element \"%s\". Allowed values: %s." % (self.used_value, self.attrib, self.element, self.allowed_values)
 
 
 class IllegalAttributeTypeError(IllegalAttributeError):
@@ -219,7 +297,7 @@ class IllegalAttributeTypeError(IllegalAttributeError):
         self.used_type = used_type
         self.element = element
     def __str__(self):
-        return repr("Illegal type used for \"%s\" attribute in \"%s\". Allowed types: %s. Recieved type: \"%s\"" % (self.attrib, self.element, self.allowed_formats, self.used_type.__name__))
+        return "Illegal type used for \"%s\" attribute in \"%s\". Allowed types: %s. Recieved type: \"%s\"" % (self.attrib, self.element, self.allowed_formats, self.used_type.__name__)
 
 class IllegalElementError(Error):
     """ Error given when attempting to add a sub-element of a type that is not
@@ -232,7 +310,7 @@ class IllegalElementError(Error):
         self.allowed_sub_elements = allowed_sub_elements
 
     def __str__(self):
-        return repr("Illegal sub-element for \"%s\". Got \"%s\", must be \"%s\"." % (self.element_type, self.sub_element_type, self.allowed_sub_elements))
+        return "Illegal sub-element for \"%s\". Got \"%s\", must be \"%s\"." % (self.element_type, self.sub_element_type, self.allowed_sub_elements)
 
 class NotImplementedError(Error):
     """ Error given when a call to an abstract function is made. """
