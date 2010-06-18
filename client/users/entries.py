@@ -20,11 +20,28 @@ import logging
 import metaelement
 
 class UserEntry(metaelement.MetaElement):
-    """
-    """
+    """ Information about each specific user. """
     xml_tag_name = "user_entry"
 
-    def __init__(self, username, uid=None, full_name=None, password=None, default_group=None, special_path=None, shell=None, email=None, phone=None, status=None):
+    def __init__(self, username, uid=None, full_name=None, password=None, 
+                    default_group=None, special_path=None, shell=None, 
+                    email=None, phone=None, status=None):
+        """ Defines the user_entry XML tag.
+
+        param:
+        username        : User's username
+        uid             : UserID of user
+        full_name       : Full name of the user
+        password        : Password hash of initial password
+        default_group   : Default group of user
+        special_path    : Path of user if needed
+        shell           : Shell for user
+        email           : Supplied email address of user
+        phone           : Supplied phone number of user
+        status          : Status of user, should be interpreted as 
+                          modification if nothing is set.
+                          (new|existing|deactivate|delete)
+        """
         attributes = {'username': username}
         if uid:
             attributes['uid'] = uid

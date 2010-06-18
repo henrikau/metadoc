@@ -21,18 +21,13 @@ from custom.siteconfiguration import SiteConfiguration
 from configuration.entries import ConfigEntry
 
 class Configuration(metaelement.MetaElement):
-    """ Registers events and packs to XML. 
-
-    Specifies cleaning methods for attributes to make sure they conform with 
-    expected values. 
-
-    """
+    """ Configuration - Configuration of site hardware. """
     xml_tag_name = "config"
     site_handler = SiteConfiguration
     url = "config"
     resend_cache = False
 
     def __init__(self):
-        """ Initialites the MetaElement and specifies legal values for attributes. """
+        """ Defines legal sub-elements for config_entry XML tag. """
         super(Configuration, self).__init__(Configuration.xml_tag_name)
         self.legal_element_types = (ConfigEntry,)

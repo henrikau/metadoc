@@ -20,6 +20,7 @@ import metaelement
 from utils import UniqueID
 
 class ConfigEntry(metaelement.MetaElement):
+    """ ConfigEntry - Size of each element of hardware. """
     xml_tag_name = "config_entry"
     def __init__(self, element, metric, volume):
         """ Creates a config_entry 

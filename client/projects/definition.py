@@ -20,16 +20,20 @@ from custom.updateprojects import UpdateProjects
 from projects.entries import ProjectEntry
 
 class Projects(metaelement.MetaElement):
-    """
-    Information about projects tied to a system.
-    """
+    """ Information about projects tied to a system. """
     xml_tag_name = "projects"
     update_handler = UpdateProjects
     url = "projects"
 
     def __init__(self, type, date, fullUpdate=None):
-        """
-        init()
+        """ Defines the projects XML tag.
+        
+        param:
+        type            : Type of project (request|update)
+        date            : Date of oldest element in set
+        fullUpdate      : Whether the set is a complete set or just an update
+                          (yes|no)
+        
         """
         attributes = {
             'type': type,

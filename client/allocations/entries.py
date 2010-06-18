@@ -19,12 +19,19 @@
 import metaelement
 
 class AllocationEntry(metaelement.MetaElement):
-    """
-    """
+    """ AllocationEntry - Allocation for specific projects. """
     xml_tag_name = "all_entry"
 
     def __init__(self, account_nmb, volume, metric, all_class, period):
-        """
+        """ Defines attributes for all_entry XML elements. 
+        
+        param:
+        account_nmb         : Account identifier
+        volume              : Amount of <metric>
+        metric              : Measurement of <volume>
+        all_class           : Allocation class
+        period              : Period of allocation
+        
         """
         attributes = {
             'account_nmb': account_nmb,

@@ -25,7 +25,10 @@ class ResourceUpEntry(metaelement.MetaElement):
     def __init__(self, dateUp, reason=None, remarks=None):
         """ Initializes the MetaElement and specifies legal values for attributes.
 
-        Allows for RemarksEntry sub-elements.
+        param:
+        dateUp          : Date the system came up
+        reason          : Reason for going down
+        remarks         : Any special remarks
 
         """
         u = UniqueID()
@@ -40,7 +43,7 @@ class ResourceUpEntry(metaelement.MetaElement):
         self.legal_element_types = (RemarksEntry,)
 
         if remarks:
-            self.add_element(RemarksEntry(remarks))
+            self.text = remarks
 
     def clean_dateUp(self, dateUp):
         """ Makes sure the date is in the correct format """
@@ -52,8 +55,13 @@ class ResourceDownEntry(metaelement.MetaElement):
 
     def __init__(self, reason, dateDown, dateUp, shareDown, remarks=None):
         """ Initializes the MetaElement and specifies legal values for attributes.
-
-        Allows for RemarksEntry sub-elements.
+        
+        param:
+        reason          : Reason for going down
+        dateDown        : Date the system went down
+        dateUp          : Date the system will come/came up
+        shareDown       : Share (percentage) of system down
+        remarks         : Any special remarks
 
         """
         u = UniqueID()
@@ -69,23 +77,10 @@ class ResourceDownEntry(metaelement.MetaElement):
         self.legal_element_types = (RemarksEntry, )
 
         if remarks:
-            self.add_element(RemarksEntry(remarks))
+            self.text = remarks
     def clean_shareDown(self, share_down):
         if isinstance(share_down, int):
             share_down = "%d" % share_down
         elif isinstance(share_down, float):
             share_down = "%f" % share_down
         return share_down
-
-class RemarksEntry(metaelement.MetaElement):
-    """ Describes a remarks entry. """
-    xml_tag_name = "remarks"
-
-    def __init__(self, content=None):
-        """ Initializes the MetaElement.
-        
-        Remarks have no attributes, but contains PCDATA.
-
-        """
-        super(RemarksEntry, self).__init__(RemarksEntry.xml_tag_name)
-        self.text = content

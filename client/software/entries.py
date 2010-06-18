@@ -23,7 +23,15 @@ class SoftwareEntry(metaelement.MetaElement):
     """ Registers software_entry and packs to XML. """
     xml_tag_name = "sw_entry"
 
-    def __init__(self, program_name, version, license = None, info_url = None):
+    def __init__(self, program_name, version, license = None, infoURL = None):
+        """ Defines the sw_entry XML tag.
+
+        param:
+        program_name            : Name of the software
+        version                 : Software version
+        license                 : Software license
+        infoURL                 : URL with more information about the software.
+        """
         u = UniqueID()
         self.attributes = {
             'progName': program_name,
@@ -33,6 +41,6 @@ class SoftwareEntry(metaelement.MetaElement):
         if license:
             self.attributes['version'] = version
         if info_url:
-            self.attributes['infoURL'] = info_url
+            self.attributes['infoURL'] = infoURL
 
         super(SoftwareEntry, self).__init__(SoftwareEntry.xml_tag_name, self.attributes)

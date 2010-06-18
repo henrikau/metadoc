@@ -18,9 +18,20 @@
 import metaelement
 
 class ProjectEntry(metaelement.MetaElement):
+    """ Information about each specific project. """
     xml_tag_name = "project_entry"
     
     def __init__(self, name, gid, status, account_nmb, valid_from, valid_to=None):
+        """ Defines the project_entry XML tag.
+
+        param:
+        name            : Name of the project
+        gid             : Group-id of the project
+        valid_from      : From when the project is valid
+        valid_to        : When the project should terminate
+        status          : Status of the project (new|existing|delete)
+
+        """
         attributes = {
             'name': name,
             'gid': gid,
