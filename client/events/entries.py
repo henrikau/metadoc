@@ -40,7 +40,7 @@ class ResourceUpEntry(metaelement.MetaElement):
             self.attributes['reason'] = reason
         super(ResourceUpEntry, self).__init__(ResourceUpEntry.xml_tag_name, self.attributes)
         
-        self.legal_element_types = (RemarksEntry,)
+        self.legal_element_types = ()
 
         if remarks:
             self.text = remarks
@@ -74,7 +74,7 @@ class ResourceDownEntry(metaelement.MetaElement):
         }
         super(ResourceDownEntry, self).__init__(ResourceDownEntry.xml_tag_name, self.attributes)
 
-        self.legal_element_types = (RemarksEntry, )
+        self.legal_element_types = ()
 
         if remarks:
             self.text = remarks
