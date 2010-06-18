@@ -165,6 +165,10 @@ class MetaElement(object):
                 except IllegalAttributeError, attrerr:
                     valid = False
                     logging.error("%s" % attrerr)
+                else:
+                    if not isinstance(self.attributes[attribute], basestring):
+                        valid = False
+                        logging.error("Attribute \"%s\" on element \"%s\" is not a string." % (attribute, self.xml_tag_name))
             else:
                 logging.debug("Found no clean function for \"%s\" on element \"%s\"." % (attribute, self.xml_tag_name))
         return valid
