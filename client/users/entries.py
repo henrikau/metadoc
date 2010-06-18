@@ -63,3 +63,15 @@ class UserEntry(metaelement.MetaElement):
             attributes['status'] = status
         super(UserEntry, self).__init__(UserEntry.xml_tag_name, attributes)
         logging.info("Recieved user \"%s\"." % (username))
+
+    def clean_uid(self, uid):
+        """ Converts uid to string if int. """
+        if isinstance(uid, int):
+            uid = "%d" % uid
+        return uid
+
+    def clean_phone(self, phone):
+        """ Converts phone to string if int. """
+        if isinstance(phone, int):
+            phone = "%d" % phone
+        return phone

@@ -47,7 +47,7 @@ class ResourceUpEntry(metaelement.MetaElement):
 
     def clean_dateUp(self, dateUp):
         """ Makes sure the date is in the correct format """
-        return dateUp
+        return self._clean_date(dateUp, 'dateUp', self.xml_tag_name)
 
 class ResourceDownEntry(metaelement.MetaElement):
     """ Describes a resourceDown entry. """
@@ -78,9 +78,23 @@ class ResourceDownEntry(metaelement.MetaElement):
 
         if remarks:
             self.text = remarks
+    def clean_dateDown(self, dateDown):
+        """ Checks that `dateDown` is correct format. """
+        return self._clean_date(dateDown, 'dateDown', self.xml_tag_name)
+    def clean_dateUp(self, dateUp):
+        """ Checks that `dateUp` is correct format. """
+        return self._clean_date(dateUp, 'dateUp', self.xml_tag_name)
     def clean_shareDown(self, share_down):
+        """ Checks that `shareDown` is correct format. 
+        Converts to string if int or float.
+        
+        """
         if isinstance(share_down, int):
             share_down = "%d" % share_down
         elif isinstance(share_down, float):
             share_down = "%f" % share_down
+        elif isinstance(share_down, basestring):
+            pass
+        else:
+            raise metaelement.IllegalAttributeTypeError("shareDown", type(share_down), "Software", ['int', 'float', 'str'])
         return share_down

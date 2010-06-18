@@ -42,4 +42,14 @@ class Projects(metaelement.MetaElement):
         if fullUpdate:
             attributes['fullUpdate'] = fullUpdate
         super(Projects, self).__init__(Projects.xml_tag_name, attributes)
+        self.legal_types = ('request', 'update',)
+        self.legal_fullUpdates = ('yes', 'no',)
         self.legal_element_types = (ProjectEntry,)
+    def clean_type(self, type):
+        """ Checks that `type` has a legal value. """
+        self._clean_allowed_values(type, self.legal_types, 'type', self.xml_tag_name, False)
+        return type
+    def clean_fullUpdate(self, fullUpdate):
+        """ Checks that `fullUpdate` has a legal value. """
+        self._clean_allowed_values(fullUpdate, self.legal_fullUpdates, 'fullUpdate', self.xml_tag_name, False)
+        return fullUpdate

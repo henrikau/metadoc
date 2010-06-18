@@ -45,13 +45,11 @@ class ConfigEntry(metaelement.MetaElement):
                                  'totalMemory','usedMemory')
     def clean_element(self, element):
         """ Checks that the element attribute contains an allowed value. """
-        if not element in self.legal_element:
-            raise metaelement.IllegalAttributeValueError("element", element, self.legal_element, "Configuration")
+        self._clean_allowed_values(element, self.legal_element, 'element', self.xml_tag_name, False)
         return element
     def clean_metric(self, metric):
         """ Checks that the metric attribute contains an allowed value. """
-        if not metric in self.legal_metric:
-            raise metaelement.IllegalAttributeValueError("metric", metric, self.legal_metric, "Configuration")
+        self._clean_allowed_values(metric, self.legal_metric, 'metric', self.xml_tag_name, False)
         return metric
     def clean_volume(self, volume):
         """ Converts volume to string if integer, and checks that the passed 
@@ -62,6 +60,4 @@ class ConfigEntry(metaelement.MetaElement):
         """
         if isinstance(volume, int):
             volume = "%d" % (volume)
-        if not isinstance(volume, basestring):
-            raise metaelement.IllegalAttributeTypeError("volume", type(volume), "Configuration", ['str', 'int'])
         return volume

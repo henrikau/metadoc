@@ -43,3 +43,11 @@ class Users(metaelement.MetaElement):
             attributes['fullUpdate'] = fullUpdate
         super(Users, self).__init__(Users.xml_tag_name, attributes)
         self.legal_element_types = (UserEntry,)
+    def clean_type(self, type):
+        """ Checks that `type` has a legal value. """
+        self._clean_allowed_values(type, self.legal_types, 'type', self.xml_tag_name, False)
+        return type
+    def clean_fullUpdate(self, fullUpdate):
+        """ Checks that `fullUpdate` has a legal value. """
+        self._clean_allowed_values(fullUpdate, self.legal_fullUpdates, 'fullUpdate', self.xml_tag_name, False)
+        return fullUpdate

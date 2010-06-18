@@ -44,3 +44,16 @@ class SoftwareEntry(metaelement.MetaElement):
             self.attributes['infoURL'] = infoURL
 
         super(SoftwareEntry, self).__init__(SoftwareEntry.xml_tag_name, self.attributes)
+
+    def clean_version(self, version):
+        """ Converts version to string if int or float. """
+        if isinstance(version, int):
+            version = "%d" % version
+        elif isinstance(version, float):
+            version = "%f" % version
+        return version
+
+    def clean_infoURL(self, infoURL):
+        """ Checks whether infoURL is up. """
+        # FIXME - Implement?
+        return infoURL

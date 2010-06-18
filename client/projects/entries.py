@@ -42,3 +42,20 @@ class ProjectEntry(metaelement.MetaElement):
         if valid_to:
             attributes['valid_to'] = valid_to
         super(ProjectEntry, self).__init__(ProjectEntry.xml_tag_name, attributes)
+
+    def clean_gid(self, gid):
+        """ Converts gid to string if int. If neither string nor int, 
+        raise an IllegalAttributeTypeError.
+
+        """
+        if isinstance(gid, int):
+            gid = "%d" % gid
+        return gid
+    def clean_valid_from(self, valid_from):
+        """ Checks that `valid_from` is RFC3339 compliant. """
+        valid_from = self._clean_date(valid_from, 'valid_from', self.xml_tag_name)
+        return valid_from
+    def clean_valid_to(self, valid_to):
+        """ Checks that `valid_to` is RFC3339 compliant. """
+        valid_to = self._clean_date(valid_to, 'valid_to', self.xml_tag_name)
+        return valid_to
