@@ -3,6 +3,9 @@
 *.pyc
 *.db2
 *.sql/apache/test.xml
+*.log
+*.aux
+*.out
 certs/
 Server/XML_Server_config.sql
 /client/metadoc.conf
