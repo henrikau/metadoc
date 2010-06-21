@@ -37,7 +37,8 @@ class MetaOutput:
         Has to be populated in the inherited class.
 
         """
-        raise Exception("populate has not been implemented, and function cannot be used!")
+        raise Exception("populate has not been implemented, and function cannot\
+                        be used!")
     def fetch(self):
         """ Returns a list of items to be sent. """
         return self.items
@@ -60,4 +61,5 @@ class MetaInput:
         Has to be created in the inherited class.
 
         """
-        raise Exception("process has not been implemented, and function cannot be used!")
+        raise Exception("process has not been implemented, and function cannot \
+                        be used!")

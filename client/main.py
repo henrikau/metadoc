@@ -246,7 +246,7 @@ def main():
         try:
             res = cli.send(m.get_xml())
         except (urllib2.HTTPError, urllib2.URLError) as httperror:
-            logging.critical("Unable to connect to server address \"%s\", \
+            logging.error("Unable to connect to server address \"%s\", \
                 error: %s" % (url, httperror))
             # Since we're unable to send the document to the server, we will 
             # cache it so that we can send it at a later date.
@@ -310,7 +310,7 @@ def main():
             try:
                 res = cli.send(m.get_xml())
             except (urllib2.HTTPError, urllib2.URLError) as httperror:
-                logging.critical("Unable to connect to server address \"%s\", \
+                logging.error("Unable to connect to server address \"%s\", \
                                                 error: %s" % (url, httperror))
                 # Since we're unable to send the document to the server, we will 
                 # cache it so that we can send it at a later date.
@@ -345,7 +345,7 @@ def main():
         try:
             res = cli.send()
         except (urllib2.HTTPError, urllib2.URLError) as httperror:
-            logging.critical("Unable to connect to server address \"%s%s\", \
+            logging.error("Unable to connect to server address \"%s%s\", \
                         error: %s" % (vals['host'], element.url, httperror))
         else:
             if res:
@@ -367,7 +367,7 @@ def main():
                                             )
                     element.update_handler(sub_elements).process()
             else:
-                logging.critical("Recieved empty response from server when \
+                logging.error("Recieved empty response from server when \
                             attempting to fetch \"%s\"." % element.xml_tag_name)
 
 if __name__ == "__main__":
