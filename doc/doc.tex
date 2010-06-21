@@ -42,8 +42,130 @@
 \author{Bjørnar Grip Fjær}
 \date{\today}
 
+% Data type = config/software/events
+
 \begin{document}
 \maketitle
+
+\tableofcontents
+\newpage
+
+\section{Using the MetaDoc client}
+Usage of the MetaDoc client is done mainly through the use of \texttt{main.py}.
+\texttt{main.py} takes care of sending and retrieving data from the server, as
+well as caching any data that could not be sent. 
+
+When \texttt{main.py} should send data to the server, a custom function that
+should populate the data to be sent is called, so that each site can customize
+the way data is gathered on the site. 
+
+When \texttt{main.py} recieves data from the server, it calls a custom function
+based on the data recieved, where each site can define what should be done with
+said data.
+
+\subsection{Handles}
+\label{sec:handles}
+\texttt{main.py} takes handles that tells the script what information to send
+or retrieve to or from the server. All handles can be mixed together
+\textit{except} for handles that override each other.
+
+\texttt{main.py} takes the following handles:
+
+\begin{description}
+    \item[-h, --help]   Displays a short help message explaning the handles
+    that may be passed to \texttt{main.py}. Overrides any other handles.
+    \item[-v, --verbose]    Verbose mode. Prints information about progress and
+    information sent and recieved between client and server. Overridden by
+    quiet if passed together.
+    \item[-q, --quiet]  Quiet mode. Prints nothing unless the program fails.
+    \item[-l \textless log level\textgreater, --log-level=\textless log
+    level\textgreater] Sets the log level for the program. See section 
+    \ref{sec:loglevels} for more information about what is logged at different 
+    levels.
+    \item[-n, --no-cache]   Prevents the client from sending any cached data.
+    For more information about caching, see section \ref{sec:caching}.
+    \item[-e]   Sends event data from client to server.
+    \item[-c]   Sends configuration data from client to server.
+    \item[-s]   Sends software data from client to server.
+    \item[-u]   Retrieves user data from the server.
+    \item[-a]   Retrieves allocation data from server.
+    \item[-p]   Retrieves project data from server.
+\end{description}
+
+\subsection{Caching}
+\label{sec:caching}
+The client will cache any information that is not accepted by the server, 
+\textit{unless} the server returns a reciept for the information that marks the 
+information as invalid or malformed in some way, such that the information will 
+not be accepted if resent at a later date. 
+
+Data the client sends may be marked so that it will not resend any cached data
+when the client is run with the same handle. This is mainly for use for full
+updates, such as software and configuration, where any cached data would be
+outdated or duplicates if sent together with a new run.
+
+If the \textbf{-n} or \textbf{--no-cache} handles are passed, the script will
+ignore any cached data completely and run as if it didn't exist.
+
+\subsection{Log levels}
+\label{sec:loglevels}
+The client has five different logging levels. The list below gives an overview
+of what is logged at the different levels. The higher items in the list contain
+everything below as well, so that with a log level set to \textbf{error} will
+also contain \textbf{critical} logging.
+
+\begin{description}
+    \item[debug]    Debugging information, used for development and error
+    checking.
+    \item[info] Information about what is happening during execution, such as
+    items sent or recieved to/from the server.
+    \item[warning]  Warnings occouring during execution, mainly problems that
+    will not cause a failure but that should be addressed.
+    \item[error]    Errors that cause partial failure of the execution, such as
+    being unable to connect to the server.
+    \item[critical] Critical failures that causes the execution to halt, or
+    errors in the program code itself.
+\end{description}
+
+The log level defaults to the lowest possible, so everything will be logged if
+nothing is set.
+
+\subsection{Customizing MetaDoc}
+
+\subsubsection{Sending data}
+
+\subsubsection{Recieving data}
+When the client recieves data from the server, it parses the data and places
+the parsed data in a \texttt{client.custom.abstrac.MetaInput} instance. When 
+the data is ready, the \texttt{MetaInput} instance's \texttt{process()} 
+function will be called. This function should process the items in 
+\texttt{self.items} as needed on the site.
+
+Examples of \texttt{MetaInput} classes are given i
+\texttt{doc/examples/custom/update*.py}
+
+\newpage
+\section{Extending MetaDoc}
+To extend MetaDoc to send more data, the following is needed. Each step is 
+explained in more detail below.
+
+\begin{itemize}
+    \item
+        Definition of data to be sent in the MetaDoc DTD.
+    \item
+        A definition file explaining the data on the client.
+    \item
+        An entries file, explaining any entries allowed in the data on the 
+        client.
+    \item
+        A \texttt{MetaInput} or \texttt{MetaOutput} sub-class that should
+        handle data, depending on whether data is recieved or sent to or from
+        the server, respectively.
+    \item
+        Adding a handle to \texttt{main.py} that will activate the data type.
+    \item
+        Configuring the server to send or recieve the intended data.
+\end{itemize}
 
 \section{XML document}
 
@@ -78,10 +200,6 @@ whether elements have been added. The attribute is \textit{not} saved in caching
 to avoid duplicate \textbf{id}s when resending cached data together with new 
 data. If you want to give elements a special identifier that should be saved, it 
 must be called something other than \textbf{id}.
-
-\section{Extensibility}
-MetaDoc is made so that extending the data sent between client and server should 
-be as easy as possible. 
 
 \subsection{Client}
 
@@ -159,12 +277,6 @@ XML errors or the document not passing DTD verification, the \texttt{<r\_entry>}
 \textbf{id} attribute will be set to \texttt{0} (zero), reffering to the 
 document itself. 
 
-\section{Caching}
-
-The client will cache any information that is not accepted by the server, 
-\textit{unless} the server returns a reciept for the information that marks the 
-information as invalid or malformed in some way, such that the information will 
-not be accepted if resent at a later date. 
 
 \newpage
 \begin{thebibliography}{99}
