@@ -16,12 +16,14 @@
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 
 import metaelement
+from users.entries import UserEntry
 
 class ProjectEntry(metaelement.MetaElement):
     """ Information about each specific project. """
     xml_tag_name = "project_entry"
     
-    def __init__(self, name, gid, status, account_nmb, valid_from, valid_to=None):
+    def __init__(self, name, status, account_nmb, valid_from, abbrev=None, 
+                    valid_to=None, responsible_person=None, gid=None):
         """ Defines the project_entry XML tag.
 
         param:
@@ -34,15 +36,41 @@ class ProjectEntry(metaelement.MetaElement):
         """
         attributes = {
             'name': name,
-            'gid': gid,
             'status': status,
             'account_nmb': account_nmb,
             'valid_from': valid_from,
         }
-        if valid_to:
+        if abbrev is not None:
+            attributes['abbrev'] = abbrev
+        if valid_to is not None:
             attributes['valid_to'] = valid_to
+        if responsible_person is not None:
+            attributes['responsible_person'] = responsible_person
+        if gid is not None:
+            attributes['gid'] = gid
         super(ProjectEntry, self).__init__(ProjectEntry.xml_tag_name, attributes)
+        self.legal_element_types = (RemarksEntry, DescriptionEntry,UserEntry,)
 
+    def get_remarks(self):
+        """ Returns remarks, if any. """
+        for el in self.sub_elements:
+            if isinstance(el, RemarksEntry):
+                return el.text
+        return None
+
+    def get_description(self):
+        """ Returns description, if any. """
+        for el in self.sub_elements:
+            if isinstance(el, DescriptionEntry):
+                return el.text
+        return None
+
+    def get_user_list(self):
+        user_list = []
+        for el in self.sub_elements:
+            if isinstance(el, UserEntry):
+                user_list.append(el)
+        return user_list
     def clean_gid(self, gid):
         """ Converts gid to string if int. If neither string nor int, 
         raise an IllegalAttributeTypeError.
@@ -59,3 +87,15 @@ class ProjectEntry(metaelement.MetaElement):
         """ Checks that `valid_to` is RFC3339 compliant. """
         valid_to = self._clean_date(valid_to, 'valid_to', self.xml_tag_name)
         return valid_to
+
+class RemarksEntry(metaelement.MetaElement):
+    xml_tag_name = "remarks"
+
+    def __init__(self):
+        super(RemarksEntry, self).__init__(RemarksEntry.xml_tag_name)
+
+class DescriptionEntry(metaelement.MetaElement):
+    xml_tag_name = "description"
+
+    def __init__(self):
+        super(DescriptionEntry, self).__init__(DescriptionEntry.xml_tag_name)
