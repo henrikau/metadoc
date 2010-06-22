@@ -6,6 +6,7 @@
 *.log
 *.aux
 *.out
+*.swp
 certs/
 Server/XML_Server_config.sql
 /client/metadoc.conf
