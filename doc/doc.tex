@@ -136,18 +136,19 @@ nothing is set.
 
 \subsubsection{Recieving data}
 When the client recieves data from the server, it parses the data and places
-the parsed data in a \texttt{client.custom.abstrac.MetaInput} instance. When 
-the data is ready, the \texttt{MetaInput} instance's \texttt{process()} 
-function will be called. This function should process the items in 
-\texttt{self.items} as needed on the site.
+the parsed data in a \texttt{client.custom.abstract.MetaInput} instance. Which
+\texttt{MetaInput} sub-class is used is defined in the element's description by
+the class variable \texttt{update\_handler}.
 
-Examples of \texttt{MetaInput} classes are given i
-\texttt{doc/examples/custom/update*.py}
+Examples for producing files similar to the ones now in used based on
+information transferred through MetaDoc is given in
+\texttt{doc/examples/custom/}.
 
 \newpage
 \section{Extending MetaDoc}
 To extend MetaDoc to send more data, the following is needed. Each step is 
-explained in more detail below.
+explained in more detail below. Certain restrictions is set on how the XML
+document should be formed. See section \ref{sec:xmldoc} for more information.
 
 \begin{itemize}
     \item
@@ -167,7 +168,57 @@ explained in more detail below.
         Configuring the server to send or recieve the intended data.
 \end{itemize}
 
+\subsection{Altering DTD}
+\textit{The XML document follows certain conventions that should be followed when
+extending the DTD. These conventions are explained in more detail in section
+\ref{sec:xmldoc}.}
+
+Before you alter the DTD you should know exactly what data should be sent.
+Create an \texttt{<!ELEMENT>} with a descriptive name of the data sent. As an
+example, \texttt{<users>} is used for a list of users. 
+
+Add any attributes necessary to describe the set of data. If the data is a list
+of entries, such as a list of users, create an \texttt{<!ELEMENT>} as a
+possible sub-element that contains the information about each entry. Any short
+information about the entry should be placed in attributes of the entry. If
+there is more information, such as information that could be several sentences
+or lines, it should not be placed as an attribute. This information should be
+placed inside the element itself. If there are several types of long
+information for each entry, create a descriptive \texttt{<!ELEMENT>} for each
+as a sub-element of each entry to contain the text. Otherwise the text may be
+placed directly inside the entry element itself. 
+
+\subsection{Defining the data on the client}
+\label{sec:defclientmodel}
+Add a module to the client with the name of the main element. Create a file
+\texttt{definition.py} inside this module. \texttt{definition.py} should define
+the main element with a subclass of \texttt{metaelement.MetaElement}.
+
+Create a file \texttt{entries.py} inside the same module. This file should
+contain definitions of each entry, and potential sub-elements for each entry,
+as a sub-class of \texttt{metaelement.MetaElement}. 
+
+Add the entry class(es) to \texttt{self.legal\_element\_types} of the 
+\texttt{metaelement.MetaElement} sub-class defining the main element. 
+
+\texttt{metaelement.MetaElement} sub-classes may define a
+\texttt{clean\_<attribute name>()} for each attribute on the element. This method
+will recieve the attribute value, and should return the attribute value after
+any potential cleaning is done on it. Please note that \textit{all} attribute
+values \textit{must} be strings, so if any value set as an attribute might be
+set as anything other than a string, the clean-function is the place to convert
+it.
+
+\subsection{Custom client handles}
+If the data is to be sent from client to server, create a module
+\texttt{custom/site<main element name>.py} that contains a sub-class of
+\texttt{custom.abstract.MetaOutput}. This class should define a method
+\texttt{populate()} which gathers the information to be sent from the site and
+appends an instance of a entry-class, as defined in section
+\ref{sec:defclientmodel}, to \texttt{self.items} for each entry.
+
 \section{XML document}
+\label{sec:xmldoc}
 
 The XML document should follow the form described in the MetaDoc DTD 
 \cite{metadoc_dtd}. 
