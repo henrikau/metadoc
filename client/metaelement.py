@@ -264,6 +264,10 @@ class MetaElement(object):
                     element.sub_elements.append(me)
                 else:
                     logging.error("Unable to add sub element to \"%s\"." % element.xml_tag_name)
+        # We'll check if there are subelements that should NOT be here
+        for child in xml_element.getchildren():
+            if child.tag not in [a.xml_tag_name for a in element.legal_element_types]:
+                logging.warning("Found an illegal sub-element of type \"%s\" in element \"%s\"." % (child.tag, element.xml_tag_name))
         return element
 
 # Error classes
