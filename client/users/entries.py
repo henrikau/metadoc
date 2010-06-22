@@ -64,7 +64,6 @@ class UserEntry(metaelement.MetaElement):
         if org is not None:
             attributes['org'] = org
         super(UserEntry, self).__init__(UserEntry.xml_tag_name, attributes)
-        logging.info("Recieved user \"%s\"." % (username))
 
     def clean_uid(self, uid):
         """ Converts uid to string if int. """

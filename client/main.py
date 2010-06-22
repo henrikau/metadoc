@@ -196,6 +196,10 @@ def main():
         return
 
     # ready for main processing.
+    # Loading DTD for validation
+    dtd_file = open("MetaDoc.dtd", "r")
+    dtd = lxml.etree.DTD(dtd_file)
+
     for element in send_elements:
         possible_send_elements.remove(element)
         m = MetaDoc(True)
@@ -356,19 +360,30 @@ def main():
                 try:
                     return_data = lxml.etree.fromstring(xml_data)
                 except lxml.etree.XMLSyntaxError, e:
-                    logging.error("Error parsing XML document from server: \
-                                        %s" % e)
+                    logging.error("Error parsing XML document from server: "+
+                                        "%s" % e)
                 else:
-                    found_elements = return_data.findall(element.xml_tag_name)
-                    sub_elements = []
-                    for found_element in found_elements:
-                        sub_elements.append(MetaElement.from_xml_element(
-                                            found_element, element)
-                                            )
-                    element.update_handler(sub_elements).process()
+                    # Check for valid according to DTD:
+                    valid = dtd.validate(return_data)
+                    if valid:
+                        found_elements = return_data.findall(element.xml_tag_name)
+                        sub_elements = []
+                        for found_element in found_elements:
+                            sub_elements.append(MetaElement.from_xml_element(
+                                                found_element, element)
+                                                )
+                        element.update_handler(sub_elements).process()
+                    else:
+                        logging.error(("XML recieved for \"%s\" did not "
+                                    "contain valid XML according to DTD.") % \
+                                    element.xml_tag_name)
+                        dtd_errors = ""
+                        for error in dtd.error_log.filter_from_errors():
+                            dtd_errors = "%s\n%s" % (dtd_errors, error)
+                        logging.debug("XML DTD errors: %s" % dtd_errors)
             else:
-                logging.error("Recieved empty response from server when \
-                            attempting to fetch \"%s\"." % element.xml_tag_name)
+                logging.error("Recieved empty response from server when "+
+                        "attempting to fetch \"%s\"." % element.xml_tag_name)
 
 if __name__ == "__main__":
     main()
