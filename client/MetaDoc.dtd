@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!--			MetaDoc					-->
 <!--								-->
 <!-- MetaDoc is Client oriented. All traffic is initiated by	-->
@@ -29,7 +29,7 @@
 <!-- events	: New events from the site.			-->
 <!-- siteInfo	: Info about the site.				-->
 <!--								-->
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!ELEMENT MetaDoc
 	  (users?,
 	  projects?,
@@ -45,7 +45,7 @@
 	  version	CDATA		#REQUIRED
 	  site_name	CDATA		#REQUIRED>
 
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!--								-->
 <!--			USER					-->
 <!--								-->
@@ -64,14 +64,13 @@
 <!--		is a complete set or just a partial set of	-->
 <!--		users.						-->
 <!--								-->
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!ELEMENT users (user_entry+)>
 <!ATTLIST users
-	  type		(request|update)	#REQUIRED
-	  date		NMTOKENS		#REQUIRED
+	  date		CDATA		#REQUIRED
 	  fullUpdate	(yes|no)		#IMPLIED>
 
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!--			USER ENTRY				-->
 <!--								-->
 <!-- Attributes:						-->
@@ -91,7 +90,7 @@
 <!--				* A new account			-->
 <!--				* update of existing		-->
 <!--				* Delete a suspsended		-->
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!ELEMENT user_entry EMPTY>
 <!ATTLIST user_entry
 	  username	CDATA	#REQUIRED
@@ -106,7 +105,7 @@
       org       CDATA   #IMPLIED
 	  status	(new|existing|deactivate|delete) #IMPLIED>
 
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!--								-->
 <!--			PROJECT					-->
 <!--								-->
@@ -120,14 +119,13 @@
 <!--		very early date. This his for verbosity and	-->
 <!--		clarity.					-->
 <!--								-->
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!ELEMENT projects (project_entry+)>
 <!ATTLIST projects
-	  type	(request|update)	#REQUIRED
-	  date	NMTOKENS		#REQUIRED
+	  date	CDATA		#REQUIRED
 	  fullUpdate (yes|no)		#IMPLIED>
 
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!-- name	: The name of the project			-->
 <!-- gid	: The group-id of the project			-->
 <!-- valid_from	: From when the project is valid		-->
@@ -140,8 +138,8 @@
 <!--		  or to remove a project form			-->
 <!--		  the system.					-->
 <!--								-->
-<!-- ---------------------------------------------------------- -->
-<!ELEMENT project_entry (user_entry*, remarks?, description?)>
+<!-- ########################################################## -->
+<!ELEMENT project_entry (remarks?, description?, user_entry*)>
 <!ATTLIST project_entry
 	  name		            CDATA	                #REQUIRED
 	  status	            (new|existing|delete)   #REQUIRED
@@ -155,7 +153,7 @@
 <!ELEMENT description	(#PCDATA)>
 <!ELEMENT remarks	    (#PCDATA)>
 
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!--								-->
 <!--		    ALLOCATION					-->
 <!--								-->
@@ -172,7 +170,7 @@
 <!-- period	: e.g. 2009.1					-->
 <!--								-->
 <!--								-->
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!ELEMENT allocations (all_entry+)>
 <!ELEMENT all_entry EMPTY>
 <!ATTLIST all_entry
@@ -182,14 +180,14 @@
 	  all_class	(pri|nonpri) #REQUIRED
 	  period	CDATA #REQUIRED>
 
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!--			EVENT					-->
 <!--	date_(up|down) should be in RFC 3339			-->
 <!--	  format with second granularity			-->
 <!--								-->
 <!--	     2009-08-20 08:30:21+02:00				-->
 <!--								-->
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!ELEMENT events	((resourceDown|resourceUp)*)>
 
 <!ELEMENT resourceUp	(remarks?)>
@@ -208,7 +206,7 @@
 
 
 
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!--		Software					-->
 <!--								-->
 <!-- List of installed software, probably read from a list of	-->
@@ -219,7 +217,7 @@
 <!-- license	: -						-->
 <!-- infoURL	: where a user can find more information about	-->
 <!--		  the sofware installed at the site.		-->
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!ELEMENT software (sw_entry+)>
 <!ELEMENT sw_entry	EMPTY>
 <!ATTLIST sw_entry
@@ -229,14 +227,14 @@
 	  license	CDATA	#IMPLIED
 	  infoURL	CDATA	#IMPLIED>
 
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!--		Config						-->
 <!-- Site-specific information including size, speed etc.	-->
 <!-- element	: type of config-element described in this	-->
 <!--		  record					-->
 <!-- volume	: Number of <metric> unit in the given record	-->
 <!-- metric	: type of volume for the resource described	-->
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!ELEMENT config (config_entry+)>
 <!ELEMENT config_entry EMPTY>
 <!ATTLIST config_entry
@@ -248,7 +246,7 @@
 	  metric	(count|MB|GB|TB)
 				#REQUIRED
 	  volume	CDATA	#REQUIRED>
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!-- Receipts for uploaded data					-->
 <!--								-->
 <!-- Both success and error will be returned from the sever	-->
@@ -264,9 +262,10 @@
 <!--		client is responsible for verifying this value	-->
 <!--	- note:	A (voluntary, short) note to pass along to the	-->
 <!--		client to help finding the root of the problem.	-->
-<!-- ---------------------------------------------------------- -->
+<!-- ########################################################## -->
 <!ELEMENT receipt (r_entry+)>
 <!ELEMENT r_entry (PCDATA?)>
-<!ATTLIST id	ID	#REQUIRED,
-	  code	CDATA	#REQUIRED,
+<!ATTLIST r_entry
+        id	ID	#REQUIRED
+	  code	CDATA	#REQUIRED
 	  note	CDATA	#IMPLIED>

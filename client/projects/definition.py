@@ -25,18 +25,16 @@ class Projects(metaelement.MetaElement):
     update_handler = UpdateProjects
     url = "projects"
 
-    def __init__(self, type, date, fullUpdate=None):
+    def __init__(self, date, fullUpdate=None):
         """ Defines the projects XML tag.
         
         param:
-        type            : Type of project (request|update)
         date            : Date of oldest element in set
         fullUpdate      : Whether the set is a complete set or just an update
                           (yes|no)
         
         """
         attributes = {
-            'type': type,
             'date': date,
         }
         if fullUpdate:

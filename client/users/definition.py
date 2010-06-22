@@ -25,18 +25,16 @@ class Users(metaelement.MetaElement):
     update_handler = UpdateUsers
     url = "users"
 
-    def __init__(self, type, date, fullUpdate = None):
+    def __init__(self, date, fullUpdate = None):
         """ Defines the users XML tag.
         
         param:
-        type            : Type of data (request|update)
         date            : Date of oldest record in set
         fullUpdate      : Whether the set contains a full list or just an 
                           update. (yes|no)
 
         """
         attributes = {
-            'type': type,
             'date': date,
         }
         if fullUpdate:
