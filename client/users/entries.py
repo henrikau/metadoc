@@ -25,7 +25,7 @@ class UserEntry(metaelement.MetaElement):
 
     def __init__(self, username, uid=None, full_name=None, password=None, 
                     default_group=None, special_path=None, shell=None, 
-                    email=None, phone=None, status=None):
+                    email=None, phone=None, status=None, org=None):
         """ Defines the user_entry XML tag.
 
         param:
@@ -43,24 +43,26 @@ class UserEntry(metaelement.MetaElement):
                           (new|existing|deactivate|delete)
         """
         attributes = {'username': username}
-        if uid:
+        if uid is not None:
             attributes['uid'] = uid
-        if full_name:
+        if full_name is not None:
             attributes['full_name'] = full_name
-        if password:
+        if password is not None:
             attributes['password'] = password
-        if default_group:
+        if default_group is not None:
             attributes['default_group'] = default_group
-        if special_path:
+        if special_path is not None:
             attributes['special_path'] = special_path
-        if shell:
+        if shell is not None:
             attributes['shell'] = shell
-        if email:
+        if email is not None:
             attributes['email'] = email
-        if phone:
+        if phone is not None:
             attributes['phone'] = phone
-        if status:
+        if status is not None:
             attributes['status'] = status
+        if org is not None:
+            attributes['org'] = org
         super(UserEntry, self).__init__(UserEntry.xml_tag_name, attributes)
         logging.info("Recieved user \"%s\"." % (username))
 

@@ -103,6 +103,7 @@
 	  shell		CDATA	#IMPLIED
 	  email		CDATA	#IMPLIED
 	  phone		CDATA	#IMPLIED
+      org       CDATA   #IMPLIED
 	  status	(new|existing|deactivate|delete) #IMPLIED>
 
 <!-- ---------------------------------------------------------- -->
@@ -140,14 +141,19 @@
 <!--		  the system.					-->
 <!--								-->
 <!-- ---------------------------------------------------------- -->
-<!ELEMENT project_entry (user_entry*)>
+<!ELEMENT project_entry (user_entry*, remarks?, description?)>
 <!ATTLIST project_entry
-	  name		CDATA	#REQUIRED
-	  gid		CDATA	#REQUIRED
-	  status	(new|existing|delete) #REQUIRED
-	  account_nmb	CDATA	#REQUIRED
-	  valid_from	CDATA	#REQUIRED
-	  valid_to	CDATA	#IMPLIED>
+	  name		            CDATA	                #REQUIRED
+	  status	            (new|existing|delete)   #REQUIRED
+	  account_nmb	        CDATA	                #REQUIRED
+	  valid_from	        CDATA	                #REQUIRED
+      abbrev                CDATA                   #IMPLIED
+	  gid		            CDATA	                #IMPLIED
+      responsible_person    CDATA                   #IMPLIED
+	  valid_to              CDATA                   #IMPLIED>
+
+<!ELEMENT description	(#PCDATA)>
+<!ELEMENT remarks	    (#PCDATA)>
 
 <!-- ---------------------------------------------------------- -->
 <!--								-->
@@ -172,7 +178,7 @@
 <!ATTLIST all_entry
 	  account_nmb	CDATA #REQUIRED
 	  volume	CDATA #REQUIRED
-	  metric	(hours|mb) # REQUIRED
+	  metric	(hours|mb) #REQUIRED
 	  all_class	(pri|nonpri) #REQUIRED
 	  period	CDATA #REQUIRED>
 
@@ -185,8 +191,6 @@
 <!--								-->
 <!-- ---------------------------------------------------------- -->
 <!ELEMENT events	((resourceDown|resourceUp)*)>
-
-<!ELEMENT remarks	(#PCDATA)>
 
 <!ELEMENT resourceUp	(remarks?)>
 <!ATTLIST resourceUp
