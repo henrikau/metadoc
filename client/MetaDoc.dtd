@@ -82,6 +82,9 @@
 <!--              user when submitting the useraccount          -->
 <!--              submitting the useraccount application        -->
 <!-- phone        : supplied phone                              -->
+<!-- mobile       : supplied mobile phone number                -->
+<!-- expiry       : expiry date days since epoch                -->
+<!-- org          : organizational short name                   -->
 <!-- status        : If not set, it should be interpreted       -->
 <!--              as an existing user being modified.           -->
 <!--                * A new account                             -->
@@ -99,6 +102,8 @@
       shell             CDATA                               #IMPLIED
       email             CDATA                               #IMPLIED
       phone             CDATA                               #IMPLIED
+      mobile            CDATA                               #IMPLIED
+      expiry            CDATA                               #IMPLIED
       org               CDATA                               #IMPLIED
       status            (new|existing|deactivate|delete)    #IMPLIED>
 

@@ -25,7 +25,8 @@ class UserEntry(metaelement.MetaElement):
 
     def __init__(self, username, uid=None, full_name=None, password=None, 
                     default_group=None, special_path=None, shell=None, 
-                    email=None, phone=None, status=None, org=None):
+                    email=None, phone=None, mobile=None, expiry=None,
+                    status=None, org=None):
         """ Defines the user_entry XML tag.
 
         param:
@@ -38,9 +39,12 @@ class UserEntry(metaelement.MetaElement):
         shell           : Shell for user
         email           : Supplied email address of user
         phone           : Supplied phone number of user
+        mobile          : Supplied mobile phone number of user
+        expiry          : Expiry of user in days since epoch
         status          : Status of user, should be interpreted as 
                           modification if nothing is set.
                           (new|existing|deactivate|delete)
+        org             : Organizational shortname
         """
         attributes = {'username': username}
         if uid is not None:
