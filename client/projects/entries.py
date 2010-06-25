@@ -22,8 +22,8 @@ class ProjectEntry(metaelement.MetaElement):
     """ Information about each specific project. """
     xml_tag_name = "project_entry"
     
-    def __init__(self, name, status, account_nmb, valid_from, abbrev=None, 
-                    valid_to=None, responsible_person=None, gid=None):
+    def __init__(self, name, account_nmb, status=None, valid_from=None, 
+            abbrev=None, valid_to=None, responsible_person=None, gid=None):
         """ Defines the project_entry XML tag.
 
         param:
@@ -36,10 +36,12 @@ class ProjectEntry(metaelement.MetaElement):
         """
         attributes = {
             'name': name,
-            'status': status,
             'account_nmb': account_nmb,
-            'valid_from': valid_from,
         }
+        if valid_from is not None:
+            attributes['valid_from'] = valid_from
+        if status is not None:
+            attributes['status'] = status
         if abbrev is not None:
             attributes['abbrev'] = abbrev
         if valid_to is not None:

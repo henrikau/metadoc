@@ -144,9 +144,9 @@
 <!ELEMENT project_entry (remarks?, description?, user_entry*)>
 <!ATTLIST project_entry
       name                  CDATA                   #REQUIRED
-      status                (new|existing|delete)   #REQUIRED
       account_nmb           CDATA                   #REQUIRED
-      valid_from            CDATA                   #REQUIRED
+      status                (new|existing|delete)   #IMPLIED
+      valid_from            CDATA                   #IMPLIED
       abbrev                CDATA                   #IMPLIED
       gid                   CDATA                   #IMPLIED
       responsible_person    CDATA                   #IMPLIED
