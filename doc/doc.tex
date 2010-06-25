@@ -38,7 +38,7 @@
 \newcommand\inlinecode[1]{{ \texttt{\small #1} }}
 
 
-\title{MetaDoc Documentation (\textsc{mdoc})}
+\title{MetaDoc Documentation}
 \author{Bjørnar Grip Fjær}
 \date{\today}
 
@@ -239,6 +239,16 @@ appends an instance of a entry-class, as defined in section
 
 The XML document should follow the form described in the MetaDoc DTD 
 \cite{metadoc_dtd}. 
+
+\subsection{Document build}
+
+Any type of information sent should only create one direct child of the root
+element, \texttt{<MetaDoc>}. This means that when lists of information is sent, 
+the list elements should be placed within a container element, and \textit{not} 
+directly in the root element.
+
+An example is that \texttt{<user\_entry>} elements are placed within a
+\texttt{<users>} element. 
 
 \subsection{Element attributes}
 
