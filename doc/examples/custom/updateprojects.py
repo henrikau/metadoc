@@ -36,7 +36,6 @@ class UpdateProjects(MetaInput):
         projects_file = open("/tmp/users.%s" % 
             datetime.datetime.now().strftime("%Y-%m-%d"), "w")
         for item in self.items:
-            print item.attributes
             for project in item.sub_elements:
                 line = "%s:" % project.attributes.get("account_nmb")
                 users = project.get_user_list()
