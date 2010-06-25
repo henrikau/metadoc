@@ -233,6 +233,30 @@ If the data is to be sent from client to server, create a module
 appends an instance of a entry-class, as defined in section
 \ref{sec:defclientmodel}, to \texttt{self.items} for each entry.
 
+\subsection{Versioning}
+MetaDoc passes a \textbf{version} attribute on it's root element,
+\texttt{<MetaDoc>} when sending information between client and server. This
+version is a number on the form ''\texttt{X}.\texttt{Y}.\texttt{Z}'', where
+\texttt{X}, \texttt{Y} and \texttt{Z} are numbers. Changes made to each number 
+indicate different levels of breakage. 
+
+When \texttt{X} is changed, changes are made such that the current information
+passed is changed in some way. This may be changes to the DTD where any of the
+currently passed information is affected (addition/removal of attributes,
+changes to how attribute values are presented or should be parsed,
+addition/removal of sub-elements). If the client or server encounters a
+document with a different value of \texttt{X} in the version number, it should
+\textit{not} accept the data, as it cannot be sure it will handle it correctly.
+
+Changes to \texttt{Y} indicates a change that does \textit{not} change the
+current behaviour in any way, but instances where new information might be
+passed. When the client or server encounters a document with a different value
+of \texttt{Y} it should log a warning, but otherwise proceed as normally.
+
+\texttt{Z} is currently not used for anything, but is present for potential
+usability in the future. Differences in \texttt{Z} should be logged as debug
+information.
+
 \newpage
 \section{XML document}
 \label{sec:xmldoc}
