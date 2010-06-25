@@ -3,7 +3,7 @@
 \usepackage[utf8x]{inputenc}
 \usepackage{listings}
 \usepackage{graphicx}
-\usepackage[pdftex]{hyperref}
+\usepackage[dvips]{hyperref}
 \hypersetup{bookmarks = true}
 \hypersetup{pdftitle = MetaDoc}
 \hypersetup{pdfauthor = Bjørnar Grip Fjær}
@@ -16,7 +16,7 @@
 \addtolength{\oddsidemargin}{0.85cm}
 \addtolength{\evensidemargin}{-1.5cm}
 \addtolength{\textwidth}{0.75cm}
-%%\addtolength{\topmargin}{-1.0cm}
+%\addtolength{\topmargin}{-1.0cm}
 \addtolength{\textheight}{1cm}
 \newcommand\rawcode[3]{{#1 \lstinputlisting[label=#2]{#3}}}
 \newcommand\scriptcode[3]{
@@ -61,13 +61,14 @@ the way data is gathered on the site.
 
 When \texttt{main.py} recieves data from the server, it calls a custom function
 based on the data recieved, where each site can define what should be done with
-said data.
+the recieved data.
 
 \subsection{Handles}
 \label{sec:handles}
 \texttt{main.py} takes handles that tells the script what information to send
 or retrieve to or from the server. All handles can be mixed together
-\textit{except} for handles that override each other.
+\textit{except} for handles that override each other. Handles that overrides
+others are explicitly stated below.
 
 \texttt{main.py} takes the following handles:
 
@@ -75,9 +76,9 @@ or retrieve to or from the server. All handles can be mixed together
     \item[-h, --help]   Displays a short help message explaning the handles
     that may be passed to \texttt{main.py}. Overrides any other handles.
     \item[-v, --verbose]    Verbose mode. Prints information about progress and
-    information sent and recieved between client and server. Overridden by
-    quiet if passed together.
+    information sent and recieved between client and server. 
     \item[-q, --quiet]  Quiet mode. Prints nothing unless the program fails.
+    Overrides \textbf{-v}, \textbf{--verbose}.
     \item[-l \textless log level\textgreater, --log-level=\textless log
     level\textgreater] Sets the log level for the program. See section 
     \ref{sec:loglevels} for more information about what is logged at different 
@@ -97,7 +98,8 @@ or retrieve to or from the server. All handles can be mixed together
 The client will cache any information that is not accepted by the server, 
 \textit{unless} the server returns a reciept for the information that marks the 
 information as invalid or malformed in some way, such that the information will 
-not be accepted if resent at a later date. 
+not be accepted if resent at a later date. See section \ref{sec:errors} for
+more information.
 
 Data the client sends may be marked so that it will not resend any cached data
 when the client is run with the same handle. This is mainly for use for full
@@ -105,7 +107,9 @@ updates, such as software and configuration, where any cached data would be
 outdated or duplicates if sent together with a new run.
 
 If the \textbf{-n} or \textbf{--no-cache} handles are passed, the script will
-ignore any cached data completely and run as if it didn't exist.
+ignore any cached data completely and run as if it didn't exist. The cached
+data will then be processed on the next run where \textbf{-n} or
+\textbf{--no-cache} is not passed.
 
 \subsection{Log levels}
 \label{sec:loglevels}
@@ -131,16 +135,28 @@ The log level defaults to the lowest possible, so everything will be logged if
 nothing is set.
 
 \subsection{Customizing MetaDoc}
+\label{sec:customizing_client}
 
 \subsubsection{Sending data}
+To send data to the server, the client creates instances of a sub-class of the
+\\
+\texttt{custom.abstract.MetaOutput} class. These classes should define a
+\texttt{populate()} function that populates \texttt{self.items} with a set of
+\texttt{metaelement.MetaElement} sub-class instances. Once \texttt{self.items}
+is populated, the server packs it to XML and sends it to the server.
+
+The server \textit{must} return a reciept for each entry, specifying whether
+the entry has been accepted by the server, or return an error code, as defined
+i table \ref{tbl:server_error_codes}, if the entry is not accepted. See
+section \ref{sec:errors} and \ref{sec:caching} for more information.
 
 \subsubsection{Recieving data}
 When the client recieves data from the server, it parses the data and places
-the parsed data in a \texttt{client.custom.abstract.MetaInput} instance. Which
+the parsed data in a \texttt{custom.abstract.MetaInput} instance. Which
 \texttt{MetaInput} sub-class is used is defined in the element's description by
 the class variable \texttt{update\_handler}.
 
-Examples for producing files similar to the ones now in used based on
+Examples for producing files similar to the ones now in use based on
 information transferred through MetaDoc is given in
 \texttt{doc/examples/custom/}.
 
@@ -198,7 +214,7 @@ Create a file \texttt{entries.py} inside the same module. This file should
 contain definitions of each entry, and potential sub-elements for each entry,
 as a sub-class of \texttt{metaelement.MetaElement}. 
 
-Add the entry class(es) to \texttt{self.legal\_element\_types} of the 
+Add the entry class(es) to \texttt{self.legal\_element\_types} of the \\ 
 \texttt{metaelement.MetaElement} sub-class defining the main element. 
 
 \texttt{metaelement.MetaElement} sub-classes may define a
@@ -217,6 +233,7 @@ If the data is to be sent from client to server, create a module
 appends an instance of a entry-class, as defined in section
 \ref{sec:defclientmodel}, to \texttt{self.items} for each entry.
 
+\newpage
 \section{XML document}
 \label{sec:xmldoc}
 
@@ -265,6 +282,7 @@ This makes it possible to create elements by passing non-string variables, such
 as \texttt{datetime} objects for date fields, then converting them in the clean 
 function. 
 
+\newpage
 \section{MetaDoc API description}
 
 \subsection{Server API}
@@ -310,6 +328,47 @@ If the client does not send a SSL certificate, sends a sertificate unknown to
 the server, or attempts to get information about sites not identified with the
 certificate, the server returns a ``403 Forbidden`` status code.
 
+\newpage
+\section{Information flow}
+
+The client will always be the initiator in either requesting data from the
+server or sending data. 
+
+Figure \ref{fig:information_flow} shows how information passes when a client
+requests a user list. The steps are as follows:
+
+\begin{enumerate}
+    \item
+        \texttt{main.py} is run with the handle \textbf{-u}, which will check
+        \texttt{users.definition.Users} for which URL to access on the server
+        to retrieve the information.
+    \item
+        A request is sent to the server to retrieve the information.
+    \item
+        The server creates an XML document with a list of users for the site.
+        
+        The XML document sent is defined by the MetaDoc DTD.
+    \item
+        \texttt{main.py} recieves the XML document, checks that it is valid
+        according to the DTD. 
+    \item
+        If the XML document passes validation, an instance of
+        \texttt{users.definition.Users} is created, and an instance of
+        \texttt{users.entries.UserEntry} is created for each
+        \texttt{<user\_entry>} in the XML document.
+
+        \texttt{users.definition.Users} and \texttt{users.entries.UserEntry}
+        may validate attributes and refuse to create any elements where
+        attribute validation does not pass.
+    \item
+        The list of validated \texttt{users.entries.UserEntry} instances is
+        placed within \texttt{self.items} for an
+        \texttt{custom.updateusers.UpdateUsers} instance, and the
+        \texttt{process()} function is called for the processing of the user
+        list.
+\end{enumerate}
+
+\newpage
 \section{Errors}
 \label{sec:errors}
 
@@ -332,13 +391,13 @@ document itself.
 \newpage
 \begin{thebibliography}{99}
     \bibitem{metadoc_dtd} \textit{MetaDoc Document Type Definition}, 
-        \url{http://www.austad.us/metadoc/MetaDoc.dtd}
+        \url{http://bjornar.me/metadoc/MetaDoc.dtd}
     \bibitem{rfc3339} \textit{RFC3339}, \url{http://www.ietf.org/rfc/rfc3339.txt}
 \end{thebibliography}
 
-\newpage
 \appendix
 
+\newpage
 \section{List of errors}
 
 \begin{table}[h]
@@ -363,5 +422,14 @@ document itself.
     \end{tabular}
     \label{tbl:server_error_codes}
 \end{table}
+
+\newpage
+\section{Information flow}
+
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{img/xml_flow}
+    \caption{Information flow when requesting user list with MetaDoc}
+    \label{fig:information_flow}
+\end{figure}
 
 \end{document}
