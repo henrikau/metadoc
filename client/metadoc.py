@@ -125,7 +125,7 @@ class MetaDoc:
                         logging.error(err_str)
                     else:
                         info_str = ("Element \"%s\" successfully added. "
-                                "(Attributes: %s)" % (element.xml_tag_name, 
+                                "(Attributes: %s)") % (element.xml_tag_name, 
                                                         element.attributes)
                         logging.info(info_str)
                         self.remove_element(element)
