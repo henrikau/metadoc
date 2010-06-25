@@ -21,11 +21,17 @@ from abstract import MetaInput
 import datetime
 
 class UpdateProjects(MetaInput):
+    """ Class for processing recieved project data. """
     def process(self):
-        """ Processes any project data recieved. 
-        
-        Example that creates a file listing usernames per project.
-        
+        """ Called when project data is parsed and should be processed for the 
+        site. 
+
+        `self.items` will contain a list of `projects.definition.Projects` 
+        instances. These instances have defined `get_user_list()` that provides
+        a list of users for the given project.
+
+        Example file that creates a project user file from data.
+
         """
         projects_file = open("/tmp/users.%s" % 
             datetime.datetime.now().strftime("%Y-%m-%d"), "w")

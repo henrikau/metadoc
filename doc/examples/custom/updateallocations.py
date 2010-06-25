@@ -28,8 +28,22 @@ class UpdateAllocations(MetaInput):
         elements, where each element in it's sub_elements will be a 
         `users.entries.AllocationEntry`. 
 
-        See doc/examples/custom/updateallocations.py for example on creating a 
-        quota file from data.
+        Example file that creates quota file from data.
 
         """
-        pass
+        project_allocations = {}
+        for item in self.items:
+            for alloc in item.sub_elements:
+                account_nmb = alloc.attributes.get("account_nmb")
+                if len(account_nmb) == 0:
+                    continue
+                if account_nmb not in project_allocations.keys():
+                    project_allocations[account_nmb] = {'pri': 0, 'nonpri': 0}
+                if alloc.attributes.get("metric").lower() == "hours":
+                    project_allocations[account_nmb][alloc.attributes.get("all_class")] += int(alloc.attributes.get("volume"))
+        allfile = open("/tmp/allfile", "w")
+        for proj in project_allocations.keys():
+            allfile.write("%s%20s%20s\n" % (proj.lower(), 
+                project_allocations[proj]['pri']*60*60, 
+                project_allocations[proj]['nonpri']*60*60))
+        allfile.close()

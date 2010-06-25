@@ -17,12 +17,22 @@
 # The API interface
 
 import logging
+import datetime
 
 from abstract import MetaInput
 
 class UpdateUsers(MetaInput):
+    """ Class for processing recieved user data. """
     def process(self):
-        for item in self.items:
-            print item.attributes
-            for a in item.sub_elements:
-                print a.attributes
+        """ Called when user data is parsed and should be processed for the 
+        site.
+
+        `self.items` will contain a list of `users.definition.Users` elements, 
+        where each element in it's sub_elements will be a 
+        `users.entries.UserEntry`. 
+
+        See doc/examples/custom/updateusers.py for example on creating a 
+        shadow file from data.
+
+        """
+        pass
