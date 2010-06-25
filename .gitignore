@@ -7,6 +7,9 @@
 *.aux
 *.out
 *.swp
+*.ps
+*.dvi
+*.toc
 certs/
 Server/XML_Server_config.sql
 /client/metadoc.conf
