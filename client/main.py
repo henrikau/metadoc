@@ -331,9 +331,9 @@ def main():
                     logging.error("Server returned an empty response when \
                         attempting to send \"%s\". Caching data." % 
                         element.xml_tag_name)
-                    # Since we recieved an empty response from the server we have 
-                    # not recieved any reciept for any elements and must cache
-                    # them.
+                    # Since we recieved an empty response from the server we 
+                    # have not recieved any reciept for any elements and must 
+                    # cache them.
                     Cacher(element.xml_tag_name, m)
             
 
@@ -366,7 +366,9 @@ def main():
                     # Check for valid according to DTD:
                     valid = dtd.validate(return_data)
                     if valid:
-                        found_elements = return_data.findall(element.xml_tag_name)
+                        found_elements = return_data.findall(
+                                        element.xml_tag_name
+                                        )
                         sub_elements = []
                         for found_element in found_elements:
                             sub_elements.append(MetaElement.from_xml_element(

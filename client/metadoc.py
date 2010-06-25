@@ -102,25 +102,31 @@ class MetaDoc:
                     try:
                         r_code = int(r_code)
                     except ValueError, e:
-                        logging.error("Recieved a non-integer error code from server: \"%s\"." % str(r_code))
+                        logging.error(("Recieved a non-integer error code from "
+                            "server: \"%s\".") % str(r_code))
                         continue
                     if not (r_code >= 1000 and r_code < 2000):
                         if r_code < 5000:
                             # Got an error that will NOT be fixed by 
                             # resending element. No point in caching.
                             self.remove_element(element)
-                        err_str = "Error %s on \"%s\" element. Element attributes: %s" % (
+                        err_str = ("Error %s on \"%s\" element. Element "
+                                    "attributes: %s") % (
                                         r_entry.attrib.get("code"),
                                         element.xml_tag_name,
                                         element.attributes
                                         )
                         if r_entry.attrib.get("note"):
-                            err_str = "%s    \nError note: %s" % (err_str, r_entry.attrib.get("note"))
+                            err_str = "%s    \nError note: %s" % (err_str, 
+                                            r_entry.attrib.get("note"))
                         if r_entry.text:
-                            err_str = "%s    \nError message:\n%s" % (err_str, r_entry.text)
+                            err_str = "%s    \nError message:\n%s" % (err_str, 
+                                            r_entry.text)
                         logging.error(err_str)
                     else:
-                        info_str = "Element \"%s\" successfully added. (Attributes: %s)" % (element.xml_tag_name, element.attributes)
+                        info_str = ("Element \"%s\" successfully added. "
+                                "(Attributes: %s)" % (element.xml_tag_name, 
+                                                        element.attributes)
                         logging.info(info_str)
                         self.remove_element(element)
             else:

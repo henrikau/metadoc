@@ -30,7 +30,8 @@ class Cacher(object):
             try:
                 os.mkdir("cache")
             except IOError, e:
-                logging.error("Unable to create cache directory. Please check access rights. (%s)" % e)
+                logging.error(("Unable to create cache directory. "
+                    "Please check access rights. (%s)") % e)
                 return
             else:
                 logging.info("Created cache directory.")
@@ -48,7 +49,8 @@ class Cacher(object):
         try:
             element = lxml.etree.fromstring(cache_string)
         except lxml.etree.XMLSyntaxError:
-            logging.error("Cached file \"%s\" contains invalid XML." % self.file_path)
+            logging.error("Cached file \"%s\" contains invalid XML." % 
+                            self.file_path)
             return None
         return element.find(self.element_type)
 
@@ -60,7 +62,8 @@ class Cacher(object):
             # be sent twice. If the data can't be sent it will be recached.
             os.remove(self.file_path)
         except IOError, e:
-            logging.error("Unable to remove cache file \"%s\". Please remove to ensure data is not resent." % self.file_path)
+            logging.error(("Unable to remove cache file \"%s\". "
+                "Please remove to ensure data is not resent.") % self.file_path)
             return
 
     def _get_cache_string(self):
@@ -75,7 +78,8 @@ class Cacher(object):
         try:
             cached_file = open(self.file_path, "r")
         except IOError, e:
-            logging.error("Found cache file \"%s\" but unable to open. Check access rights. (%s)" % (self.file_path, e))
+            logging.error(("Found cache file \"%s\" but unable to open. "
+                "Check access rights. (%s)") % (self.file_path, e))
             return None
         cached_string = cached_file.read()
         return cached_string
