@@ -67,6 +67,10 @@ class UserEntry(metaelement.MetaElement):
             attributes['status'] = status
         if org is not None:
             attributes['org'] = org
+        if expiry is not None:
+            attributes['expiry'] = expiry
+        if mobile is not None:
+            attributes['mobile'] = mobile
         super(UserEntry, self).__init__(UserEntry.xml_tag_name, attributes)
 
     def clean_uid(self, uid):
