@@ -18,6 +18,8 @@
 """Registers an event through a command line interface that can be sent 
 through MetaDoc client.
 
+main.py should be run afterwards in order to send data to server.
+
 Usage:
 --help                  Displays this help message.
 --up                    Sets event type to resource up(1).
@@ -40,15 +42,21 @@ import getopt
 import sys
 from datetime import datetime
 
+from events.definition import Events
+from events.entries import ResourceUpEntry, ResourceDownEntry
+from metadoc import MetaDoc
+from cacher import Cacher
+
 def main():
     optlist = ['help', 'up', 'down', 'reason=', 'dateup=', 'datedown=', 
-                'sharedown=', 'dateformat=']
+                'sharedown=', 'dateformat=', 'remarks=']
     event_type = None
     reason = None
     date_up = datetime.now()
     date_down = datetime.now()
     share_down = None
     date_format = "%Y-%m-%d %H:%M:%S"
+    remarks = None
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", optlist)
     except getopt.GetoptError, goe:
@@ -73,6 +81,17 @@ def main():
             share_down = arg
         elif opt in ('--dateformat'):
             date_format = arg
+        elif opt in ('--remarks'):
+            try:
+                rfile = open(arg, "r")
+            except IOError, e:
+                print "Could not open file containing remarks."
+                print "Got error: %s" % str(e)
+                print "Halting."
+                sys.exit(2)
+            else:
+                remarks = rfile.read()
+                rfile.close()
 
     if not isinstance(date_up, datetime):
         if date_up is not None:
@@ -83,6 +102,7 @@ def main():
                 print str(e)
                 print __doc__
                 sys.exit(2)
+    if not isinstance(date_down, datetime):
         if date_down is not None:
             try:
                 date_down = datetime.strptime(date_down, date_format)
@@ -106,6 +126,30 @@ def main():
                 print __doc__
                 sys.exit(2)
     # We have everything we require to create an event.
+    # Attempt to find already cached data:
+    m = MetaDoc(True)
+    c = Cacher("events")
+    cached_data = c.get_cache()
+    if cached_data is not None:
+        processor = Events.from_xml_element(cached_data, Events)
+        if processor is None:
+            print "Found previous event cache, but could not load. Please check "
+            print "\"%s\" for errors. " % c.file_path
+            print "Halting."
+            sys.exit(2)
+        else:
+            c.remove_cache()
+    else:
+        processor = Events()
+    if event_type == "resourceUp":
+        e = ResourceUpEntry(date_up, reason, remarks)
+    else:
+        e = ResourceDownEntry(reason, date_down, date_up, share_down, remarks)
+    processor.add_element(e)
+    m.reg_meta_element(processor)
+    Cacher(Events.xml_tag_name, m)
+            
+     
 
 if __name__=='__main__':
     main()
