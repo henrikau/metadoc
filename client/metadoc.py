@@ -58,7 +58,9 @@ class MetaDoc:
             self.root.append(me.get_xml_element(with_id))
 
 
-        return lxml.etree.tostring(self.root, encoding=unicode)
+        return lxml.etree.tostring(self.root, 
+                encoding='utf-8', 
+                xml_declaration=True)
 
     def find_id(self, locate_id):
         """ Attempts to locate the element with a given ID. """
