@@ -42,6 +42,7 @@ class UpdateAllocations(MetaInput):
                 if alloc.attributes.get("metric").lower() == "hours":
                     project_allocations[account_nmb][alloc.attributes.get("all_class")] += int(alloc.attributes.get("volume"))
         allfile = open("/tmp/allfile", "w")
+        allfile.write("# account  quota[cpusecs]  nonpri_quota[cpusecs]\n")
         for proj in project_allocations.keys():
             allfile.write("%s%20s%20s\n" % (proj.lower(), 
                 project_allocations[proj]['pri']*60*60, 
