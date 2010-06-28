@@ -254,8 +254,8 @@ def main():
             try:
                 res = cli.send(m.get_xml())
             except (urllib2.HTTPError, urllib2.URLError) as httperror:
-                logging.error("Unable to connect to server address \"%s\", \
-                    error: %s" % (url, httperror))
+                logging.error(("Unable to connect to server address \"%s\", "
+                    "error: %s") % (url, httperror))
                 # Since we're unable to send the document to the server, we will 
                 # cache it so that we can send it at a later date.
                 Cacher(element.xml_tag_name, m)
@@ -318,8 +318,8 @@ def main():
             try:
                 res = cli.send(m.get_xml())
             except (urllib2.HTTPError, urllib2.URLError) as httperror:
-                logging.error("Unable to connect to server address \"%s\", \
-                                                error: %s" % (url, httperror))
+                logging.error(("Unable to connect to server address \"%s\", "
+                                                "error: %s") % (url, httperror))
                 # Since we're unable to send the document to the server, we will 
                 # cache it so that we can send it at a later date.
                 Cacher(element.xml_tag_name, m)
