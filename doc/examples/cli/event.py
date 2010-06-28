@@ -150,8 +150,7 @@ def main():
     processor.add_element(e)
     m.reg_meta_element(processor)
     Cacher(Events.xml_tag_name, m)
-            
-     
+    print "Event has been registered. Run main.py to send to server."
 
 if __name__=='__main__':
     main()
