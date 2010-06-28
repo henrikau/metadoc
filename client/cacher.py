@@ -23,7 +23,7 @@ class Cacher(object):
     def __init__(self, element_type, metadoc = None):
         """ Receives a metadoc.MetaDoc that should be cached. """
         self.metadoc = metadoc
-        self.file_path = "cache/%s.xml" % element_type
+        self.file_path = "/var/cache/mapi/%s.xml" % element_type
         self.element_type = element_type
         if not os.path.isdir("cache"):
             logging.info("Cache directory not present, attempting to create.")
