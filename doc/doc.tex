@@ -91,25 +91,9 @@ others are explicitly stated below.
     \item[-u]   Retrieves user data from the server.
     \item[-a]   Retrieves allocation data from server.
     \item[-p]   Retrieves project data from server.
+    \item[--dry-run]    Does a dry run, not sending any data to server. Should
+    be run with verbose to see data that would be sent.
 \end{description}
-
-\subsection{Caching}
-\label{sec:caching}
-The client will cache any information that is not accepted by the server, 
-\textit{unless} the server returns a reciept for the information that marks the 
-information as invalid or malformed in some way, such that the information will 
-not be accepted if resent at a later date. See section \ref{sec:errors} for
-more information.
-
-Data the client sends may be marked so that it will not resend any cached data
-when the client is run with the same handle. This is mainly for use for full
-updates, such as software and configuration, where any cached data would be
-outdated or duplicates if sent together with a new run.
-
-If the \textbf{-n} or \textbf{--no-cache} handles are passed, the script will
-ignore any cached data completely and run as if it didn't exist. The cached
-data will then be processed on the next run where \textbf{-n} or
-\textbf{--no-cache} is not passed.
 
 \subsection{Log levels}
 \label{sec:loglevels}
@@ -133,6 +117,24 @@ also contain \textbf{critical} logging.
 
 The log level defaults to the lowest possible, so everything will be logged if
 nothing is set.
+
+\subsection{Caching}
+\label{sec:caching}
+The client will cache any information that is not accepted by the server, 
+\textit{unless} the server returns a reciept for the information that marks the 
+information as invalid or malformed in some way, such that the information will 
+not be accepted if resent at a later date. See section \ref{sec:errors} for
+more information.
+
+Data the client sends may be marked so that it will not resend any cached data
+when the client is run with the same handle. This is mainly for use for full
+updates, such as software and configuration, where any cached data would be
+outdated or duplicates if sent together with a new run.
+
+If the \textbf{-n} or \textbf{--no-cache} handles are passed, the script will
+ignore any cached data completely and run as if it didn't exist. The cached
+data will then be processed on the next run where \textbf{-n} or
+\textbf{--no-cache} is not passed.
 
 \subsection{Customizing MetaDoc}
 \label{sec:customizing_client}
@@ -465,5 +467,22 @@ document itself.
     \caption{Information flow when requesting user list with MetaDoc}
     \label{fig:information_flow}
 \end{figure}
+
+\newpage
+\section{Included examples}
+\texttt{doc/examples/} includes a set of examples for using MetaDoc. Below is a
+list of the included examples and what they do. 
+
+\begin{description}
+    \item[cli/event.py] A command line interface for adding events. Should be
+    placed inside \texttt{client/} when run. See \texttt{event.py --help} for
+    usage.
+    \item[custom/updateusers.py]    Custom function for converting recieved
+    user data into a passwd/shadow file.
+    \item[custom/updateprojects.py] Custom function for converting recieved
+    project data to a project user file.
+    \item[custom/updateallocations.py]  Custom function for converting recieved
+    allocation data into a quota file for projects.
+\end{description}
 
 \end{document}
