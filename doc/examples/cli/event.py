@@ -31,6 +31,8 @@ Usage:
                         the event(2).
 --dateformat=<format>   Sets the format of the dates that are passed in python 
                         format(4)
+--remarks=<file>        File path for a text file containing remarks. This may
+                        be a longer description than reason.
 
 (1) Either --up or --down must be passed.
 (2) Required if --down is passed.
