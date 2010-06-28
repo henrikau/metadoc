@@ -112,3 +112,28 @@ def rfc3339_to_date(date_str):
         return False
         
     return dt_obj
+
+def check_version(server_version):
+    """ Checks whether server and client versions are the same. 
+
+    Stops program execution on different major versions, logs critical error.
+    Logs warning on different minor versions.
+    Logs debug info on different bugfix versions.
+
+    """
+    client_version = version.__version__
+    (cmajor, cminor, cbug) = client_version.split(".")
+    (smajor, sminor, sbug) = server_version.split(".")
+    if cmajor != smajor:
+        logging.critical(("Client has different major version from server. "
+                "Server version: %s. Client version: %s.") % 
+                (server_version, client_version))
+        sys.exit(2)
+    elif cminor != sminor:
+        logging.warning(("Client has different minor version from server. "
+                "Server version: %s. Client version: %s.") % 
+                (server_version, client_version))
+    elif cbug != sbug:
+        logging.debug(("Client has different bugfix version from server. "
+                "Server version: %s. Client version: %s.") % 
+                (server_version, client_version))

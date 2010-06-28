@@ -370,6 +370,7 @@ def main():
                     # Check for valid according to DTD:
                     valid = dtd.validate(return_data)
                     if valid:
+                        utils.check_version(return_data.attrib.get("version"))
                         found_elements = return_data.findall(
                                         element.xml_tag_name
                                         )
@@ -390,6 +391,7 @@ def main():
             else:
                 logging.error("Recieved empty response from server when "+
                         "attempting to fetch \"%s\"." % element.xml_tag_name)
+
 
 if __name__ == "__main__":
     main()
