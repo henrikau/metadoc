@@ -82,6 +82,18 @@ class MetaDoc:
                 return True
         return False
 
+    def has_content(self):
+        """Checks to see if there is any real content inside the MetaDoc.
+
+        First checks whether it has any subelements itself, if not, no content 
+        is present. 
+        If there are subelements, must check to see if they contain any content.
+        """
+        for me in self.metaelements:
+            if me.has_content():
+                return True
+        return False
+
     def check_response(self, xml_response):
         """ Function that checks the response from server.
         xml_response should be the XML response from the server when self was 

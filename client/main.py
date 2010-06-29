@@ -187,45 +187,49 @@ def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
         or conf.get('trailing_slash',"").lower() == 'yes':
         url = "%s/" % url
 
-    # Do not want to send any data if we're doing a dry run.
-    if not dryrun:
-        cli = metahttp.XMLClient(url, conf['key'], conf['cert'])
+    # Check to see if there is any content to transfer in the MetaDoc.
+    if m.has_content():
+        # Do not want to send any data if we're doing a dry run.
+        if not dryrun:
+            cli = metahttp.XMLClient(url, conf['key'], conf['cert'])
 
-    if verbose:
-        print "-" * 70
-        print "Connecting to host: %s" % url
-        print "Using key: %s" % conf['key']
-        print "Using certificate: %s" % conf['cert']
-        print "-" * 70
-        print "Sent data:\n%s" % ("-" * 70)
-        print m.get_xml()
+        if verbose:
+            print "-" * 70
+            print "Connecting to host: %s" % url
+            print "Using key: %s" % conf['key']
+            print "Using certificate: %s" % conf['cert']
+            print "-" * 70
+            print "Sent data:\n%s" % ("-" * 70)
+            print m.get_xml()
 
-    # Will not recieve any data on a dry run.
-    if not dryrun:
-        try:
-            res = cli.send(m.get_xml())
-        except (urllib2.HTTPError, urllib2.URLError) as httperror:
-            logging.error(("Unable to connect to server address \"%s\". "
-                "Error: %s") % (url, httperror))
-            # Since we're unable to send the document to the server, we will 
-            # cache it so that we can send it at a later date.
-            Cacher(element.xml_tag_name, m)
-        else:
-            if res:
-                xml_data = res.read()
-                if verbose:
-                    print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
-                    print xml_data
-                    print "-" * 70
-                utils.check_response(element.xml_tag_name, m, xml_data)
-            else:
-                logging.error(("Server returned an empty response when "
-                    "attempting to send \"%s\". Caching data.") % 
-                    element.xml_tag_name)
-                # Since we recieved an empty response from the server we have 
-                # not recieved any reciept for any elements and must cache
-                # them.
+        # Will not recieve any data on a dry run.
+        if not dryrun:
+            try:
+                res = cli.send(m.get_xml())
+            except (urllib2.HTTPError, urllib2.URLError) as httperror:
+                logging.error(("Unable to connect to server address \"%s\". "
+                    "Error: %s") % (url, httperror))
+                # Since we're unable to send the document to the server, we will 
+                # cache it so that we can send it at a later date.
                 Cacher(element.xml_tag_name, m)
+            else:
+                if res:
+                    xml_data = res.read()
+                    if verbose:
+                        print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
+                        print xml_data
+                        print "-" * 70
+                    utils.check_response(element.xml_tag_name, m, xml_data)
+                else:
+                    logging.error(("Server returned an empty response when "
+                        "attempting to send \"%s\". Caching data.") % 
+                        element.xml_tag_name)
+                    # Since we recieved an empty response from the server we have 
+                    # not recieved any reciept for any elements and must cache
+                    # them.
+                    Cacher(element.xml_tag_name, m)
+    else:
+        logging.info(("No data to send for \"%s\".") % element.xml_tag_name)
 
 def main():
     optstr = "hvqecaspunl:"

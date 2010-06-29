@@ -164,6 +164,16 @@ class MetaElement(object):
                 "\"%s\".") % self.get_name())
             return False
 
+    def has_content(self):
+        """Checks whether there are any subelements or text in this element.
+
+        """
+        if len(self.sub_elements) > 0:
+            return True
+        if self.text is not None:
+            return True
+        return False
+
     def clean(self):
         """ Runs clean functions on every attribute if they exist. 
         
