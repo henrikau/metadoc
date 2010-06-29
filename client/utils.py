@@ -19,6 +19,7 @@ import logging
 import datetime
 import time
 import re
+import version
 
 import metadoc
 from cacher import Cacher
