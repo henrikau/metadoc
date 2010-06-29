@@ -73,7 +73,7 @@ from projects.definition import Projects
 possible_send_elements = [Events, Configuration, Software,]
 
 def write_sample_config():
-    """ Creates a default configuration file.
+    """Creates a default configuration file.
     Used if the config file is missing to create a base to work from.
 
     """
@@ -92,7 +92,7 @@ def write_sample_config():
     f.close()
 
 def testConfig(vals):
-    """ Tests configuration file to see that it contains the necessary 
+    """Tests configuration file to see that it contains the necessary 
     information to run the script.
 
     """
@@ -124,9 +124,10 @@ def testConfig(vals):
     return True
 
 def get_element_processor(element, send_cache, verbose, dryrun):
-    """Fetches an element processor.
+    """Gets an instance of `element` that contains cached data, depending on 
+    arguments passed.
 
-    Will skip any cached data if send_cache is False or dryrun is True.
+    Will skip any cached data if `send_cache` is False or `dryrun` is True.
 
     """
     if dryrun or not send_cache:
@@ -161,10 +162,10 @@ def get_element_processor(element, send_cache, verbose, dryrun):
             return element()
 
 def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
-    """Attempts to gather and send information defined by element to server.
+    """Attempts to gather and send information defined by `element` to server.
 
-    If send_cache or dryrun is False, cache will be ignored.
-    If cache_only is True, only cache is checked and no new data is gathered.
+    If `send_cache` or `dryrun` is False, cache will be ignored.
+    If `cache_only` is True, only cache is checked and no new data is gathered.
 
     """
     if dryrun and cache_only:
@@ -200,7 +201,7 @@ def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
             print "Using certificate: %s" % conf['cert']
             print "-" * 70
             print "Sent data:\n%s" % ("-" * 70)
-            print m.get_xml()
+            print m.get_xml(pretty=True)
 
         # Will not recieve any data on a dry run.
         if not dryrun:
@@ -341,19 +342,19 @@ def main():
         
 
     for element in fetch_elements:
-        cli = metahttp.XMLClient("%s%s" % 
-            (vals['host'], element.url), vals['key'], vals['cert'])
+        url = "%s%s" % (vals['host'], element.url)
+        cli = metahttp.XMLClient(url, vals['key'], vals['cert'])
         if verbose:
             print "-" * 70
-            print "Connecting to host: %s%s" % (vals['host'], element.url)
+            print "Connecting to host: %s" % url
             print "Using key: %s" % vals['key']
             print "Using certificate: %s" % vals['cert']
             print "-" * 70
         try:
             res = cli.send()
         except (urllib2.HTTPError, urllib2.URLError) as httperror:
-            logging.error("Unable to connect to server address \"%s%s\", \
-                        error: %s" % (vals['host'], element.url, httperror))
+            logging.error(("Unable to connect to server address \"%s\", "
+                        "error: %s") % (url, httperror))
         else:
             if res:
                 xml_data = res.read()
@@ -363,8 +364,8 @@ def main():
                 try:
                     return_data = lxml.etree.fromstring(xml_data)
                 except lxml.etree.XMLSyntaxError, e:
-                    logging.error("Error parsing XML document from server: "+
-                                        "%s" % e)
+                    logging.error(("Error parsing XML document from server: "
+                                        "%s") % e)
                 else:
                     # Check for valid according to DTD:
                     valid = dtd.validate(return_data)
@@ -381,17 +382,16 @@ def main():
                         element.update_handler(sub_elements).process()
                     else:
                         logging.error(("XML recieved for \"%s\" did not "
-                                    "contain valid XML according to DTD.") % \
+                                    "contain valid XML according to DTD.") % 
                                     element.xml_tag_name)
                         dtd_errors = ""
                         for error in dtd.error_log.filter_from_errors():
                             dtd_errors = "%s\n%s" % (dtd_errors, error)
                         logging.debug("XML DTD errors: %s" % dtd_errors)
             else:
-                logging.error("Recieved empty response from server when "+
-                        "attempting to fetch \"%s\"." % element.xml_tag_name)
+                logging.error(("Recieved empty response from server when "
+                        "attempting to fetch \"%s\".") % element.xml_tag_name)
 
 
 if __name__ == "__main__":
     main()
-
