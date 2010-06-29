@@ -72,11 +72,13 @@ class Cacher(object):
         except IOError, e:
             logging.error(("Unable to remove cache file \"%s\". "
                 "Please remove to ensure data is not resent.") % self.file_path)
-            return
+            return False
         except OSError, e:
             logging.error(("Could not find cache file \"%s\" when attempting "
                 "to remove.") % self.file_path)
-            return
+            return False
+        else:
+            return True
 
     def _get_cache_string(self):
         """ Returns cached data, if any. 
