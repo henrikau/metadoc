@@ -127,8 +127,11 @@ executes quietly and logs warning messages.
 \section{Logging}
 The MetaDoc client logs to \texttt{/var/log/mapi/}, log files are named \\
 \texttt{metadoc.client.YYYY-mm-dd.log}. The amount of information logged
-depends on the log level passed as an argument on script execution. See the
-MetaDoc documentation for more information on logging \cite{mdoc}.
+depends on the log level passed to \textbf{-l} on script execution. The
+possible log levels are \textbf{debug}, \textbf{info}, \textbf{warning},
+\textbf{error} and \textbf{critical}. When \textbf{-l} is not passed, or passed
+with a log level not availible, everything is logged. See the MetaDoc 
+documentation for more information on logging \cite{mdoc}.
 
 \newpage
 \begin{thebibliography}{99}
