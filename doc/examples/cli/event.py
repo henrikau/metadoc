@@ -20,15 +20,19 @@ through MetaDoc client.
 
 main.py should be run afterwards in order to send data to server.
 
+Please remember to enclose argument strings with spaces in quotes, such as 
+--datedown='2010-06-29 9:39'.
+
 Usage:
 --help                  Displays this help message.
 --up                    Sets event type to resource up(1).
 --down                  Sets event type to resource down(1).
---reason=<reason>       Sets the reason for the event(2)
+--reason=<reason>       Sets the reason for the event(2,5)
 --dateup=<date>         Sets the date for the system comming up(2,3).
---datedown=<date>       Sets the date for the system going down(2,3).
+                        Defaults to now if nothing is given.
+--datedown=<date>       Sets the date for the system going down(2,3,5).
 --sharedown=<share>     Sets the percentage of the system being down during 
-                        the event(2).
+                        the event(2,5).
 --dateformat=<format>   Sets the format of the dates that are passed in python 
                         format(4)
 --remarks=<file>        File path for a text file containing remarks. This may
@@ -37,8 +41,21 @@ Usage:
 (1) Either --up or --down must be passed.
 (2) Required if --down is passed.
 (3) Must follow <format>. If --dateformat is not passed, <format> is set to 
-    "%Y-%m-%d %H:%M:%S"
+    "%Y-%m-%d %H:%M"
 (4) http://docs.python.org/library/datetime.html#strftime-and-strptime-behavior
+(5) Only used by --down.
+
+Examples:
+
+System back up now, no reason given:
+./event.py --up
+
+System going down 10:00 the 20th august 2010 due to equipment replacement. The 
+file /tmp/systemshutdown contains more detailed information. Excepted downtime 
+two hours:
+./event.py --down --reason='Equipment replacement' --datedown='2010-08-20 10:00'
+--dateup='2010-08-20 12:00' --remarks=/tmp/systemshutdown
+
 """
 import getopt
 import sys
@@ -55,9 +72,9 @@ def main():
     event_type = None
     reason = None
     date_up = datetime.now()
-    date_down = datetime.now()
+    date_down = None
     share_down = None
-    date_format = "%Y-%m-%d %H:%M:%S"
+    date_format = "%Y-%m-%d %H:%M"
     remarks = None
     try:
         opts, args = getopt.getopt(sys.argv[1:], "", optlist)
@@ -104,15 +121,14 @@ def main():
                 print str(e)
                 print __doc__
                 sys.exit(2)
-    if not isinstance(date_down, datetime):
-        if date_down is not None:
-            try:
-                date_down = datetime.strptime(date_down, date_format)
-            except ValueError, e:
-                print "Date down recieved, but format does not match."
-                print str(e)
-                print __doc__
-                sys.exit(2)
+    if date_down is not None:
+        try:
+            date_down = datetime.strptime(date_down, date_format)
+        except ValueError, e:
+            print "Date down recieved, but format does not match."
+            print str(e)
+            print __doc__
+            sys.exit(2)
     if event_type is None:
         print "Missing event type."
         print __doc__
@@ -127,6 +143,8 @@ def main():
                 print "Recieved resource down handle, but missing share down."
                 print __doc__
                 sys.exit(2)
+            if date_down is None:
+                print "Recieved resource down handle, but missing date down."
     # We have everything we require to create an event.
     # Attempt to find already cached data:
     m = MetaDoc(True)
