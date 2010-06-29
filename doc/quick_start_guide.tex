@@ -1,0 +1,142 @@
+\documentclass[titlepage, a4paper,10pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage[dvips]{hyperref}
+\usepackage{glossaries}
+\hypersetup{bookmarks = true}
+\hypersetup{pdftitle = MetaDoc Quick start guide}
+\hypersetup{pdfauthor = Bjørnar Grip Fjær}
+\hypersetup{pdfsubject = MetaDoc Quick start guide}
+\hypersetup{colorlinks = true}
+\hypersetup{urlcolor = black}
+\hypersetup{linkcolor = black}
+\hypersetup{citecolor = black}
+\hypersetup{filecolor = black}
+\addtolength{\oddsidemargin}{0.85cm}
+\addtolength{\evensidemargin}{-1.5cm}
+\addtolength{\textwidth}{0.75cm}
+%\addtolength{\topmargin}{-1.0cm}
+\addtolength{\textheight}{1cm}
+\newcommand\rawcode[3]{{#1 \lstinputlisting[label=#2]{#3}}}
+\newcommand\scriptcode[3]{
+        \lstset{language=#3,
+                emph={asmlinkage, \_\_user, ENTRY, foreach, \_\_init, \_\_exit},
+                numbersep=15pt,
+                numbers=left,
+                numberstyle=\scriptsize,
+                frame=tb,
+                tabsize=8,
+                commentstyle=\texttt,
+                keywordstyle=\bfseries,
+                emphstyle=\bfseries,
+                linewidth=0.90\textwidth,
+                showstringspaces=false
+                frame=shadowbox,
+                rulesepcolor=\color{blue}}
+                \rawcode{\scriptsize}{#1}{#2}}
+\newcommand\inlinecode[1]{{ \texttt{\small #1} }}
+
+\newacronym{mapi}{MAPI}{MetaDoc API}
+
+\title{MetaDoc\\Quick start guide}
+\author{Bjørnar Grip Fjær}
+\date{\today}
+
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+This guide is ment to provide a quick introduction to using MetaDoc and the
+\gls{mapi}. For more complete information about MetaDoc, please refer to the
+MetaDoc Documentation \cite{mdoc}.
+
+\section{Retrieving the MetaDoc client}
+Before you start you need a version of the MetaDoc client. You can download the
+latest version from the MetaDoc GitHub repository \cite{downloads}.
+
+Extract the client to the wanted destination. 
+
+\section{Setting up folders}
+The MetaDoc client uses two system folders, namely \texttt{/var/log/mapi/} and
+\texttt{/var/cache/mapi/} for log files and cache files, respectively. Make
+sure to create these folders, and make sure the user running the MetaDoc client
+has access to \textbf{read} and \textbf{write} to these folders. 
+
+\section{Configuring the MetaDoc client}
+The MetaDoc client uses a configuration file called \texttt{metadoc.conf} in
+the same folder as the client itself. You can create a sample configuration
+file by running \texttt{main.py} without any parameters. 
+
+The configuration file contains the following settings:
+
+\begin{description}
+    \item[host] URI of a server responding to the MetaDoc server API
+        \cite{mdoc}.
+    \item[key]  Location of file containing the private key for the client.
+    \item[cert] Location of file containing the certificate for the client key.
+    \item[trailing\_slash]   Whether the server uses a trailing slash on URIs,
+        should be set to True for now.
+    \item[valid]    Defaults to False to avoid the script from running with
+        default configuration. Should be set to True or removed once properly
+        configured.
+\end{description}
+
+Please note that file locations \textbf{must} be given as an absolute path.
+
+The certificate file referenced by the \textbf{cert} key in the configuration
+must be availible at the server and related to your client properly, otherwise
+the server will refuse the connection.
+
+\section{Using the information}
+Once the actions detailed above have been performed, the MetaDoc client is
+ready to send and recieve information. However, it has to know what to do with
+the information it recieves, and how to gather information to send. 
+
+\texttt{doc/examples/} contains examples of customized functions that produce a
+shadow file from user data recieved, project user file from project data and
+project quota file from recieved allocation data. It also contains an example
+of a command line tool for adding events.
+
+Please refer to the MetaDoc documentation \cite{mdoc} for more information on
+customizing the MetaDoc client. 
+
+\section{Setting up crontab}
+The MetaDoc client can be set up as a crontab in order to syncronize sites with
+the server. Below, some examples of using the client in crontab is shown. The
+information passed between the client and server depends on the handles passed
+on script execution. See the MetaDoc documentation for a detailed explanation
+of each handle \cite{mdoc}.
+
+\begin{verbatim}
+0  0  *  *  *  /path/to/metadoc/client/main.py -ecs -q -l error
+\end{verbatim}
+Sends event, configuration and software data to the server at midnight every
+night. Makes sure the script executes quietly, passing no output to
+\texttt{stdout}, only to \texttt{stderr} if the script execution fails. Only
+logs error messages.
+
+\begin{verbatim}
+0  0  *  *  0  /path/to/metadoc/client/main.py -upa -q -l warning
+\end{verbatim}
+Fetches user, project and allocation data once a week. Makes sure the script
+executes quietly and logs warning messages.
+
+\section{Logging}
+The MetaDoc client logs to \texttt{/var/log/mapi/}, log files are named \\
+\texttt{metadoc.client.YYYY-mm-dd.log}. The amount of information logged
+depends on the log level passed as an argument on script execution. See the
+MetaDoc documentation for more information on logging \cite{mdoc}.
+
+\newpage
+\begin{thebibliography}{99}
+    \bibitem{mdoc} \textit{MetaDoc Documentation}, Bjørnar Grip Fjær, 
+        \url{http://bjornar.me/metadoc/doc.pdf}
+    \bibitem{downloads} \textit{MetaDoc Downloads},
+        \url{http://github.com/bjornarg/metadoc/downloads}
+\end{thebibliography}
+
+
+\end{document}
