@@ -98,21 +98,27 @@ def testConfig(vals):
     if 'valid' in vals:
         if vals['valid'].lower() == "false" or vals['valid'].lower() == "no":
             print "The config is not valid. "
-            print "You need to explicitly set the \
-                    config-switch 'valid' to 'True'."
+            print ("You need to explicitly set the "
+                    "config-switch 'valid' to 'True'.")
             print "You can also remove the switch completely from the file"
             print ""
-            print "It is included as a fail-safe to stop \
-                    auto-configured programs from running."
+            print ("It is included as a fail-safe to stop "
+                    "auto-configured programs from running.")
+            logging.critical("Configuration file not set to valid. "
+                    "Please make sure configuration file is correct and "
+                    "set 'valid' to 'True'.")
             return False
     if 'host' not in vals or vals['host'] == "":
         print "Need a valid host. Aborting"
+        logging.critical("Configuration file missing 'host'.")
         return False
     if 'cert' not in vals or vals['cert'] == "":
         print "Need path to the certificate to use for AuthN/AuthZ. Aborting"
+        logging.critical("Configuration file missing path to certificate.")
         return False
     if 'key' not in vals or vals['key'] == "":
         print "Need path to the privatekey to use for AuthN/AuthZ. Aborting"
+        logging.critical("Configuration file missing path to private key.")
         return False
     return True
 
