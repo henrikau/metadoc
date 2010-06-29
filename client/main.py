@@ -49,6 +49,7 @@ import getopt
 import lxml.etree
 import urllib2
 import StringIO
+import datetime
 
 import metahttp 
 import metadoc
@@ -173,7 +174,12 @@ def main():
             send_cache = False
 
     # FIXME - Create log dir if non-existent
-    logging.basicConfig(level=log_level, format=LOG_FORMAT)
+    logging.basicConfig(level=log_level, 
+        format=LOG_FORMAT,
+        datefmt="%Y-%m-%d %H:%M:%S",
+        filename=datetime.datetime.strftime(datetime.datetime.now(), 
+            "/var/log/mapi/metadoc.client.%Y-%m-%d.log")
+        )
     
 
     conf = ConfigParser.ConfigParser()
