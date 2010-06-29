@@ -26,7 +26,8 @@ class Events(metaelement.MetaElement):
     url = "events"
 
     def __init__(self):
-        """ Initializes the MetaElement and specifies legal values for attributes. 
+        """Initializes the MetaElement and specifies legal values for 
+        attributes. 
         
         Allows for both ResourceUpEntry and ResourceDownEntry sub-elements.
 

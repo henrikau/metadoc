@@ -23,7 +23,8 @@ class ResourceUpEntry(metaelement.MetaElement):
     xml_tag_name = "resourceUp"
 
     def __init__(self, dateUp, reason=None, remarks=None):
-        """ Initializes the MetaElement and specifies legal values for attributes.
+        """Initializes the MetaElement and specifies legal values for 
+        attributes.
 
         param:
         dateUp          : Date the system came up
@@ -38,7 +39,8 @@ class ResourceUpEntry(metaelement.MetaElement):
         }
         if reason:
             self.attributes['reason'] = reason
-        super(ResourceUpEntry, self).__init__(ResourceUpEntry.xml_tag_name, self.attributes)
+        super(ResourceUpEntry, self).__init__(ResourceUpEntry.xml_tag_name, 
+                                                self.attributes)
         
         self.legal_element_types = ()
 
@@ -54,7 +56,8 @@ class ResourceDownEntry(metaelement.MetaElement):
     xml_tag_name = "resourceDown"
 
     def __init__(self, reason, dateDown, dateUp, shareDown, remarks=None):
-        """ Initializes the MetaElement and specifies legal values for attributes.
+        """Initializes the MetaElement and specifies legal values for 
+        attributes.
         
         param:
         reason          : Reason for going down
@@ -72,7 +75,8 @@ class ResourceDownEntry(metaelement.MetaElement):
             'shareDown': shareDown,
             'id': u.get_id(),
         }
-        super(ResourceDownEntry, self).__init__(ResourceDownEntry.xml_tag_name, self.attributes)
+        super(ResourceDownEntry, self).__init__(ResourceDownEntry.xml_tag_name,
+                                                self.attributes)
 
         self.legal_element_types = ()
 
@@ -96,5 +100,6 @@ class ResourceDownEntry(metaelement.MetaElement):
         elif isinstance(share_down, basestring):
             pass
         else:
-            raise metaelement.IllegalAttributeTypeError("shareDown", type(share_down), "Software", ['int', 'float', 'str'])
+            raise metaelement.IllegalAttributeTypeError("shareDown", 
+                        type(share_down), "Software", ['int', 'float', 'str'])
         return share_down
