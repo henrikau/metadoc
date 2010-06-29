@@ -18,6 +18,7 @@
 
 import logging
 import lxml.etree
+import version
 
 class MetaDoc:
     """ Class for handling the MetaDoc.
@@ -35,21 +36,27 @@ class MetaDoc:
     def _create_root(self):
         self.root = None
         self.root = lxml.etree.Element("MetaDoc",
-                                        version="1.0",
+                                        version=version.__version__,
                                         fullUpdate=self.fullUpdate)
 
     def reg_meta_element(self, me):
-        """ Add a new element to the base MetaDoc element. """
+        """Add a new element to the base MetaDoc element. """
         if not me:
             return False
         if me.get_name():
             self.metaelements.append(me)
         return True
 
-    def get_xml(self, with_id=True):
-        """ Return the XML-string of the registred information.
+    def get_xml(self, with_id=True, pretty=False):
+        """Return the XML-string of the registred information.
 
         The result should be valid XML and ready to export to the recipient.
+
+        If `with_id` is set to false, all attributes named id will be removed 
+        from the document.
+
+        If `pretty` is set to true, the document will contain white space
+        to make the document more readable.
 
         """
         self._create_root()
@@ -59,6 +66,7 @@ class MetaDoc:
 
         return lxml.etree.tostring(self.root, 
                 encoding='utf-8', 
+                pretty_print=pretty,
                 xml_declaration=True)
 
     def find_id(self, locate_id):
