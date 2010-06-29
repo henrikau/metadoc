@@ -45,6 +45,7 @@ import ConfigParser
 import logging
 import logging.handlers
 import sys
+import os
 import getopt
 import lxml.etree
 import urllib2
@@ -125,6 +126,7 @@ def testConfig(vals):
 def main():
     optstr = "hvqecaspunl:"
     optlist = ['help', 'dry-run', 'loglevel=', 'no-cache']
+    SCRIPT_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
     # Default settings
     # Will be altered depending on passed options
     verbose = False
@@ -179,17 +181,23 @@ def main():
         elif opt in ('-l', '--no-cache'):
             send_cache = False
 
-    # FIXME - Create log dir if non-existent
-    logging.basicConfig(level=log_level, 
-        format=LOG_FORMAT,
-        datefmt="%Y-%m-%d %H:%M:%S",
-        filename=datetime.datetime.strftime(datetime.datetime.now(), 
-            "/var/log/mapi/metadoc.client.%Y-%m-%d.log")
-        )
+    log_file = datetime.datetime.strftime(datetime.datetime.now(), 
+                "/var/log/mapi/metadoc.client.%Y-%m-%d.log")
+    try:
+        logging.basicConfig(level=log_level, 
+            format=LOG_FORMAT,
+            datefmt="%Y-%m-%d %H:%M:%S",
+            filename=log_file 
+            )
+    except IOError, ioerr:
+        print "Unable to open log file for writing, please check permissions"
+        print "for %s" % log_file
+        print "Error message: %s" % ioerr
+        sys.exit(2)
     
 
     conf = ConfigParser.ConfigParser()
-    conf.read("metadoc.conf")
+    conf.read("%s/%s" % (SCRIPT_PATH, "metadoc.conf"))
     v = []
     vals = {}
     try:
@@ -210,8 +218,9 @@ def main():
         return
 
     # ready for main processing.
+    logging.info("Running main.py with handles %s." % " ".join(sys.argv[1:]))
     # Loading DTD for validation
-    dtd_file = open("MetaDoc.dtd", "r")
+    dtd_file = open("%s/%s" % (SCRIPT_PATH, "MetaDoc.dtd"), "r")
     dtd = lxml.etree.DTD(dtd_file)
 
     for element in send_elements:
@@ -249,8 +258,8 @@ def main():
         # Let's see if we have some cached data to add
         m.reg_meta_element(element_processor)
         url = "%s%s" % (vals['host'], element.url)
-        if vals['trailing_slash'].lower() == 'true'\
-            or vals['trailing_slash'].lower() == 'yes':
+        if vals.get('trailing_slash',"").lower() == 'true'\
+            or vals.get('trailing_slash',"").lower() == 'yes':
             url = "%s/" % url
         if not dryrun:
             cli = metahttp.XMLClient(url, vals['key'], vals['cert'])
@@ -315,8 +324,8 @@ def main():
                 continue
             m.reg_meta_element(element_processor)
             url = "%s%s" % (vals['host'], element.url)
-            if vals['trailing_slash'].lower() == 'true' \
-                or vals['trailing_slash'].lower() == 'yes':
+            if vals.get('trailing_slash',"").lower() == 'true' \
+                or vals('trailing_slash',"").lower() == 'yes':
                 url = "%s/" % url
             cli = metahttp.XMLClient(url, vals['key'], vals['cert'])
             if verbose:
