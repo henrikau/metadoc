@@ -15,23 +15,23 @@
 # You should have received a copy of the GNU General Public License
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
 # The API interface
-from datetime import datetime, timedelta
-
 from abstract import MetaOutput
 from events.entries import ResourceUpEntry, ResourceDownEntry
 import utils
-#### Testing Purposes ####
-import random
-#### Testing Purposes end ####
 
 class SiteEvents(MetaOutput):
     def populate(self):
+        """Function to populate `self.items` with ResourceUpEntry and 
+        ResourceDownEntry.
+
+        ResourceUpEntry takes the arguments dateUp, reason and remarks.
+        Only dateUp is required. 
+
+        ResourceDownEntry takes the arguments reason, dateDown, dateUp, 
+        shareDown and remarks.
+        Only remarks is optional. 
+
+        Dates should be date, datetime or a RFC3339 string.
+
         """
-        Function to populate self.items with ConfigItem
-        """
-        for i in xrange(5):
-            t = random.randint(0,1)
-            if t == 0:
-                self.items.append(ResourceDownEntry('Testing purposes', datetime.now(), (datetime.now()+timedelta(hours=2)), 95.5))
-            else:
-                self.items.append(ResourceUpEntry(datetime.now(), 'We are BACK!', 'We were down'))
+        pass
