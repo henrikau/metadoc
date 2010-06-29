@@ -18,7 +18,6 @@
 
 import logging
 import lxml.etree
-from cacher import Cacher
 
 class MetaDoc:
     """ Class for handling the MetaDoc.
