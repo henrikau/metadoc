@@ -123,6 +123,110 @@ def testConfig(vals):
         return False
     return True
 
+def get_element_processor(element, send_cache, verbose, dryrun):
+    """Fetches an element processor.
+
+    Will skip any cached data if send_cache is False or dryrun is True.
+
+    """
+    if dryrun or not send_cache:
+        return element()
+    if send_cache:
+        c = Cacher(element.xml_tag_name)
+        cached_data = c.get_cache()
+        if cached_data is not None:
+            if element.resend_cache:
+                return element.from_xml_element(cached_data, element)
+            else:
+                logging.info(("Found cached data for \"%s\", but element "
+                    "type declares not to resend this cache. "
+                    "Cache removed.") % element.xml_tag_name)
+                c.remove_cache()
+                return element()
+            if element_processor is None:
+                logging.error(("Found cached data for \"%s\", but unable to "
+                    "load. Check file \"%s\" for possible errors.") % 
+                                (element.xml_tag_name, c.file_path))
+                return element()
+            else:
+                # We have successfully loaded the cached data.
+                if element.resend_cache:
+                    logging.debug(("Succesfully loaded cache for \"%s\", "
+                        "removing cached file \"%s\".") % 
+                        (element.xml_tag_name, c.file_path))
+                    c.remove_cache()
+        else:
+            logging.debug(("Found no cached data for \"%s\".") % 
+                            element.xml_tag_name)
+            return element()
+
+def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
+    """Attempts to gather and send information defined by element to server.
+
+    If send_cache or dryrun is False, cache will be ignored.
+    If cache_only is True, only cache is checked and no new data is gathered.
+
+    """
+    if dryrun and cache_only:
+        # We're doing a dry run and we've reached the cached items
+        return
+    m = MetaDoc(True)
+    element_processor = get_element_processor(element, send_cache, 
+                                                verbose, dryrun)
+    if not cache_only:
+        # If we're doing cache only, we've reached the possible_send_elements
+        # loop and do not want or need to remove elements from it anymore.
+        possible_send_elements.remove(element)
+        site_element = element.site_handler()
+        site_element.populate()
+        element_processor.add_elements(site_element.fetch())
+    m.reg_meta_element(element_processor)
+    # Build URL
+    url = "%s%s" % (conf['host'], element.url)
+    if conf.get('trailing_slash',"").lower() == 'true'\
+        or conf.get('trailing_slash',"").lower() == 'yes':
+        url = "%s/" % url
+
+    # Do not want to send any data if we're doing a dry run.
+    if not dryrun:
+        cli = metahttp.XMLClient(url, conf['key'], conf['cert'])
+
+    if verbose:
+        print "-" * 70
+        print "Connecting to host: %s" % url
+        print "Using key: %s" % conf['key']
+        print "Using certificate: %s" % conf['cert']
+        print "-" * 70
+        print "Sent data:\n%s" % ("-" * 70)
+        print m.get_xml()
+
+    # Will not recieve any data on a dry run.
+    if not dryrun:
+        try:
+            res = cli.send(m.get_xml())
+        except (urllib2.HTTPError, urllib2.URLError) as httperror:
+            logging.error(("Unable to connect to server address \"%s\". "
+                "Error: %s") % (url, httperror))
+            # Since we're unable to send the document to the server, we will 
+            # cache it so that we can send it at a later date.
+            Cacher(element.xml_tag_name, m)
+        else:
+            if res:
+                xml_data = res.read()
+                if verbose:
+                    print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
+                    print xml_data
+                    print "-" * 70
+                utils.check_response(element.xml_tag_name, m, xml_data)
+            else:
+                logging.error(("Server returned an empty response when "
+                    "attempting to send \"%s\". Caching data.") % 
+                    element.xml_tag_name)
+                # Since we recieved an empty response from the server we have 
+                # not recieved any reciept for any elements and must cache
+                # them.
+                Cacher(element.xml_tag_name, m)
+
 def main():
     optstr = "hvqecaspunl:"
     optlist = ['help', 'dry-run', 'loglevel=', 'no-cache']
@@ -183,6 +287,7 @@ def main():
 
     log_file = datetime.datetime.strftime(datetime.datetime.now(), 
                 "/var/log/mapi/metadoc.client.%Y-%m-%d.log")
+    # Might get an error due to not having access to log directory.
     try:
         logging.basicConfig(level=log_level, 
             format=LOG_FORMAT,
@@ -214,7 +319,7 @@ def main():
         vals[key] = value
 
     if not testConfig(vals):
-        # testConfig() prints any errors
+        # testConfig() prints/logs any errors
         return
 
     # ready for main processing.
@@ -224,143 +329,12 @@ def main():
     dtd = lxml.etree.DTD(dtd_file)
 
     for element in send_elements:
-        possible_send_elements.remove(element)
-        m = MetaDoc(True)
-        if send_cache and not dryrun:
-            c = Cacher(element.xml_tag_name)
-            cached_data = c.get_cache()
-            if cached_data is not None:
-                if element.resend_cache:
-                    element_processor = element.from_xml_element(cached_data,
-                                                                    element)
-                else:
-                    logging.info("Found cached data for \"%s\", but element \
-                        type declares not to resend this cache. \
-                        Cache removed." % element.xml_tag_name)
-                    c.remove_cache()
-                    element_processor = element()
-                if element_processor is None:
-                    logging.error("Found cached data for \"%s\", but unable to \
-                        load. Check file \"%s\" for possible errors." % 
-                                    (element.xml_tag_name, c.file_path))
-                    element_processor = element()
-                else:
-                    # We have successfully loaded the cached data.
-                    if element.resend_cache:
-                        c.remove_cache()
-            else:
-                element_processor = element()
-        else:
-            element_processor = element()
-        site_element = element.site_handler()
-        site_element.populate()
-        element_processor.add_elements(site_element.fetch())
-        # Let's see if we have some cached data to add
-        m.reg_meta_element(element_processor)
-        url = "%s%s" % (vals['host'], element.url)
-        if vals.get('trailing_slash',"").lower() == 'true'\
-            or vals.get('trailing_slash',"").lower() == 'yes':
-            url = "%s/" % url
-        if not dryrun:
-            cli = metahttp.XMLClient(url, vals['key'], vals['cert'])
-        if verbose:
-            print "-" * 70
-            print "Connecting to host: %s" % url
-            print "Using key: %s" % vals['key']
-            print "Using certificate: %s" % vals['cert']
-            print "-" * 70
-            print "Sent data:\n%s" % ("-" * 70)
-            print m.get_xml()
-        if not dryrun:
-            try:
-                res = cli.send(m.get_xml())
-            except (urllib2.HTTPError, urllib2.URLError) as httperror:
-                logging.error(("Unable to connect to server address \"%s\", "
-                    "error: %s") % (url, httperror))
-                # Since we're unable to send the document to the server, we will 
-                # cache it so that we can send it at a later date.
-                Cacher(element.xml_tag_name, m)
-            else:
-                if res:
-                    xml_data = res.read()
-                    if verbose:
-                        print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
-                        print xml_data
-                        print "-" * 70
-                    utils.check_response(element.xml_tag_name, m, xml_data)
-                else:
-                    logging.error("Server returned an empty response when \
-                        attempting to send \"%s\". Caching data." % 
-                        element.xml_tag_name)
-                    # Since we recieved an empty response from the server we have 
-                    # not recieved any reciept for any elements and must cache
-                    # them.
-                    Cacher(element.xml_tag_name, m)
+        send_element(element, vals, send_cache, dryrun, verbose, False)
 
     # Checking if we have any cached items that should be sent
-    if send_cache and not dryrun:
-        for element in possible_send_elements:
-            m = MetaDoc(True)
-            c = Cacher(element.xml_tag_name)
-            cached_data = c.get_cache()
-            if cached_data is not None:
-                element_processor = element.from_xml_element(cached_data,
-                                                                element)
-                logging.info("Found cached data for \"%s\"." % 
-                                                    element.xml_tag_name)
-                if element_processor is not None:
-                    logging.info("Loaded cached data for \"%s\"." % 
-                                                    element.xml_tag_name)
-                    # We will remove the cache, even though it's not sent yet
-                    # since it will be recached later if it can't be 
-                    # transferred.
-                    c.remove_cache()
-                else:
-                    logging.error("Unable to load cached data for \"%s\". \
-                        Please check file \"%s\"." % 
-                        (element.xml_tag_name, c.file_path))
-                    continue
-            else:
-                continue
-            m.reg_meta_element(element_processor)
-            url = "%s%s" % (vals['host'], element.url)
-            if vals.get('trailing_slash',"").lower() == 'true' \
-                or vals('trailing_slash',"").lower() == 'yes':
-                url = "%s/" % url
-            cli = metahttp.XMLClient(url, vals['key'], vals['cert'])
-            if verbose:
-                print "-" * 70
-                print "Connecting to host: %s" % url
-                print "Using key: %s" % vals['key']
-                print "Using certificate: %s" % vals['cert']
-                print "-" * 70
-                print "Sent data:\n%s" % ("-" * 70)
-                print m.get_xml()
-            try:
-                res = cli.send(m.get_xml())
-            except (urllib2.HTTPError, urllib2.URLError) as httperror:
-                logging.error(("Unable to connect to server address \"%s\", "
-                                                "error: %s") % (url, httperror))
-                # Since we're unable to send the document to the server, we will 
-                # cache it so that we can send it at a later date.
-                Cacher(element.xml_tag_name, m)
-            else:
-                if res:
-                    xml_data = res.read()
-                    if verbose:
-                        print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
-                        print xml_data
-                        print "-" * 70
-                    utils.check_response(element.xml_tag_name, m, xml_data)
-                else:
-                    logging.error("Server returned an empty response when \
-                        attempting to send \"%s\". Caching data." % 
-                        element.xml_tag_name)
-                    # Since we recieved an empty response from the server we 
-                    # have not recieved any reciept for any elements and must 
-                    # cache them.
-                    Cacher(element.xml_tag_name, m)
-            
+    for element in possible_send_elements:
+        send_element(element, vals, send_cache, dryrun, verbose, True)
+        
 
     for element in fetch_elements:
         cli = metahttp.XMLClient("%s%s" % 
