@@ -18,6 +18,7 @@
 import logging
 import os
 import lxml.etree
+import sys
 
 class Cacher(object):
     def __init__(self, element_type, metadoc = None):
@@ -37,9 +38,16 @@ class Cacher(object):
                 logging.info("Created cache directory.")
 
         if metadoc:
-            cache_file = open(self.file_path, "w")
-            cache_file.write(metadoc.get_xml(False))
-            cache_file.close()
+            try:
+                cache_file = open(self.file_path, "w")
+            except IOError, ioerr:
+                logging.critical(("Unable to open file '%s' for writing. "
+                    "Please check permissions. Error message: %s") % 
+                                (self.file_path, ioerr))
+                sys.exit(2)
+            else:
+                cache_file.write(metadoc.get_xml(False))
+                cache_file.close()
 
     def get_cache(self):
         """ Returns a lxml.etree.Element of self.element_type """
