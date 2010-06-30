@@ -26,18 +26,15 @@ class MetaDoc:
     A nice way of adding information and exporting to the MetaDoc-XML standard.
 
     """
-    def __init__(self, fullUpdate=False):
-        if fullUpdate:
-            self.fullUpdate = "yes"
-        else:
-            self.fullUpdate = "no"
+    def __init__(self, site_name):
+        self.site_name = site_name
         self.metaelements = []
 
     def _create_root(self):
         self.root = None
         self.root = lxml.etree.Element("MetaDoc",
                                         version=version.__version__,
-                                        fullUpdate=self.fullUpdate)
+                                        site_name=self.site_name)
 
     def reg_meta_element(self, me):
         """Add a new element to the base MetaDoc element. """

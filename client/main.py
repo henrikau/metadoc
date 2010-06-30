@@ -89,6 +89,7 @@ def write_sample_config():
     f.write("cert  = usercert.pem\n")
     f.write("trailing_slash = True\n")
     f.write("valid = False\n")
+    f.write("site_name = SITENAME\n")
     f.close()
 
 def testConfig(vals):
@@ -120,6 +121,10 @@ def testConfig(vals):
     if 'key' not in vals or vals['key'] == "":
         print "Need path to the privatekey to use for AuthN/AuthZ. Aborting"
         logging.critical("Configuration file missing path to private key.")
+        return False
+    if 'site_name' not in vals or vals['site_name'] == "":
+        print "Missing site name in configuration file. Aborting"
+        logging.critical("Configuration file missing site name.")
         return False
     return True
 
@@ -171,7 +176,7 @@ def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
     if dryrun and cache_only:
         # We're doing a dry run and we've reached the cached items
         return
-    m = MetaDoc(True)
+    m = MetaDoc(conf.get("site_name"))
     element_processor = get_element_processor(element, send_cache, 
                                                 verbose, dryrun)
     if not cache_only:
