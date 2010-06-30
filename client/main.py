@@ -142,18 +142,18 @@ def get_element_processor(element, send_cache, verbose, dryrun):
         cached_data = c.get_cache()
         if cached_data is not None:
             if element.resend_cache:
-                return element.from_xml_element(cached_data, element)
+                element_processor = element.from_xml_element(cached_data, element)
             else:
                 logging.info(("Found cached data for \"%s\", but element "
                     "type declares not to resend this cache. "
                     "Cache removed.") % element.xml_tag_name)
                 c.remove_cache()
-                return element()
+                element_processor = element()
             if element_processor is None:
                 logging.error(("Found cached data for \"%s\", but unable to "
                     "load. Check file \"%s\" for possible errors.") % 
                                 (element.xml_tag_name, c.file_path))
-                return element()
+                element_processor = element()
             else:
                 # We have successfully loaded the cached data.
                 if element.resend_cache:
@@ -164,7 +164,8 @@ def get_element_processor(element, send_cache, verbose, dryrun):
         else:
             logging.debug(("Found no cached data for \"%s\".") % 
                             element.xml_tag_name)
-            return element()
+            element_processor = element()
+    return element_processor
 
 def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
     """Attempts to gather and send information defined by `element` to server.
