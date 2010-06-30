@@ -236,6 +236,8 @@ def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
                     # them.
                     Cacher(element.xml_tag_name, m)
     else:
+        if verbose and not cache_only:
+            print "No data to send for \"%s\"." % element.xml_tag_name
         logging.info(("No data to send for \"%s\".") % element.xml_tag_name)
 
 def main():
