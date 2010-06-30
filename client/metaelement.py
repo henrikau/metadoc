@@ -56,14 +56,15 @@ class MetaElement(object):
         self.sub_elements = []
         self.text = None
 
-    def get_name(self):
-        """ Return the name of the element. """
-        return self.name
     def __str__(self):
         """ We want the string representation of MetaElements to be its 
         XML tag. 
         
         """
+        return self.name
+
+    def get_name(self):
+        """ Return the name of the element. """
         return self.name
 
     def get_attributes(self):
