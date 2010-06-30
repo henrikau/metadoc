@@ -59,6 +59,8 @@ two hours:
 """
 import getopt
 import sys
+import os
+import ConfigParser
 from datetime import datetime
 
 from events.definition import Events
@@ -111,6 +113,17 @@ def main():
             else:
                 remarks = rfile.read()
                 rfile.close()
+    SCRIPT_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
+    conf = ConfigParser.ConfigParser()
+    conf.read("%s/%s" % (SCRIPT_PATH, "metadoc.conf"))
+    try:
+        v = conf.items("MetaDoc")
+    except ConfigParser.NoSectionError as nose:
+        print "Missing configuration file. Please make sure you have a MetaDoc"
+        print "configuration file in %s before continuing." % SCRIPT_PATH
+        sys.exit(2)
+    vals = dict(v)
+    site_name = vals.get("site_name")
 
     if not isinstance(date_up, datetime):
         if date_up is not None:
@@ -147,7 +160,7 @@ def main():
                 print "Recieved resource down handle, but missing date down."
     # We have everything we require to create an event.
     # Attempt to find already cached data:
-    m = MetaDoc(True)
+    m = MetaDoc(site_name)
     c = Cacher("events")
     cached_data = c.get_cache()
     if cached_data is not None:
