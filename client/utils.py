@@ -41,7 +41,7 @@ class UniqueID(object):
     def get_id(self):
         """ Increments the ID counter and returns it. """
         self.last_id = self.last_id + 1
-        return "%i" % self.last_id
+        return "_%i" % self.last_id
 
 
 def check_response(element_tag, md, xml_data):
