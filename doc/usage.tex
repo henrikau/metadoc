@@ -1,8 +1,9 @@
 \newpage
 \section{Using the MetaDoc client}
 Usage of the MetaDoc client is done mainly through the use of \texttt{main.py}.
-\texttt{main.py} takes care of sending and retrieving data from the server, as
-well as caching any data that could not be sent. 
+\texttt{main.py} takes care of sending and retrieving data to and from the 
+server, caching any data that could not be sent, and validating XML data 
+recieved.
 
 When \texttt{main.py} should send data to the server, a custom function that
 should populate the data to be sent is called, so that each site can customize
@@ -11,6 +12,9 @@ the way data is gathered on the site.
 When \texttt{main.py} recieves data from the server, it calls a custom function
 based on the data recieved, where each site can define what should be done with
 the recieved data.
+
+Section \ref{sec:customizing_client} explains what functions are called and how
+they should handle the data. 
 
 \subsection{Handles}
 \label{sec:handles}
@@ -85,27 +89,57 @@ ignore any cached data completely and run as if it didn't exist. The cached
 data will then be processed on the next run where \textbf{-n} or
 \textbf{--no-cache} is not passed.
 
-\subsection{Customizing MetaDoc}
+\subsection{Customizing the MetaDoc client}
 \label{sec:customizing_client}
 
-\subsubsection{Sending data}
-To send data to the server, the client creates instances of a sub-class of the
-\\
-\texttt{custom.abstract.MetaOutput} class. These classes should define a
-\texttt{populate()} function that populates \texttt{self.items} with a set of
-\texttt{metaelement.MetaElement} sub-class instances. Once \texttt{self.items}
-is populated, the server packs it to XML and sends it to the server.
+The MetaDoc client calls a specified function based on the data passed between
+client and server. Only one type of data should be sent per document, and both
+the client and the server only checks for the expected type of data in the
+recieved XML document. 
 
-The server \textit{must} return a reciept for each entry, specifying whether
-the entry has been accepted by the server, or return an error code, as defined
-i table \ref{tbl:server_error_codes}, if the entry is not accepted. See
-section \ref{sec:errors} and \ref{sec:caching} for more information.
+Each data type has a named container element within the XML document, which
+there should only be one of per document. If a list of data is passed between
+server and client, the list should be contained within a container element. The
+name of the container element is used in naming modules and classes in order to
+ease readability of code. 
+
+The naming of the class that handles the data passed between server and client
+on the client side depends on whether data is passed from client to server, or
+the other way around. For information about the classes and functions used when
+sending data to the server, see section \ref{sec:customizing_client_send}, and
+for data recieved from the server, see section
+\ref{sec:customizing_client_recieve}. 
+
+\subsubsection{Sending data}
+\label{sec:customizing_client_send}
+Data sent from the client to the server must first be populated. Because there
+is not always a standard way to populate this data on every site, a custom
+class is created. This class should be found under
+\texttt{custom.site<name>.Site<Name>}, where \texttt{<name>} is the name of the
+container element in the XML, and \texttt{<Name>} is the name capitalized (e.g. 
+\texttt{config} would use \texttt{custom.siteconfig.SiteConfig}). This class
+should inherit from \texttt{custom.abstract.MetaOutput}. 
+
+When the client is ready to fetch these items, the function \texttt{populate()}
+on this class will be called. This function should gather any information to be
+sent, create elements found in
+\texttt{<name>.definition.<Name>.legal\_element\_types} for this information 
+and place these items in \texttt{self.items}. 
+
+The client will then take care of packing data to XML, sending the data to the
+server, processing the receipt returned from the server and caching any data
+that was not accepted by the server. For more information on caching, see
+section \ref{sec:caching}.
 
 \subsubsection{Recieving data}
-When the client recieves data from the server, it parses the data and places
-the parsed data in a \texttt{custom.abstract.MetaInput} instance. Which
-\texttt{MetaInput} sub-class is used is defined in the element's description by
-the class variable \texttt{update\_handler}.
+\label{sec:customizing_client_recieve}
+Data that is recieved from the server must be processed. The client will take
+care of fetching the data from the server, unpacking the XML and creating
+objects based on the type of data recieved. Once this is done, a function
+called \texttt{process()} will be called on the class
+\texttt{custom.update<name>.Update<Name>}. When this function is called, the 
+object's \texttt{self.items} should be a list of 
+\texttt{<name>.definition.<Name>} objects.
 
 Examples for producing files similar to the ones now in use based on
 information transferred through MetaDoc is given in

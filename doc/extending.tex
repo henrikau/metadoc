@@ -1,5 +1,6 @@
 \newpage
 \section{Extending MetaDoc}
+\label{sec:extending}
 To extend MetaDoc to send more data, the following is needed. Each step is 
 explained in more detail below. Certain restrictions is set on how the XML
 document should be formed. See section \ref{sec:xmldoc} for more information.
@@ -21,6 +22,17 @@ document should be formed. See section \ref{sec:xmldoc} for more information.
     \item
         Configuring the server to send or recieve the intended data.
 \end{itemize}
+
+Figure \ref{fig:connection_example} shows an example of how the data for
+projects is defined, and the connection between classes that are used when data
+about projects is recieved from the server.
+
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{img/example}
+    \caption{Example of how projects data is defined and connection between
+    classes used in definition and processing of project data.}
+    \label{fig:connection_example}
+\end{figure}
 
 \subsection{Altering DTD}
 \textit{The XML document follows certain conventions that should be followed when
