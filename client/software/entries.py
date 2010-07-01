@@ -39,7 +39,7 @@ class SoftwareEntry(metaelement.MetaElement):
             'id': u.get_id()
         }
         if license:
-            self.attributes['version'] = version
+            self.attributes['license'] = license
         if infoURL:
             self.attributes['infoURL'] = infoURL
 
