@@ -1,0 +1,31 @@
+\newpage
+\section{List of errors}
+
+\begin{table}[h]
+    \caption{Error codes recieved from server}
+    \begin{tabular}{|l|l|p{5cm}|}
+        \hline
+        \texttt{Error code} & \texttt{Meaning} & \texttt{Extra notes} \\
+        \hline
+        \hline
+        1000 & No errors & \\
+        \hline
+        \hline
+        2000 & Error with the XML data & \\
+        \hline
+        2001 & Missing attribute & Missing attribute should be returned as a note. \\
+        \hline
+        \hline
+        5000 & Database error & \\
+        \hline
+        5001 & MySQL database error & Note should contain the MySQL error code, 
+        and the message the MySQL error message \\
+        \hline
+        \hline
+        6001 & Another element error & Another element in the same set has been
+        rejected, and this type of set will not accept any elements if any
+        element contains an error\\
+        \hline
+    \end{tabular}
+    \label{tbl:server_error_codes}
+\end{table}

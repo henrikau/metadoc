@@ -1,0 +1,45 @@
+\newpage
+\section{MetaDoc API description}
+
+\subsection{Server API}
+
+The MetaDoc server implements a REST-like API. The server defines several URLs 
+that can be accessed from the client:
+
+\begin{description}
+    \item[baseurl/allocations/] Retrieves a list of allocations relevant to the 
+        site
+    \item[baseurl/users/] Retrieves a list of users for the site
+    \item[baseurl/projects/] Retrieves a list of projects relevant to the site
+    \item[baseurl/config/] Sends system configuration to server
+    \item[baseurl/events/] Sends site events to the server
+    \item[baseurl/software/] Sends system software to server
+\end{description}
+
+When sending information to the MetaDoc Server, only the information relevant to 
+that URL is processed. Any XML data sent that is not relevant for that URL is 
+discarded, e.g. event information sent to \textbf{/baseurl/config/} will be 
+discarded by the server. No receipt will be returned for this data.  
+
+The server will return a MetaDoc XML document containing a \texttt{<reciept>} 
+element, which will contain \texttt{<r\_entry>} elements for each element 
+recieved. The \texttt{<r\_entry>} element should return a code from table 
+\ref{tbl:server_error_codes} for each element. See section \ref{sec:errors} for 
+more information on errors. 
+
+\subsubsection{Differences from REST}
+
+There are certain differences in the API compared to the REST specification. The 
+MetaDoc Server API makes use of HTTP POST where HTTP PUT should be used in 
+accordance with REST. This is due to limitations in standard Python libraries.
+
+Because the access the MetaDoc Server API gives to the client is limited, this 
+change does not prohibit any other functionality. 
+
+\subsubsection{Server HTTP responses}
+
+The server makes use of HTTP status codes.
+
+If the client does not send a SSL certificate, sends a sertificate unknown to 
+the server, or attempts to get information about sites not identified with the
+certificate, the server returns a ``403 Forbidden`` status code.

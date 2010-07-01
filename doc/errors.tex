@@ -1,0 +1,18 @@
+\newpage
+\section{Errors}
+\label{sec:errors}
+
+The server returns a \texttt{<receipt>} containing an \texttt{<r\_entry>} for 
+each element parsed. The \texttt{<r\_entry>} has the required attributes 
+\textbf{id} and \textbf{code}, containing the ID of the element and the error 
+code, respectively. It may also contain an attribute \textbf{note} with a short 
+note explaining the error if extra information is availible. The 
+\texttt{<r\_entry>} tag might also contain text with a longer message, if more 
+information is needed about the error. 
+
+\subsection{Document errors}
+
+In the special case where there are problems with the document itself, such as 
+XML errors or the document not passing DTD verification, the \texttt{<r\_entry>} 
+\textbf{id} attribute will be set to \texttt{0} (zero), reffering to the 
+document itself. 
