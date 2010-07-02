@@ -1,33 +1,56 @@
 \newpage
-\section{MetaDoc API description}
+\section{MetaDoc Server API}
+\label{sec:server_api}
 
-\subsection{Server API}
+The MetaDoc server implements a REST-like API, however, there are certain
+differences from REST noted in section \ref{sec:diff_from_rest}.
 
-The MetaDoc server implements a REST-like API. The server defines several URLs 
-that can be accessed from the client:
+When the client performs a GET request on an availible URL, the server should 
+return an XML document, or a HTTP status code refering to an error. 
+The XML document should follow the MetaDoc DTD \cite{metadoc_dtd}. Each URL
+only returns data from the requested data type. This means that a request to
+\textbf{baseurl/allocations/} will return an MetaDoc XML document containing
+only an \texttt{<allocations>} directly on the \texttt{<MetaDoc>} root, with
+\texttt{<all\_entry>} tags as children of \texttt{<allocations>}. The client
+should disregard any information outside \texttt{<allocations>} when connecting
+to \textbf{baseurl/allocations/}. 
+
+In order to send data to the server, the client performs a POST request, with
+the POST data variable \texttt{metadoc} containing a MetaDoc XML document. The
+server will only accept data from the data type specified in the URL, and will
+disregard any other information. This means that a POST to
+\textbf{baseurl/events/} should be a MetaDoc XML document containing a 
+\texttt{<events>} tag directly on the \texttt{<MetaDoc>} root, with any number
+of \texttt{<resourceUp>} and \texttt{<resourceDown>} tags as children of
+\texttt{<events>}. 
+
+When this data is sent to the server, the server should return a MetaDoc XML
+document containing a \texttt{<receipts>} tag, with a \texttt{<r\_entry>} tag
+for each element recieved that has an \textbf{id}-attribute. 
+
+\subsection{Availible URLs}
 
 \begin{description}
-    \item[baseurl/allocations/] Retrieves a list of allocations relevant to the 
-        site
-    \item[baseurl/users/] Retrieves a list of users for the site
-    \item[baseurl/projects/] Retrieves a list of projects relevant to the site
+    \item[baseurl/allocations/] Retrieves a list of allocations/quotas relevant
+        to the client
+    \item[baseurl/users/] Retrieves a list of users for the client
+    \item[baseurl/projects/] Retrieves a list of projects relevant to the
+        client
     \item[baseurl/config/] Sends system configuration to server
     \item[baseurl/events/] Sends site events to the server
     \item[baseurl/software/] Sends system software to server
 \end{description}
 
-When sending information to the MetaDoc Server, only the information relevant to 
-that URL is processed. Any XML data sent that is not relevant for that URL is 
-discarded, e.g. event information sent to \textbf{/baseurl/config/} will be 
-discarded by the server. No receipt will be returned for this data.  
+\subsection{Authentication}
+\label{sec:authentication}
+The site uses SSL certificates to authenticate the client. In order for the
+site to be authenticated properly, the server must be aware of the client's
+certificate already, and the correct owner of the certificate must be saved on
+the server. This \textit{must} be the same as the value for \texttt{site\_name}
+set in the MetaDoc configuration (see section \ref{sec:metadoc_conf}).
 
-The server will return a MetaDoc XML document containing a \texttt{<reciept>} 
-element, which will contain \texttt{<r\_entry>} elements for each element 
-recieved. The \texttt{<r\_entry>} element should return a code from table 
-\ref{tbl:server_error_codes} for each element. See section \ref{sec:errors} for 
-more information on errors. 
-
-\subsubsection{Differences from REST}
+\subsection{Differences from REST}
+\label{sec:diff_from_rest}
 
 There are certain differences in the API compared to the REST specification. The 
 MetaDoc Server API makes use of HTTP POST where HTTP PUT should be used in 
@@ -36,10 +59,20 @@ accordance with REST. This is due to limitations in standard Python libraries.
 Because the access the MetaDoc Server API gives to the client is limited, this 
 change does not prohibit any other functionality. 
 
-\subsubsection{Server HTTP responses}
+No address currently supports both adding and retrieving data. This is not a
+limitation in the system itself, but a matter of authorative sources of
+information. 
 
-The server makes use of HTTP status codes.
+\subsection{Server HTTP responses}
+
+The server makes use of HTTP status codes to identify what error has occoured
+if the server is unable or unwilling to process the request from the server. 
 
 If the client does not send a SSL certificate, sends a sertificate unknown to 
-the server, or attempts to get information about sites not identified with the
-certificate, the server returns a ``403 Forbidden`` status code.
+the server, attempts to get information about sites not identified with the
+certificate, or attempts to send information that identifies as another site, 
+the server returns a ``403 Forbidden`` status code.
+
+If the server fails to process the request, it will return a ``500 Server
+Error`` status code. This does \textit{not} include errors on the document that
+results in returning receipts.

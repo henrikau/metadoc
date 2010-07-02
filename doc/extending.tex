@@ -14,7 +14,7 @@ document should be formed. See section \ref{sec:xmldoc} for more information.
         An entries file, explaining any entries allowed in the data on the 
         client.
     \item
-        A \texttt{MetaInput} or \texttt{MetaOutput} sub-class that should
+        A \texttt{MetaInput} or \texttt{MetaOutput} sub class that should
         handle data, depending on whether data is recieved or sent to or from
         the server, respectively.
     \item
@@ -27,12 +27,6 @@ Figure \ref{fig:connection_example} shows an example of how the data for
 projects is defined, and the connection between classes that are used when data
 about projects is recieved from the server.
 
-\begin{figure}[h!]
-    \includegraphics[width=\textwidth]{img/example}
-    \caption{Example of how projects data is defined and connection between
-    classes used in definition and processing of project data.}
-    \label{fig:connection_example}
-\end{figure}
 
 \subsection{Altering DTD}
 \textit{The XML document follows certain conventions that should be followed when
@@ -58,16 +52,16 @@ placed directly inside the entry element itself.
 \label{sec:defclientmodel}
 Add a module to the client with the name of the main element. Create a file
 \texttt{definition.py} inside this module. \texttt{definition.py} should define
-the main element with a subclass of \texttt{metaelement.MetaElement}.
+the main element with a sub class of \texttt{metaelement.MetaElement}.
 
 Create a file \texttt{entries.py} inside the same module. This file should
-contain definitions of each entry, and potential sub-elements for each entry,
-as a sub-class of \texttt{metaelement.MetaElement}. 
+contain definitions of each entry, and potential sub elements for each entry,
+as a sub class of \texttt{metaelement.MetaElement}. 
 
 Add the entry class(es) to \texttt{self.legal\_element\_types} of the \\ 
-\texttt{metaelement.MetaElement} sub-class defining the main element. 
+\texttt{metaelement.MetaElement} sub class defining the main element. 
 
-\texttt{metaelement.MetaElement} sub-classes may define a
+\texttt{metaelement.MetaElement} sub classes may define a
 \texttt{clean\_<attribute name>()} for each attribute on the element. This method
 will recieve the attribute value, and should return the attribute value after
 any potential cleaning is done on it. Please note that \textit{all} attribute
@@ -75,13 +69,25 @@ values \textit{must} be strings, so if any value set as an attribute might be
 set as anything other than a string, the clean-function is the place to convert
 it.
 
+See section \ref{sec:useful_classes} for more information on how to build these
+classes.
+
 \subsection{Custom client handles}
 If the data is to be sent from client to server, create a module
-\texttt{custom/site<main element name>.py} that contains a sub-class of
+\texttt{custom/site<main element name>.py} that contains a sub class of
 \texttt{custom.abstract.MetaOutput}. This class should define a method
 \texttt{populate()} which gathers the information to be sent from the site and
 appends an instance of a entry-class, as defined in section
-\ref{sec:defclientmodel}, to \texttt{self.items} for each entry.
+\ref{sec:defclientmodel}, to \textbf{self.items} for each entry.
+
+Section \ref{sec:customizing_client_send} and section \ref{sec:useful_classes}
+contain more information on how to define these classes.
+
+If the data is sent from server to client, a module called
+\texttt{custom/update<main element name>.py} should be created that contains a
+sub class of \texttt{custom.abstract.MetaInput}. This class should define a
+method \texttt{process()} that processes any recieved data in
+\textbf{self.items}.  
 
 \subsection{Versioning}
 MetaDoc passes a \textbf{version} attribute on it's root element,

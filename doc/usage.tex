@@ -1,4 +1,3 @@
-\newpage
 \section{Using the MetaDoc client}
 Usage of the MetaDoc client is done mainly through the use of \texttt{main.py}.
 \texttt{main.py} takes care of sending and retrieving data to and from the 
@@ -15,6 +14,41 @@ the recieved data.
 
 Section \ref{sec:customizing_client} explains what functions are called and how
 they should handle the data. 
+
+\subsection{Configuration}
+\label{sec:metadoc_conf}
+The MetaDoc client uses a configuration file \texttt{metadoc.conf}. This file
+\textit{must} be placed in the same folder as the client itself. 
+
+The configuration is in INI format and defines a section named \texttt{MetaDoc}
+which must contain the following parameters:
+
+\begin{description}
+    \item[host] \textbf{baseurl} for the MetaDoc Server that the client should
+        communicate with.
+    \item[key]  Absolute path to the clients SSL certificate key file. This
+        should be the private key for \textbf{cert}, and is used to encrypt
+        data passed to the server.
+    \item[cert] Absolute path to the clients SSL certificate file. This is used
+        to authenticate the client with the server. See section
+        \ref{sec:authentication} for more information.
+    \item[site\_name]   The name of the site the client is running on. 
+\end{description}
+
+The following parameters \textit{may} be defined:
+
+\begin{description}
+    \item[trailing\_slash]  Whether the client should append a trailing slash
+        at the end of URLs used to connect to the server. At the moment, this
+        should be set to \texttt{True}.
+    \item[valid]    Initially set to \texttt{False} when \texttt{main.py}
+        creates a sample configuration file. This is set to avoid running the
+        client without being properly configured. If this value is present, it
+        \textit{must} be set to \texttt{True} or \texttt{yes}.
+\end{description}
+
+\texttt{main.py} will create a initial configuration file if one is missing
+when it starts. This can be used as a basis for a configuration file. 
 
 \subsection{Handles}
 \label{sec:handles}
@@ -34,7 +68,7 @@ others are explicitly stated below.
     Overrides \textbf{-v}, \textbf{--verbose}.
     \item[-l \textless log level\textgreater, --log-level=\textless log
     level\textgreater] Sets the log level for the program. See section 
-    \ref{sec:loglevels} for more information about what is logged at different 
+    \ref{sec:logging} for more information about what is logged at different 
     levels.
     \item[-n, --no-cache]   Prevents the client from sending any cached data.
     For more information about caching, see section \ref{sec:caching}.
@@ -44,12 +78,18 @@ others are explicitly stated below.
     \item[-u]   Retrieves user data from the server.
     \item[-a]   Retrieves allocation data from server.
     \item[-p]   Retrieves project data from server.
-    \item[--dry-run]    Does a dry run, not sending any data to server. Should
-    be run with verbose to see data that would be sent.
+    \item[--dry-run]    Does a dry run, not sending any data to server. Does
+        not retrieve cached data, and does not save any data to cache.
+        Should be run with verbose to see data that would be sent.
 \end{description}
 
-\subsection{Log levels}
-\label{sec:loglevels}
+\subsection{Logging}
+\label{sec:logging}
+The client logs data to \texttt{/var/log/mapi/}. The folder must be read and
+writable for the user that runs the client in order for the client to run.
+The client creates a new log file each day it is run, with the name 
+\texttt{metadoc.client.YYYY-mm-dd.log}. 
+
 The client has five different logging levels. The list below gives an overview
 of what is logged at the different levels. The higher items in the list contain
 everything below as well, so that with a log level set to \textbf{error} will
@@ -73,6 +113,10 @@ nothing is set.
 
 \subsection{Caching}
 \label{sec:caching}
+The client caches data to \texttt{/var/cache/mapi/}. Files are named after the
+data type that is cached in each file. The user running the client must have
+read and write access to the folder in order for the client to run. 
+
 The client will cache any information that is not accepted by the server, 
 \textit{unless} the server returns a reciept for the information that marks the 
 information as invalid or malformed in some way, such that the information will 

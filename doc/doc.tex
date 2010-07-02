@@ -5,9 +5,9 @@
 \usepackage{graphicx}
 \usepackage[dvips]{hyperref}
 \hypersetup{bookmarks = true}
-\hypersetup{pdftitle = MetaDoc Documentation}
+\hypersetup{pdftitle = MetaDoc Client Documentation}
 \hypersetup{pdfauthor = Bjørnar Grip Fjær}
-\hypersetup{pdfsubject = MetaDoc Documentation}
+\hypersetup{pdfsubject = MetaDoc Client Documentation}
 \hypersetup{colorlinks = true}
 \hypersetup{urlcolor = black}
 \hypersetup{linkcolor = black}
@@ -18,9 +18,11 @@
 \addtolength{\textwidth}{0.75cm}
 %\addtolength{\topmargin}{-1.0cm}
 \addtolength{\textheight}{1cm}
+\newcounter{scriptcounter}
+\setcounter{scriptcounter}{1}
 \newcommand\rawcode[3]{{#1 \lstinputlisting[label=#2]{#3}}}
-\newcommand\scriptcode[3]{
-        \lstset{language=#3,
+\newcommand\scriptcode[4][script\arabic{scriptcounter}]{
+        \lstset{language=#4,
                 emph={asmlinkage, \_\_user, ENTRY, foreach, \_\_init, \_\_exit},
                 numbersep=15pt,
                 numbers=left,
@@ -30,15 +32,19 @@
                 commentstyle=\texttt,
                 keywordstyle=\bfseries,
                 emphstyle=\bfseries,
-                linewidth=0.90\textwidth,
+                linewidth=\textwidth,
                 showstringspaces=false
                 frame=shadowbox,
                 rulesepcolor=\color{blue}}
-                \rawcode{\scriptsize}{#1}{#2}}
+        \small{Script \arabic{scriptcounter}: #2}
+        \rawcode{\scriptsize}{#2}{#3}
+        \label{#1}
+        \addtocounter{scriptcounter}{1}}
+
 \newcommand\inlinecode[1]{{ \texttt{\small #1} }}
 
 
-\title{MetaDoc Documentation\\\small{Version 0.1.0}}
+\title{MetaDoc Client Documentation\\\small{Version 0.1.0}}
 \author{Bjørnar Grip Fjær}
 \date{\today}
 
@@ -47,15 +53,20 @@
 \begin{document}
 \maketitle
 
+\pagenumbering{roman}
 \tableofcontents
+\newpage
 
+\pagenumbering{arabic}
 \input{usage}
 
-\input{extending}
+\input{server_api}
 
 \input{xml}
 
-\input{server_api}
+\input{useful_classes}
+
+\input{extending}
 
 \input{information_flow}
 

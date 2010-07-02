@@ -1,32 +1,24 @@
 \newpage
 \section{XML document}
 \label{sec:xmldoc}
-
 The XML document should follow the form described in the MetaDoc DTD 
-\cite{metadoc_dtd}. 
+\cite{metadoc_dtd}. Below certain conventions used in the XML build is 
+explained. Any alterations to the DTD should follow these conventions in order
+for the client and server to continue functioning normally. 
 
 \subsection{Document build}
-
 Any type of information sent should only create one direct child of the root
 element, \texttt{<MetaDoc>}. This means that when lists of information is sent, 
 the list elements should be placed within a container element, and \textit{not} 
-directly in the root element.
+directly in the root element. The container element should have an self
+explanatory name about the information passed. 
 
 An example is that \texttt{<user\_entry>} elements are placed within a
-\texttt{<users>} element. 
-
-\subsection{Element attributes}
-
-All element attributes \textit{must} be strings. This is because the attributes 
-must be placed in the XML document, and without knowing the way to represent the 
-attribute as a string it is not possible to properly use it as one.
-
-After the attributes \texttt{clean}-function is run, it will be checked that
-the attribute value is a \textbf{basestring} (\textbf{unicode} or
-\textbf{str}). If any attribute is not, the element will not be sent. 
+\texttt{<users>} element. Here \texttt{<users>} is considered the container
+element, and there should only be one of them in each MetaDoc XML document.
+\texttt{<users>} may contain any number of \texttt{<user\_entry>} elements. 
 
 \subsection{Dates}
-
 All dates in the document should be on the form specified by RFC3339 
 \cite{rfc3339}. The \texttt{utils} module provides a function 
 \texttt{date\_to\_rfc3339} that takes a \texttt{datetime.datetime} object and 
@@ -36,23 +28,9 @@ object from a proper RFC3339 string, or \textbf{False} if the string is not a
 correct RFC3339 date.
 
 \subsection{Special attributes}
-
 The \textbf{id} attribute of elements have a special function in MetaDoc. This 
 attribute is used to identify the object when recieving receipts from the server 
 whether elements have been added. The attribute is \textit{not} saved in caching 
 to avoid duplicate \textbf{id}s when resending cached data together with new 
 data. If you want to give elements a special identifier that should be saved, it 
 must be called something other than \textbf{id}.
-
-\subsection{Client}
-
-\subsubsection{Cleaning attributes}
-
-When an element is added as a sub-element to \texttt{metaelement.MetaElement}, a 
-clean function is called for each attribute. The element defenition for 
-sub-elements added may implement a function called 
-\texttt{clean\_<attribute name>}. This function should validate that the value 
-of the attribute and make sure it returns the string value of the attribute. 
-This makes it possible to create elements by passing non-string variables, such 
-as \texttt{datetime} objects for date fields, then converting them in the clean 
-function. 

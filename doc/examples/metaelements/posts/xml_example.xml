@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MetaDoc version="0.0.0" site_name="example">
+  <posts>
+    <post_entry title="We're making progress!" author="bjornarg" id="_1">
+      This text will be in post_entry MetaElement instance's self.text!
+    </post_entry>
+    <post_entry title="Cleaning attributes" author="properauthor" id="_2">
+      We've made sure that author is sent in lower case.
+    </post_entry>
+  </posts>
+</MetaDoc>
