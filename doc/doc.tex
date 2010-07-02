@@ -3,6 +3,7 @@
 \usepackage[utf8x]{inputenc}
 \usepackage{listings}
 \usepackage{graphicx}
+\usepackage{glossaries}
 \usepackage[dvips]{hyperref}
 \hypersetup{bookmarks = true}
 \hypersetup{pdftitle = MetaDoc Client Documentation}
@@ -42,7 +43,8 @@
         \addtocounter{scriptcounter}{1}}
 
 \newcommand\inlinecode[1]{{ \texttt{\small #1} }}
-
+\newacronym{hpc}{HPC}{High Performance Computing}
+\newacronym{xml}{XML}{Extensible Markup Language}
 
 \title{MetaDoc Client Documentation\\\small{Version 0.1.0}}
 \author{Bjørnar Grip Fjær}
@@ -58,6 +60,8 @@
 \newpage
 
 \pagenumbering{arabic}
+\input{introduction}
+
 \input{usage}
 
 \input{server_api}
