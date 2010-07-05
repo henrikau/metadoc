@@ -26,28 +26,30 @@ of \texttt{<resourceUp>} and \texttt{<resourceDown>} tags as children of
 
 When this data is sent to the server, the server should return a MetaDoc XML
 document containing a \texttt{<receipts>} tag, with a \texttt{<r\_entry>} tag
-for each element recieved that has an \textbf{id}-attribute. 
+for each element recieved that has an \textbf{id}-attribute. This allows for a
+very fine grained error reporting.
 
-\subsection{Availible URLs}
+\subsection{Available URLs}
 
 \begin{description}
-    \item[baseurl/allocations/] Retrieves a list of allocations/quotas relevant
+    \item[/allocations/] Retrieves a list of allocations/quotas relevant
         to the client
-    \item[baseurl/users/] Retrieves a list of users for the client
-    \item[baseurl/projects/] Retrieves a list of projects relevant to the
+    \item[/users/] Retrieves a list of users for the client
+    \item[/projects/] Retrieves a list of projects relevant to the
         client
-    \item[baseurl/config/] Sends system configuration to server
-    \item[baseurl/events/] Sends site events to the server
-    \item[baseurl/software/] Sends system software to server
+    \item[/config/] Sends system configuration to server
+    \item[/events/] Sends site events to the server
+    \item[/software/] Sends system software to server
 \end{description}
 
 \subsection{Authentication}
 \label{sec:authentication}
-The site uses SSL certificates to authenticate the client. In order for the
+The site uses X.509 certificates to authenticate the client. In order for the
 site to be authenticated properly, the server must be aware of the client's
-certificate already, and the correct owner of the certificate must be saved on
-the server. This \textit{must} be the same as the value for \texttt{site\_name}
-set in the MetaDoc configuration (see section \ref{sec:metadoc_conf}).
+certificate prior to the request, and the correct owner of the certificate must
+be saved on the server. This \textit{must} be the same as the value for
+\texttt{site\_name} set in the MetaDoc configuration (see section
+\ref{sec:metadoc_conf}).
 
 \subsection{Differences from REST}
 \label{sec:diff_from_rest}
@@ -56,23 +58,29 @@ There are certain differences in the API compared to the REST specification. The
 MetaDoc Server API makes use of HTTP POST where HTTP PUT should be used in 
 accordance with REST. This is due to limitations in standard Python libraries.
 
-Because the access the MetaDoc Server API gives to the client is limited, this 
-change does not prohibit any other functionality. 
-
-No address currently supports both adding and retrieving data. This is not a
-limitation in the system itself, but a matter of authorative sources of
-information. 
+Because the MetaDoc Server does not give the client access to delete or replace
+data on the server, this does not create problems for the Server API. % FIXME
 
 \subsection{Server HTTP responses}
 
 The server makes use of HTTP status codes to identify what error has occoured
-if the server is unable or unwilling to process the request from the server. 
+if the server is unable or unwilling to process the request from the server.
+Table \ref{tbl:http_status_codes} contains a list of status codes the server
+returns, and why these status codes occour. 
 
-If the client does not send a SSL certificate, sends a sertificate unknown to 
-the server, attempts to get information about sites not identified with the
-certificate, or attempts to send information that identifies as another site, 
-the server returns a ``403 Forbidden`` status code.
-
-If the server fails to process the request, it will return a ``500 Server
-Error`` status code. This does \textit{not} include errors on the document that
-results in returning receipts.
+\begin{table}[h!]
+    \centering
+    \caption{List of HTTP status codes used by the MetaDoc Server}
+    \begin{tabular}{|l|l|p{7cm}|}
+        \hline
+        \textbf{Code} & \textbf{Official name} & \textbf{MAPI-Reason} \\
+        \hline
+        403 & 403 Forbidden & The client certificate was not recognized as an
+        authorative source for the site given in the XML document. \\
+        \hline
+        500 & 500 Server Error & The server failed to process the request. This
+        does not include errors that return a receipt. \\
+        \hline
+    \end{tabular}
+    \label{tbl:http_status_codes}
+\end{table}

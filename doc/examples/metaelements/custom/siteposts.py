@@ -9,5 +9,5 @@ class SitePosts(MetaOutput):
 instance's self.text!""")
         self.items.append(post_one)
         post_two = PostEntry(title="Cleaning attributes" author="ProperAuthor")
-        post_two = "We've made sure that author is sent in lower case."
+        post_two.set_content("We've made sure that author is sent in lower case.")
         self.items.append(post_two)

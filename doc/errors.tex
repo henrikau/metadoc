@@ -2,13 +2,16 @@
 \section{Errors}
 \label{sec:errors}
 
-The server returns a \texttt{<receipt>} containing an \texttt{<r\_entry>} for 
-each element parsed. The \texttt{<r\_entry>} has the required attributes 
-\textbf{id} and \textbf{code}, containing the ID of the element and the error 
-code, respectively. It may also contain an attribute \textbf{note} with a short 
-note explaining the error if extra information is availible. The 
-\texttt{<r\_entry>} tag might also contain text with a longer message, if more 
-information is needed about the error. 
+The server returns a \texttt{<receipt>} containing an \texttt{<r\_entry>}
+\textit{for each} element passed. The \texttt{<r\_entry>} has the required
+attributes \textbf{id} and \textbf{code}, containing the ID of the element sent
+by the client and the error code, respectively. It may also contain an
+attribute \textbf{note} with a short note explaining the error if extra
+information is availible. The \texttt{<r\_entry>} tag might also contain text
+with a longer message, if more information is needed about the error. 
+
+An example of a error message would be an error code \texttt{2001} with the
+note \texttt{Missing attribute "reason"}.
 
 \subsection{Document errors}
 

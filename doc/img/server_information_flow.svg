@@ -14,7 +14,7 @@
    id="svg3850"
    version="1.1"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="New document 4">
+   sodipodi:docname="server_information_flow.svg">
   <defs
      id="defs3852">
     <inkscape:perspective
@@ -24,6 +24,20 @@
        inkscape:vp_z="744.09448 : 526.18109 : 1"
        inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
        id="perspective3858" />
+    <inkscape:perspective
+       id="perspective2855"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2855-9"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -32,9 +46,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="176.87458"
-     inkscape:cy="641.1796"
+     inkscape:zoom="1.979899"
+     inkscape:cx="233.9553"
+     inkscape:cy="883.12109"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -51,7 +65,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -69,7 +83,7 @@
        id="path4446" />
     <path
        style="fill:#f38630;fill-opacity:1;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 266.68027,254.34167 196.97975,0"
+       d="m 266.57366,254.34167 175.97977,0"
        id="path4448" />
     <g
        id="g4380"
@@ -117,56 +131,50 @@
              width="115.15739"
              id="rect4393" /></flowRegion><flowPara
            id="flowPara4395">Client validates according to DTD.</flowPara></flowRoot>    </g>
-    <g
-       id="g4414"
-       transform="translate(-64.649763,22.223356)">
-      <rect
-         ry="23.57143"
-         rx="23.571428"
-         y="45.240093"
-         x="179.80716"
-         height="69.700523"
-         width="164.65486"
-         id="rect4404"
-         style="fill:#f38630;fill-opacity:1;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-      <flowRoot
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot4406"
-         xml:space="preserve"><flowRegion
-           id="flowRegion4408"><rect
-             y="55.341621"
-             x="191.92899"
-             height="91.923882"
-             width="140.41121"
-             id="rect4410" /></flowRegion><flowPara
-           id="flowPara4412">Server gathers information and packs to XML.</flowPara></flowRoot>    </g>
-    <g
-       id="g4435"
-       transform="translate(18.182746,-67.680221)">
-      <rect
-         ry="23.57143"
-         rx="23.571428"
-         y="260.40259"
-         x="426.28436"
-         height="120.20815"
-         width="185.86807"
-         id="rect4421"
-         style="fill:#f38630;fill-opacity:1;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-      <flowRoot
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot4423"
-         xml:space="preserve"><flowRegion
-           id="flowRegion4425"><rect
-             y="275.55487"
-             x="439.41635"
-             height="104.04572"
-             width="164.65486"
-             id="rect4427" /></flowRegion><flowPara
-           id="flowPara4429">Client performs process() on data.</flowPara><flowPara
-           id="flowPara4431" /><flowPara
-           style="font-style:italic;-inkscape-font-specification:Andale Mono Italic"
-           id="flowPara4433">Any errors may not be returned to server through API.</flowPara></flowRoot>    </g>
+    <rect
+       style="fill:#f38630;fill-opacity:0.66666669000000001;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect4404"
+       width="164.65486"
+       height="69.700523"
+       x="115.15739"
+       y="67.463448"
+       rx="23.571428"
+       ry="23.57143" />
     <flowRoot
+       xml:space="preserve"
+       id="flowRoot4406"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(-64.649763,22.223356)"><flowRegion
+         id="flowRegion4408"><rect
+           id="rect4410"
+           width="140.41121"
+           height="91.923882"
+           x="191.92899"
+           y="55.341621" /></flowRegion><flowPara
+         id="flowPara4412">Server gathers information and packs to XML.</flowPara></flowRoot>    <rect
+       style="fill:#f38630;fill-opacity:0.66666669;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669000000001;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect4421"
+       width="185.86807"
+       height="120.20815"
+       x="444.4671"
+       y="192.72237"
+       rx="23.571428"
+       ry="23.57143" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4423"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(18.182746,-67.680221)"><flowRegion
+         id="flowRegion4425"><rect
+           id="rect4427"
+           width="164.65486"
+           height="104.04572"
+           x="439.41635"
+           y="275.55487" /></flowRegion><flowPara
+         id="flowPara4429">Client performs process() on data.</flowPara><flowPara
+         id="flowPara4431" /><flowPara
+         id="flowPara4433"
+         style="font-style:italic;-inkscape-font-specification:Andale Mono Italic">Any errors may not be returned to server through API.</flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot4450"
        style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -177,5 +185,53 @@
            height="18.182745"
            x="301.02545"
            y="71.504059" /></flowRegion><flowPara
-         id="flowPara4456">Data sent to client</flowPara></flowRoot>  </g>
+         id="flowPara4456">Data sent to client</flowPara></flowRoot>    <path
+       sodipodi:type="star"
+       style="fill:#f38630;fill-opacity:1;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path2845"
+       sodipodi:sides="3"
+       sodipodi:cx="262.13458"
+       sodipodi:cy="169.99393"
+       sodipodi:r1="14.472"
+       sodipodi:r2="7.2360001"
+       sodipodi:arg1="2.0943951"
+       sodipodi:arg2="3.1415927"
+       inkscape:flatsided="true"
+       inkscape:rounded="1.0408341e-17"
+       inkscape:randomized="0"
+       d="m 254.89858,182.52705 0,-25.06624 21.708,12.53312 -21.708,12.53312 z"
+       transform="translate(162.63456,-66.670068)" />
+    <path
+       transform="matrix(-0.8660254,0.5,-0.5,-0.8660254,591.42217,246.96615)"
+       sodipodi:type="star"
+       style="fill:#f38630;fill-opacity:1;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path2845-5"
+       sodipodi:sides="3"
+       sodipodi:cx="262.13458"
+       sodipodi:cy="169.99393"
+       sodipodi:r1="14.472"
+       sodipodi:r2="7.2360001"
+       sodipodi:arg1="2.0943951"
+       sodipodi:arg2="3.1415927"
+       inkscape:flatsided="true"
+       inkscape:rounded="1.0408341e-17"
+       inkscape:randomized="0"
+       d="m 254.89858,182.52705 0,-25.06624 21.708,12.53312 -21.708,12.53312 z" />
+    <path
+       transform="translate(165.58256,84.347742)"
+       sodipodi:type="star"
+       style="fill:#f38630;fill-opacity:1;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path2845-2"
+       sodipodi:sides="3"
+       sodipodi:cx="262.13458"
+       sodipodi:cy="169.99393"
+       sodipodi:r1="14.472"
+       sodipodi:r2="7.2360001"
+       sodipodi:arg1="2.0943951"
+       sodipodi:arg2="3.1415927"
+       inkscape:flatsided="true"
+       inkscape:rounded="1.0408341e-17"
+       inkscape:randomized="0"
+       d="m 254.89858,182.52705 0,-25.06624 21.708,12.53312 -21.708,12.53312 z" />
+  </g>
 </svg>

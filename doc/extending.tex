@@ -1,13 +1,14 @@
 \newpage
 \section{Extending MetaDoc}
 \label{sec:extending}
-To extend MetaDoc to send more data, the following is needed. Each step is 
-explained in more detail below. Certain restrictions is set on how the XML
-document should be formed. See section \ref{sec:xmldoc} for more information.
+MetaDoc is explicitly designed to allow for future enhancements in case more
+information should be sent. In order to do so, an series of steps are required.
+The list below details each of these steps, and each step is explained in more
+detail in the following sections.
 
-\begin{itemize}
+\begin{enumerate}
     \item
-        Definition of data to be sent in the MetaDoc DTD.
+        Extend the MetaDoc DTD with the definition of the data.
     \item
         A definition file explaining the data on the client.
     \item
@@ -21,7 +22,7 @@ document should be formed. See section \ref{sec:xmldoc} for more information.
         Adding a handle to \texttt{main.py} that will activate the data type.
     \item
         Configuring the server to send or recieve the intended data.
-\end{itemize}
+\end{enumerate}
 
 Figure \ref{fig:connection_example} shows an example of how the data for
 projects is defined, and the connection between classes that are used when data
@@ -48,13 +49,20 @@ information for each entry, create a descriptive \texttt{<!ELEMENT>} for each
 as a sub-element of each entry to contain the text. Otherwise the text may be
 placed directly inside the entry element itself. 
 
-\subsection{Defining the data on the client}
-\label{sec:defclientmodel}
-Add a module to the client with the name of the main element. Create a file
-\texttt{definition.py} inside this module. \texttt{definition.py} should define
-the main element with a sub class of \texttt{metaelement.MetaElement}.
+As an example, the MetaDoc DTD \cite{metadoc_dtd} defines
+\texttt{project\_entry}, where \texttt{remarks} and \texttt{description} are
+allowed sub-elements that contain any text. Meanwhile, \texttt{resourceUp} and
+\texttt{resourceDown} places the text directly inside the tag itself, as not
+other information is allowed inside these tags.
 
-Create a file \texttt{entries.py} inside the same module. This file should
+\subsection{Defining the data client side}
+\label{sec:defclientmodel}
+Add a package to the client with the name of the main element
+\cite{python_modules}. Create a module \texttt{definition} inside this package.
+\texttt{definition} should define the main element with a sub class of
+\texttt{metaelement.MetaElement}.
+
+Create a module \texttt{entries} inside the same package. This file should
 contain definitions of each entry, and potential sub elements for each entry,
 as a sub class of \texttt{metaelement.MetaElement}. 
 
@@ -67,10 +75,15 @@ will recieve the attribute value, and should return the attribute value after
 any potential cleaning is done on it. Please note that \textit{all} attribute
 values \textit{must} be strings, so if any value set as an attribute might be
 set as anything other than a string, the clean-function is the place to convert
-it.
+it. If the attribute contains a value that is not allowed, a sub class of
+\texttt{metaelement.IllegalAttributeError} should be raised that defines the
+error that has occoured. 
 
-See section \ref{sec:useful_classes} for more information on how to build these
-classes.
+The \texttt{metaelement.MetaElement} defines some methods that are commonly
+used in cleaning methods, such as converting a \texttt{date} object into an
+RFC3339 string, or checking for legal values of an attribute. See section
+\ref{sec:useful_classes} for more information about these functions and how to
+build these classes.
 
 \subsection{Custom client handles}
 If the data is to be sent from client to server, create a module
@@ -80,19 +93,20 @@ If the data is to be sent from client to server, create a module
 appends an instance of a entry-class, as defined in section
 \ref{sec:defclientmodel}, to \textbf{self.items} for each entry.
 
-Section \ref{sec:customizing_client_send} and section \ref{sec:useful_classes}
-contain more information on how to define these classes.
-
 If the data is sent from server to client, a module called
 \texttt{custom/update<main element name>.py} should be created that contains a
-sub class of \texttt{custom.abstract.MetaInput}. This class should define a
+sub class of \\ \texttt{custom.abstract.MetaInput}. This class should define a
 method \texttt{process()} that processes any recieved data in
 \textbf{self.items}.  
+
+See section \ref{sec:client_api} and \ref{sec:useful_classes} for more
+information on these classes.
+
 
 \subsection{Versioning}
 MetaDoc passes a \textbf{version} attribute on it's root element,
 \texttt{<MetaDoc>} when sending information between client and server. This
-version is a number on the form ''\texttt{X}.\texttt{Y}.\texttt{Z}'', where
+version is a string on the form ''\texttt{X}.\texttt{Y}.\texttt{Z}'', where
 \texttt{X}, \texttt{Y} and \texttt{Z} are numbers. Changes made to each number 
 indicate different levels of breakage. 
 
@@ -105,9 +119,9 @@ document with a different value of \texttt{X} in the version number, it should
 \textit{not} accept the data, as it cannot be sure it will handle it correctly.
 
 Changes to \texttt{Y} indicates a change that does \textit{not} change the
-current behaviour in any way, but instances where new information might be
-passed. When the client or server encounters a document with a different value
-of \texttt{Y} it should log a warning, but otherwise proceed as normally.
+current behaviour in any way, but may be instances where new information might
+be passed. When the client or server encounters a document with a different
+value of \texttt{Y} it should log a warning, but otherwise proceed as normal.
 
 \texttt{Z} is currently not used for anything, but is present for potential
 usability in the future. Differences in \texttt{Z} should be logged as debug

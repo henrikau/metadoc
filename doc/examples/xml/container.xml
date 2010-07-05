@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MetaDoc version="0.1.0" site_name="example">
+  <users>
+    <user_entry username="example1"/>
+    <user_entry username="example2" uid="1"/>
+  </users>
+</MetaDoc>
