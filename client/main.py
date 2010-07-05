@@ -262,7 +262,7 @@ def main():
         'critical': logging.CRITICAL
     }
     LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
-    log_level = logging.NOTSET
+    log_level = logging.WARNING
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], optstr, optlist)
@@ -294,7 +294,7 @@ def main():
         elif opt == '--dry-run':
             dryrun = True
         elif opt in ('-l', '--loglevel'):
-            log_level = LOG_LEVELS.get(arg.lower(), logging.NOTSET)
+            log_level = LOG_LEVELS.get(arg.lower(), logging.WARNING)
         elif opt in ('-l', '--no-cache'):
             send_cache = False
 
