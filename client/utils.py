@@ -61,6 +61,8 @@ def check_response(element_tag, md, xml_data, cache_data=True):
             logging.warning("--no-cache handle passed, not caching data.")
     except metadoc.NotAllAcceptedError, nar:
         logging.error("Not all elements accepted. Caching not accepted data.")
+        sys.stderr.write("Not all elements were accepted by the server.\n")
+        sys.stderr.write("Check MetaDoc Client log file for more information.")
         if cache_data:
             Cacher(element_tag, md)
         else:
@@ -137,6 +139,10 @@ def check_version(server_version):
     if cmajor != smajor:
         logging.critical(("Client has different major version from server. "
                 "Server version: %s. Client version: %s.") % 
+                (server_version, client_version))
+        sys.stderr.write(("Client has different major version from server. \n"
+                "Server version: %s. Client version: %s.\n"
+                "Terminating MetaDoc Client.") %
                 (server_version, client_version))
         sys.exit(2)
     elif cminor != sminor:

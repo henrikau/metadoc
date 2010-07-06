@@ -19,6 +19,7 @@
 import logging
 import lxml.etree
 import version
+import sys
 
 class MetaDoc:
     """ Class for handling the MetaDoc.
@@ -128,9 +129,14 @@ class MetaDoc:
                             # Got an error that will NOT be fixed by 
                             # resending element. No point in caching.
                             self.remove_element(element)
-                        err_str = ("Error %s on \"%s\" element. Element "
+                            sys.stderr.write(("Received critical error %d on "
+                                "element \"%s\".\n") % (r_code, 
+                                                        element.xml_tag_name))
+                            sys.stderr.write("Please check log file for "
+                                "more information.")
+                        err_str = ("Error %d on \"%s\" element. Element "
                                     "attributes: %s") % (
-                                        r_entry.attrib.get("code"),
+                                        r_code,
                                         element.xml_tag_name,
                                         element.attributes
                                         )

@@ -393,7 +393,10 @@ def main():
             res = cli.send()
         except (urllib2.HTTPError, urllib2.URLError) as httperror:
             logging.error(("Unable to connect to server address \"%s\", "
-                        "error: %s") % (url, httperror))
+                                "error: %s") % (url, httperror))
+            sys.stderr.write("Unable to connect to server address \"%s\".\n" %
+                                url)
+            sys.stderr.write("Error: %s" % httperror)
         else:
             if res:
                 xml_data = res.read()
@@ -405,11 +408,14 @@ def main():
                 except lxml.etree.XMLSyntaxError, e:
                     logging.error(("Error parsing XML document from server: "
                                         "%s") % e)
+                    sys.stderr.write(("Got response from server at url \"%s\", "
+                                    "but unable to parse. Error message: %s") % 
+                                    (url, e))
                 else:
                     # Check for valid according to DTD:
+                    utils.check_version(return_data.attrib.get("version"))
                     valid = dtd.validate(return_data)
                     if valid:
-                        utils.check_version(return_data.attrib.get("version"))
                         found_elements = return_data.findall(
                                         element.xml_tag_name
                                         )
@@ -423,6 +429,11 @@ def main():
                         logging.error(("XML recieved for \"%s\" did not "
                                     "contain valid XML according to DTD.") % 
                                     element.xml_tag_name)
+                        sys.stderr.write(("Received XML document from server "
+                                    "on url \"%s\", but did not validate "
+                                    "against DTD.\n") % url)
+                        sys.stderr.write("Logging with \"debug\" will show "
+                                    "validation errors.")
                         dtd_errors = ""
                         for error in dtd.error_log.filter_from_errors():
                             dtd_errors = "%s\n%s" % (dtd_errors, error)
@@ -430,6 +441,8 @@ def main():
             else:
                 logging.error(("Recieved empty response from server when "
                         "attempting to fetch \"%s\".") % element.xml_tag_name)
+                sys.stderr.write(("Received empty response from server on url "
+                            "\"%s\".") % url)
 
 
 if __name__ == "__main__":
