@@ -69,7 +69,9 @@ others are explicitly stated below.
     \ref{sec:logging} for more information about what is logged at different 
     levels.
     \item[-n, --no-cache]   Prevents the client from sending any cached data.
-    For more information about caching, see section \ref{sec:caching}.
+    If any errors occour when the client runs with this handle, data from this
+    run will \textit{not} be cached. For more information about caching, see
+    section \ref{sec:caching}.
     \item[-e]   Sends event data from client to server.
     \item[-c]   Sends configuration data from client to server.
     \item[-s]   Sends software data from client to server.
@@ -112,7 +114,7 @@ The log level defaults \textbf{warning}.
 \label{sec:caching}
 The client caches data to \texttt{/var/cache/mapi/}. Files are named after the
 data type that is cached in each file. The user running the client must have
-read and write access to the folder in order for the client to run. 
+read and write access to this folder. 
 
 The client will cache any information that is not accepted by the server, 
 \textit{unless} the server returns a reciept for the information that marks the 
@@ -126,6 +128,7 @@ updates, such as software and configuration, where any cached data would be
 outdated or duplicates if sent together with a new run.
 
 If the \textbf{-n} or \textbf{--no-cache} handles are passed, the script will
-ignore any cached data completely and run as if it didn't exist. The cached
-data will then be processed on the next run where \textbf{-n} or
-\textbf{--no-cache} is not passed.
+ignore any cached data completely and run as if it didn't exist. The client
+will also \textit{not} cache any data on this run. The cached data will then be
+processed on the next run where \textbf{-n} or \textbf{--no-cache} is not
+passed. 
