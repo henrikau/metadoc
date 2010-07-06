@@ -15,8 +15,8 @@ detail in the following sections.
     \item
         Creating definition files on the MetaDoc Client.
     \item
-        A \texttt{MetaInput} or \texttt{MetaOutput} sub class that should
-        handle data, depending on whether data is received or sent to or from
+        A \texttt{MetaOutput} or \texttt{MetaInput} sub class that should
+        handle data, depending on whether data is sent or received to or from
         the server, respectively.
     \item
         Adding a handle to \texttt{mapi.py} that will activate the data type.
@@ -43,7 +43,7 @@ As an example, \texttt{<users>} is used for a list of users.
 
 Add any attributes necessary to describe the set of data. If the data is a list
 of entries, such as a list of users, create an \texttt{<!ELEMENT>} as a
-possible sub-element that contains the information about each entry. Any short
+possible sub element that contains the information about each entry. Any short
 information about the entry should be placed in attributes of the entry. If
 there is more information, such as information that could be several sentences
 or lines, it should not be placed as an attribute. This information should be
@@ -58,8 +58,7 @@ allowed sub-elements that contain any text. Meanwhile, \texttt{resourceUp} and
 \texttt{resourceDown} places the text directly inside the tag itself, as not
 other information is allowed inside these tags.
 
-\textit{Make sure the updated \gls{dtd} is placed on both the client and
-server.}
+\textit{Make sure to update the \gls{dtd} on both the MetaDoc client and server.}
 
 \subsection{Defining the data client side}
 \label{sec:defclientmodel}

@@ -2,24 +2,24 @@
 \section{MetaDoc Server API}
 \label{sec:server_api}
 
-The MetaDoc server implements a REST-like \gls{api}, however, there are certain
-differences from REST noted in section \ref{sec:diff_from_rest}.
+The MetaDoc server implements a REST-like \gls{api} \cite{rest}, however, there
+are certain differences from REST noted in section \ref{sec:diff_from_rest}.
 
 When the client performs a GET request on an available URL, the server should
 return an \gls{xml} document, or a \gls{http} status code referring to an
 error.  The \gls{xml} document should follow the MetaDoc \gls{dtd}
 \cite{metadoc_dtd}. Each URL only returns data from the requested data type.
-This means that a request to \textbf{baseurl/allocations/} will return an
-MetaDoc \gls{xml} document containing only an \texttt{<allocations>} directly
-on the \texttt{<MetaDoc>} root, with \texttt{<all\_entry>} tags as children of
+This means that a request to \textbf{/allocations/} will return a MetaDoc
+\gls{xml} document containing only an \texttt{<allocations>} directly on the
+\texttt{<MetaDoc>} root, with \texttt{<all\_entry>} tags as children of
 \texttt{<allocations>}.  The client should disregard any information outside
-\texttt{<allocations>} when connecting to \textbf{baseurl/allocations/}. 
+\texttt{<allocations>} when connecting to \textbf{/allocations/}. 
 
 In order to send data to the server, the client performs a POST request, with
 the POST data variable \texttt{metadoc} containing a MetaDoc \gls{xml}
 document. The server will only accept data from the data type specified in the
 URL, and will disregard any other information. This means that a POST to
-\textbf{baseurl/events/} should be a MetaDoc \gls{xml} document containing a
+\textbf{/events/} should be a MetaDoc \gls{xml} document containing a
 \texttt{<events>} tag directly on the \texttt{<MetaDoc>} root, with any number
 of \texttt{<resourceUp>} and \texttt{<resourceDown>} tags as children of
 \texttt{<events>}. 
@@ -68,6 +68,8 @@ The server makes use of \gls{http} status codes to identify what error has
 occurred if the server is unable or unwilling to process the request from the
 server.  Table \ref{tbl:http_status_codes} contains a list of status codes the
 server returns, and why these status codes occur. 
+
+Any return code except for 200 is considered to be an error.
 
 \begin{table}[h!]
     \centering
