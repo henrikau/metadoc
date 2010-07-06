@@ -77,6 +77,8 @@ The configuration file contains the following settings:
         \cite{mdoc}.
     \item[key]  Location of file containing the private key for the client.
     \item[cert] Location of file containing the certificate for the client key.
+    \item[site\_name]   Name of the site. This must correspond to the site name
+        set on the server for the given key.
     \item[trailing\_slash]   Whether the server uses a trailing slash on URIs,
         should be set to True for now.
     \item[valid]    Defaults to False to avoid the script from running with
@@ -87,7 +89,7 @@ The configuration file contains the following settings:
 Please note that file locations \textbf{must} be given as an absolute path.
 
 The certificate file referenced by the \textbf{cert} key in the configuration
-must be availible at the server and related to your client properly, otherwise
+must be available at the server and related to your client properly, otherwise
 the server will refuse the connection.
 
 \section{Using the information}
@@ -107,7 +109,11 @@ customizing the MetaDoc client.
 The MetaDoc client can be set up as a crontab in order to syncronize sites with
 the server. Below, some examples of using the client in crontab is shown. The
 information passed between the client and server depends on the handles passed
-on script execution. See the MetaDoc documentation for a detailed explanation
+on script execution. 
+
+A couple of useful handles are \textbf{--send-all} and \textbf{--fetch-all},
+which sends all data and retrieves all data, respectively. \textbf{--all} is a
+combination of these.  See the MetaDoc documentation for a detailed explanation
 of each handle \cite{mdoc}.
 
 \begin{verbatim}
@@ -125,17 +131,17 @@ Fetches user, project and allocation data once a week. Makes sure the script
 executes quietly and logs warning messages.
 
 \section{Logging}
-The MetaDoc client logs to \texttt{/var/log/mapi/}, log files are named \\
-\texttt{metadoc.client.YYYY-mm-dd.log}. The amount of information logged
+The MetaDoc client logs to \texttt{/var/log/mapi/}, log files follow the naming
+schema \texttt{metadoc.client.YYYY-mm-dd.log}. The amount of information logged
 depends on the log level passed to \textbf{-l} on script execution. The
 possible log levels are \textbf{debug}, \textbf{info}, \textbf{warning},
 \textbf{error} and \textbf{critical}. When \textbf{-l} is not passed, or passed
-with a log level not availible, the level is set to \textbf{warning}. See the
+with a log level not available, the level is set to \textbf{warning}. See the
 MetaDoc documentation for more information on logging \cite{mdoc}.
 
 \newpage
 \begin{thebibliography}{99}
-    \bibitem{mdoc} \textit{MetaDoc Documentation}, Bjørnar Grip Fjær, 
+    \bibitem{mdoc} Fjær, Bjørnar Grip, \textit{MetaDoc Documentation},
         \url{http://bjornar.me/metadoc/doc.pdf}
     \bibitem{downloads} \textit{MetaDoc Downloads},
         \url{http://github.com/bjornarg/metadoc/downloads}
