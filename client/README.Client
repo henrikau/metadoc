@@ -31,4 +31,4 @@ m.regMetaElement(p)
 xml = m.getXML()
 
 # Now you can create the client and ship it off. For a better example,
-# see main.py
+# see mapi.py

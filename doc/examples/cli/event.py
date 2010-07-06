@@ -18,7 +18,7 @@
 """Registers an event through a command line interface that can be sent 
 through MetaDoc client.
 
-main.py should be run afterwards in order to send data to server.
+mapi.py should be run afterwards in order to send data to server.
 
 Please remember to enclose argument strings with spaces in quotes, such as 
 --datedown='2010-06-29 9:39'.
@@ -181,7 +181,7 @@ def main():
     processor.add_element(e)
     m.reg_meta_element(processor)
     Cacher(Events.xml_tag_name, m)
-    print "Event has been registered. Run main.py to send to server."
+    print "Event has been registered. Run mapi.py to send to server."
 
 if __name__=='__main__':
     main()

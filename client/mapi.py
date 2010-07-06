@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#            main.py is part of MetaDoc (Client).
+#            mapi.py is part of MetaDoc (Client).
 #
 # All of MetaDoc is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -15,10 +15,10 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
-"""main.py - Runs the synchronization procedure
+"""mapi.py - Runs the synchronization procedure
 
-Information sent and recieved depends on handles passed to main.py.
-If main.py is run without any handles it will attempt to send any cached 
+Information sent and recieved depends on handles passed to mapi.py.
+If mapi.py is run without any handles it will attempt to send any cached 
 information to the server.
 
 Usage:
@@ -336,7 +336,7 @@ def main():
         return
 
     # ready for main processing.
-    logging.info("Running main.py with handles %s." % " ".join(sys.argv[1:]))
+    logging.info("Running mapi.py with handles %s." % " ".join(sys.argv[1:]))
     # Loading DTD for validation
     dtd_file = open("%s/%s" % (SCRIPT_PATH, "MetaDoc.dtd"), "r")
     dtd = lxml.etree.DTD(dtd_file)

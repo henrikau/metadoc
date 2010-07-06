@@ -68,7 +68,7 @@ has access to \textbf{read} and \textbf{write} to these folders.
 \section{Configuring the MetaDoc client}
 The MetaDoc client uses a configuration file called \texttt{metadoc.conf} in
 the same folder as the client itself. You can create a sample configuration
-file by running \texttt{main.py} without any parameters. 
+file by running \texttt{mapi.py} without any parameters. 
 
 The configuration file contains the following settings:
 
@@ -111,7 +111,7 @@ on script execution. See the MetaDoc documentation for a detailed explanation
 of each handle \cite{mdoc}.
 
 \begin{verbatim}
-0  0  *  *  *  /path/to/metadoc/client/main.py -ecs -q -l error
+0  0  *  *  *  /path/to/metadoc/client/mapi.py -ecs -q -l error
 \end{verbatim}
 Sends event, configuration and software data to the server at midnight every
 night. Makes sure the script executes quietly, passing no output to
@@ -119,7 +119,7 @@ night. Makes sure the script executes quietly, passing no output to
 logs error messages.
 
 \begin{verbatim}
-0  0  *  *  0  /path/to/metadoc/client/main.py -upa -q -l warning
+0  0  *  *  0  /path/to/metadoc/client/mapi.py -upa -q -l warning
 \end{verbatim}
 Fetches user, project and allocation data once a week. Makes sure the script
 executes quietly and logs warning messages.

@@ -1,8 +1,8 @@
 \newpage
 \section{Overview}
 \label{sec:overview}
-Usage of the MetaDoc client is done mainly through the use of \texttt{main.py}.
-\texttt{main.py} takes care of sending and retrieving data to and from the
+Usage of the MetaDoc client is done mainly through the use of \texttt{mapi.py}.
+\texttt{mapi.py} takes care of sending and retrieving data to and from the
 server, caching any data that could not be sent, and validating \gls{xml} data
 recieved.
 
@@ -35,13 +35,13 @@ The configuration is in INI format and defines a section named
     \item[trailing\_slash]  Whether the client should append a trailing slash
         at the end of URLs used to connect to the server. At the moment, this
         should be set to \texttt{True}.
-    \item[valid]    Initially set to \texttt{False} when \texttt{main.py}
+    \item[valid]    Initially set to \texttt{False} when \texttt{mapi.py}
         creates a sample configuration file. This is set to avoid running the
         client without being properly configured. If this value is present, it
         \textit{must} be set to \texttt{True} or \texttt{yes}.
 \end{description}
 
-\texttt{main.py} will create a initial configuration file if one is missing
+\texttt{mapi.py} will create a initial configuration file if one is missing
 when it starts. This can be used as the basis for a configuration file. 
 
 \scriptcode[lst:config]{Example of a basic configuration file}{examples/configuration/metadoc.conf}{}
@@ -50,16 +50,16 @@ when it starts. This can be used as the basis for a configuration file.
 \label{sec:handles}
 A handle is an option passed to the client when running the script.
 
-\texttt{main.py} takes handles that tell the script what information to send
+\texttt{mapi.py} takes handles that tell the script what information to send
 or retrieve to or from the server. All handles can be mixed together
 \textit{except} for handles that override each other. Handles that overrides
 others are explicitly stated below.
 
-\texttt{main.py} takes the following handles:
+\texttt{mapi.py} takes the following handles:
 
 \begin{description}
     \item[-h, --help]   Displays a short help message explaning the handles
-    that may be passed to \texttt{main.py}. Overrides any other handles.
+    that may be passed to \texttt{mapi.py}. Overrides any other handles.
     \item[-v, --verbose]    Verbose mode. Prints information about progress and
     information sent and recieved between client and server. 
     \item[-q, --quiet]  Quiet mode. Prints nothing unless the program fails.
