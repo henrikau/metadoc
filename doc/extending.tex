@@ -10,10 +10,7 @@ detail in the following sections.
     \item
         Extend the MetaDoc \gls{dtd} with the definition of the data.
     \item
-        A definition file explaining the data on the client.
-    \item
-        An entries file, explaining any entries allowed in the data on the 
-        client.
+        Creating definition files on the MetaDoc Client.
     \item
         A \texttt{MetaInput} or \texttt{MetaOutput} sub class that should
         handle data, depending on whether data is recieved or sent to or from
@@ -22,6 +19,8 @@ detail in the following sections.
         Adding a handle to \texttt{mapi.py} that will activate the data type.
     \item
         Configuring the server to send or recieve the intended data.
+    \item
+        Updating the version of MetaDoc.
 \end{enumerate}
 
 Figure \ref{fig:connection_example} on page \pageref{fig:connection_example}
@@ -56,10 +55,13 @@ allowed sub-elements that contain any text. Meanwhile, \texttt{resourceUp} and
 \texttt{resourceDown} places the text directly inside the tag itself, as not
 other information is allowed inside these tags.
 
+\textit{Make sure the updated \gls{dtd} is placed on both the client and
+server.}
+
 \subsection{Defining the data client side}
 \label{sec:defclientmodel}
-Add a package to the client with the name of the main element
-\cite{python_modules}. Create a module \texttt{definition} inside this package.
+Add a package \cite{python_modules} to the client with the name of the main
+element. Create a module \texttt{definition} inside this package.
 \texttt{definition} should define the main element with a sub class of
 \texttt{metaelement.MetaElement}.
 
@@ -103,6 +105,29 @@ method \texttt{process()} that processes any recieved data in
 See section \ref{sec:client_api} and \ref{sec:useful_classes} for more
 information on these classes.
 
+\subsection{Updating \texttt{mapi.py}}
+A couple of changes are necessary inside \texttt{mapi.py} in order for the
+script to be able to send or recieve the new data added. 
+
+First, a new handle has to be created for the new data. The handle should
+preferably be descriptive to what the data transferred is (e.g. \textbf{-u} for
+user data), but it \textit{cannot} conflict with any of the existing handles.
+The handle should be added to \texttt{mapi.py}'s docstring, the \textbf{optstr}
+and potentially \textbf{optlist} variables inside the \texttt{main()} function,
+and must register the element inside the \textbf{opts} loop. 
+
+If the data is to be sent from the client, the definition class for the
+container element (see section \ref{sec:defclientmodel}) should be added to the
+\texttt{main()} function's \textbf{possible\_send\_elements} variable. It the
+data is to be retrieved from the server, add the class to
+\textbf{possible\_fetch\_elements} instead.
+
+\subsection{Updating the MetaDoc Server}
+The MetaDoc server must respond to the URL defined by the \textbf{url} variable
+defined on the definition class of the data on the client (see section
+\ref{sec:defclientmodel}). The URL must conform to the MetaDoc Server
+\gls{api}. See section \ref{sec:server_api} for more information about the
+MetaDoc Server \gls{api}.
 
 \subsection{Versioning}
 \label{sec:version}
@@ -112,6 +137,15 @@ version is a string on the form ''\texttt{X}.\texttt{Y}.\texttt{Z}'', where
 \texttt{X}, \texttt{Y} and \texttt{Z} are numbers. Changes made to each number 
 indicate different levels of breakage. 
 
+When extending the MetaDoc \gls{api}, you need to consider what version level
+has to be changed. Section \ref{sec:version_levels} explains each of the
+levels.
+
+\textit{Any updates to the MetaDoc \gls{api} must update the version.} Failure
+to do so may result in unreliable consequences.
+
+\subsubsection{Version levels}
+\label{sec:version_levels}
 When \texttt{X} is changed, changes are made such that the current information
 passed is changed in some way. This may be changes to the \gls{dtd} where any
 of the currently passed information is affected (addition/removal of
@@ -128,3 +162,10 @@ value of \texttt{Y} it should log a warning, but otherwise proceed as normal.
 \texttt{Z} is currently not used for anything, but is present for potential
 usability in the future. Differences in \texttt{Z} should be logged as debug
 information.
+
+\subsubsection{Changing the version}
+The version is set in the \texttt{version} module's \textbf{\_\_version\_\_}
+variable. This is the variable that must be updated to update the version of
+the MetaDoc Client.
+
+Make sure the MetaDoc server is also updated to the same version.
