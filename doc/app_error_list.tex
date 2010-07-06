@@ -1,5 +1,6 @@
 \newpage
 \section{List server return codes}
+\label{app:server_return_codes}
 
 \begin{table}[h]
     \centering
@@ -9,13 +10,19 @@
         \texttt{Return code code} & \texttt{Meaning} & \texttt{Extra notes} \\
         \hline
         \hline
+        \multicolumn{3}{|c|}{\textbf{Accepted element}} \\
+        \hline
         1000 & No error & \\
         \hline
+        \hline
+        \multicolumn{3}{|c|}{\textbf{Critical errors}} \\
         \hline
         2000 & Error with the \gls{xml} data & \\
         \hline
         2001 & Missing attribute & Missing attribute should be returned as a note. \\
         \hline
+        \hline
+        \multicolumn{3}{|c|}{\textbf{Non-critical errors}} \\
         \hline
         5000 & Database error & \\
         \hline
@@ -28,5 +35,5 @@
         element contains an error\\
         \hline
     \end{tabular}
-    \label{tbl:server_error_codes}
+    \label{tbl:server_return_codes}
 \end{table}
