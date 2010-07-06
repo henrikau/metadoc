@@ -4,7 +4,7 @@
 Usage of the MetaDoc client is done mainly through the use of \texttt{mapi.py}.
 \texttt{mapi.py} takes care of sending and retrieving data to and from the
 server, caching any data that could not be sent, and validating \gls{xml} data
-recieved.
+received.
 
 \subsection{Configuration}
 \label{sec:metadoc_conf}
@@ -58,10 +58,10 @@ others are explicitly stated below.
 \texttt{mapi.py} takes the following handles:
 
 \begin{description}
-    \item[-h, --help]   Displays a short help message explaning the handles
+    \item[-h, --help]   Displays a short help message explaining the handles
     that may be passed to \texttt{mapi.py}. Overrides any other handles.
     \item[-v, --verbose]    Verbose mode. Prints information about progress and
-    information sent and recieved between client and server. 
+    information sent and received between client and server. 
     \item[-q, --quiet]  Quiet mode. Prints nothing unless the program fails.
     Overrides \textbf{-v}, \textbf{--verbose}.
     \item[-l \textless log level\textgreater, --log-level=\textless log
@@ -104,8 +104,8 @@ The log level defaults \textbf{warning}.
     \item[debug]    Debugging information, used for development and error
     checking.
     \item[info] Information about what is happening during execution, such as
-    items sent or recieved to/from the server.
-    \item[warning]  Warnings occouring during execution, mainly problems that
+    items sent or received to/from the server.
+    \item[warning]  Warnings occurring during execution, mainly problems that
     will not cause a failure but that should be addressed.
     \item[error]    Errors that cause partial failure of the execution, such as
     being unable to connect to the server.
@@ -120,7 +120,7 @@ data type that is cached in each file. The user running the client must have
 read and write access to this folder. 
 
 The client will cache any information that is not accepted by the server, 
-\textit{unless} the server returns a reciept for the information that marks the 
+\textit{unless} the server returns a receipt for the information that marks the 
 information as invalid or malformed in some way, such that the information will 
 not be accepted if resent at a later date. See section \ref{sec:errors} for
 more information about errors.

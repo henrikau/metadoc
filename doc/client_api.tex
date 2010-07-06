@@ -5,7 +5,7 @@
 The MetaDoc client calls a specified function based on the data passed between
 client and server. Only one type of data should be sent per document, and both
 the client and the server only checks for the expected type of data in the
-recieved \gls{xml} document. 
+received \gls{xml} document. 
 
 Each data type has a named container element within the \gls{xml} document,
 which there should only be one of per document. If a list of data is passed
@@ -49,10 +49,10 @@ to the server, processing the receipt returned from the server and caching any
 data that was not accepted by the server. For more information on caching, see
 section \ref{sec:caching}.
 
-\subsection{Recieving data}
+\subsection{Receiving data}
 \label{sec:customizing_client_recieve}
 The client will take care of fetching the data from the server, unpacking the
-\gls{xml} and creating objects based on the type of data recieved. Once this is
+\gls{xml} and creating objects based on the type of data received. Once this is
 done, a function called \texttt{process()} will be called on the class
 \texttt{custom.update<name>.Update<Name>}. When this function is called, the
 object's \texttt{self.items} should be a list of \\

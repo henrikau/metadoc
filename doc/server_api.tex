@@ -6,7 +6,7 @@ The MetaDoc server implements a REST-like \gls{api}, however, there are certain
 differences from REST noted in section \ref{sec:diff_from_rest}.
 
 When the client performs a GET request on an available URL, the server should
-return an \gls{xml} document, or a HTTP status code refering to an error.  The
+return an \gls{xml} document, or a HTTP status code referring to an error.  The
 \gls{xml} document should follow the MetaDoc \gls{dtd} \cite{metadoc_dtd}. Each
 URL only returns data from the requested data type. This means that a request
 to \textbf{baseurl/allocations/} will return an MetaDoc \gls{xml} document
@@ -26,7 +26,7 @@ of \texttt{<resourceUp>} and \texttt{<resourceDown>} tags as children of
 
 When this data is sent to the server, the server should return a MetaDoc
 \gls{xml} document containing a \texttt{<receipts>} tag, with a
-\texttt{<r\_entry>} tag for each element recieved that has an
+\texttt{<r\_entry>} tag for each element received that has an
 \textbf{id}-attribute. This allows for a very fine grained error reporting.
 
 \subsection{Available URLs}
@@ -60,14 +60,14 @@ PUT should be used in accordance with REST. This is due to limitations in
 standard Python libraries.
 
 Because the MetaDoc Server does not give the client access to delete or replace
-data on the server, this does not create problems for the Server \gls{api}. %FIXME
+data on the server, replacing PUT with POST will not cause problems.
 
 \subsection{Server HTTP responses}
 
-The server makes use of HTTP status codes to identify what error has occoured
+The server makes use of HTTP status codes to identify what error has occurred
 if the server is unable or unwilling to process the request from the server.
 Table \ref{tbl:http_status_codes} contains a list of status codes the server
-returns, and why these status codes occour. 
+returns, and why these status codes occur. 
 
 \begin{table}[h!]
     \centering
