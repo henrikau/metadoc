@@ -351,6 +351,9 @@ def main():
 
     for element in fetch_elements:
         url = "%s%s" % (vals['host'], element.url)
+        if vals.get('trailing_slash',"").lower() == 'true'\
+            or vals.get('trailing_slash',"").lower() == 'yes':
+            url = "%s/" % url
         cli = metahttp.XMLClient(url, vals['key'], vals['cert'])
         if verbose:
             print "-" * 70
