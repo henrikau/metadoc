@@ -44,18 +44,27 @@ class UniqueID(object):
         return "_%i" % self.last_id
 
 
-def check_response(element_tag, md, xml_data):
+def check_response(element_tag, md, xml_data, cache_data=True):
     try:
         md.check_response(xml_data)
     except metadoc.NoReceiptReturnedError, nr:
         logging.error("Server returned no receipt. Caching data.")
-        Cacher(element_tag, md)
+        if cache_data:
+            Cacher(element_tag, md)
+        else:
+            logging.warning("--no-cache handle passed, not caching data.")
     except metadoc.InvalidXMLResponseError, ir:
         logging.error("Server returned invalid receipt. Caching data.")
-        Cacher(element_tag, md)
+        if cache_data:
+            Cacher(element_tag, md)
+        else:
+            logging.warning("--no-cache handle passed, not caching data.")
     except metadoc.NotAllAcceptedError, nar:
         logging.error("Not all elements accepted. Caching not accepted data.")
-        Cacher(element_tag, md)
+        if cache_data:
+            Cacher(element_tag, md)
+        else:
+            logging.warning("--no-cache handle passed, not caching data.")
 
 def date_to_rfc3339(date):
     """ Converts a datetime.datetime object or time.time() to RFC3339 string. 

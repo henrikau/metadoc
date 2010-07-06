@@ -35,10 +35,13 @@ Usage:
 -p                      Fetch project data
 -l <log level>          Sets log level, availible levels are:
 --loglevel=<log level>  debug, info, warning, error, critical
--n, --no-cache          Will not send any cached data
+-n, --no-cache          Will not send any cached data.
 --dry-run               Does a dry run, not sending or fetching any data.
                         Run with verbose to see input and output that would be
                         sent.
+--all                   Sends and fetches all data, equal to -ecsuap.
+--send-all              Sends all data, equal to -ecs.
+--fetch-all             Fetches all data, equal to -uap.
 
 """
 import ConfigParser
@@ -218,7 +221,11 @@ def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
                     "Error: %s") % (url, httperror))
                 # Since we're unable to send the document to the server, we will 
                 # cache it so that we can send it at a later date.
-                Cacher(element.xml_tag_name, m)
+                if not send_cache:
+                    logging.warning("Could not send data to server, "
+                        "but running with --no-cache, so data was not cached.")
+                else:
+                    Cacher(element.xml_tag_name, m)
             else:
                 if res:
                     xml_data = res.read()
@@ -226,7 +233,10 @@ def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
                         print "%s\nRecieved data:\n%s" % ("-" * 70, "-" * 70)
                         print xml_data
                         print "-" * 70
-                    utils.check_response(element.xml_tag_name, m, xml_data)
+                    utils.check_response(element.xml_tag_name, 
+                                            m, 
+                                            xml_data,
+                                            send_cache)
                 else:
                     logging.error(("Server returned an empty response when "
                         "attempting to send \"%s\". Caching data.") % 
@@ -234,7 +244,11 @@ def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
                     # Since we recieved an empty response from the server we have 
                     # not recieved any reciept for any elements and must cache
                     # them.
-                    Cacher(element.xml_tag_name, m)
+                    if not send_cache:
+                        logging.warning("No data returned from server, but "
+                            "running with --no-cache, so data was not cached.")
+                    else:
+                        Cacher(element.xml_tag_name, m)
     else:
         if verbose and not cache_only:
             print "No data to send for \"%s\"." % element.xml_tag_name
