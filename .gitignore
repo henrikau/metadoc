@@ -10,6 +10,13 @@
 *.ps
 *.dvi
 *.toc
+*.glg
+*.glo
+*.gls
+*.ist
+*.lof
+*.lol
+*.lot
 certs/
 Server/XML_Server_config.sql
 /client/metadoc.conf
