@@ -14,7 +14,11 @@ An example of a error message would be an error code \texttt{2001} with the
 note \texttt{Missing attribute "reason"}.
 
 A list of possible return codes is given in table \ref{tbl:server_return_codes}
-in appendix \ref{app:server_return_codes}.
+in appendix \ref{app:server_return_codes}. The difference between critical and
+non-critical errors are that critical errors are problems with the element
+itself, causing it to be refused by the server at any time. Non-critical errors
+are errors where the element would potentially be accepted at a later date, but
+not now.
 
 \subsection{Document errors}
 
