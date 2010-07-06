@@ -34,6 +34,16 @@ In figure \ref{fig:post_data}, data is sent from the client to the server. On
 recieving the data, the server will return a receipt, telling the client that
 the data has been processed and accepted or rejected. 
 
+\subsection{Transmitting data}
+The \gls{mapi} uses \gls{ssl}/\gls{tls} to transport data over \gls{http} to
+ensure the data is safely encrypted. It uses X.509 certificates to identify the
+client to the server. 
+
+The data transmitted is packed to \gls{xml}, which is a human readable data
+format\footnote{At least for the technically inclined}. It also has strong
+support in almost any commonly used programming language today.  
+
+\subsection{Documentation overview}
 In section \ref{sec:overview}, an overview of the MetaDoc client is given. It
 explains what is done by the standard client, and how the client can run. 
 
