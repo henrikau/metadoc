@@ -20,7 +20,9 @@
 # The HTTPSClientAuthHandler is inspired by
 #       http://www.threepillarsoftware.com/soap_client_auth
 #
-import urllib, urllib2, httplib
+import urllib, urllib2, httplib, ssl, socket
+import sys, os
+import ConfigParser
 
 """ Simple client for pushing XML over HTTPS. """
 class HTTPSClientAuthHandler(urllib2.HTTPSHandler):
@@ -47,8 +49,40 @@ class HTTPSClientAuthHandler(urllib2.HTTPSHandler):
 
     def get_conncetion(self, host, timeout=300):
         """ Get the connection. """
-        return httplib.HTTPSConnection(host, key_file=self.key,
-                                       cert_file=self.cert)
+        SCRIPT_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
+        conf = ConfigParser.ConfigParser()
+        conf.read("%s/%s" % (SCRIPT_PATH, "metadoc.conf"))
+        v = conf.items("MetaDoc")
+        v = dict(v)
+        ca_certs = v.get("ca_certs")
+        return HTTPSAuthServerConnection(host, key_file=self.key,
+                                       cert_file=self.cert,
+                                       cert_reqs=ssl.CERT_REQUIRED,
+                                       ca_certs=ca_certs)
+
+class HTTPSAuthServerConnection(httplib.HTTPSConnection):
+    """ HTTPSAuthServerConnection extends httplib.HTTPConnection.
+    
+    Code for enabling server certificate verification in an SSL tunnel.
+
+    """
+    def __init__(self, host, port=None, key_file=None, cert_file=None,
+                strict=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
+                cert_reqs=ssl.CERT_NONE, ca_certs=None):
+        httplib.HTTPConnection.__init__(self, host, port, strict, timeout)
+        self.key_file = key_file
+        self.cert_file = cert_file
+        self.cert_reqs = cert_reqs
+        self.ca_certs = ca_certs
+    def connect(self):
+        sock = socket.create_connection((self.host, self.port), self.timeout)
+        if self._tunnel_host:
+            self.sock = sock
+            self._tunnel()
+        self.sock = ssl.wrap_socket(sock, keyfile=self.key_file, 
+                                    certfile=self.cert_file, 
+                                    cert_reqs=self.cert_reqs, 
+                                    ca_certs=self.ca_certs)
 
 
 class XMLClient:

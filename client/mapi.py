@@ -91,6 +91,7 @@ def write_sample_config():
     f.write("trailing_slash = True\n")
     f.write("valid = False\n")
     f.write("site_name = SITENAME\n")
+    f.write("ca_certs = ca_certs.pem\n")
     f.close()
 
 def testConfig(vals):
@@ -119,14 +120,35 @@ def testConfig(vals):
         print "Need path to the certificate to use for AuthN/AuthZ. Aborting"
         logging.critical("Configuration file missing path to certificate.")
         return False
+    else:
+        if not os.access(vals['cert'], os.R_OK):
+            print "cert file is not a file or not readable for user."
+            logging.critical("cert file is not a file or not readable "
+                        "for user")
+            return False
     if 'key' not in vals or vals['key'] == "":
         print "Need path to the privatekey to use for AuthN/AuthZ. Aborting"
         logging.critical("Configuration file missing path to private key.")
         return False
+    else:
+        if not os.access(vals['key'], os.R_OK):
+            print "key file is not a file or not readable for user."
+            logging.critical("key file is not a file or not readable "
+                        "for user")
+            return False
     if 'site_name' not in vals or vals['site_name'] == "":
         print "Missing site name in configuration file. Aborting"
         logging.critical("Configuration file missing site name.")
         return False
+    if 'ca_certs' not in vals or vals['ca_certs'] == "":
+        print "Missing ca_certs in configuration. Aborting."
+        logging.critical("Missing ca_certs in configuration.")
+    else:
+        if not os.access(vals['ca_certs'], os.R_OK):
+            print "ca_certs file is not a file or not readable for user."
+            logging.critical("ca_certs file is not a file or not readable "
+                        "for user")
+            return False
     return True
 
 def get_element_processor(element, send_cache, verbose, dryrun):
