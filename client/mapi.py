@@ -72,8 +72,6 @@ from allocations.definition import Allocations
 from users.definition import Users
 from projects.definition import Projects
 
-# This list is used to check for cached items for elements within the list.
-possible_send_elements = [Events, Configuration, Software,]
 
 def write_sample_config():
     """Creates a default configuration file.
@@ -186,7 +184,6 @@ def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
     if not cache_only:
         # If we're doing cache only, we've reached the possible_send_elements
         # loop and do not want or need to remove elements from it anymore.
-        possible_send_elements.remove(element)
         site_element = element.site_handler()
         site_element.populate()
         element_processor.add_elements(site_element.fetch())
@@ -256,13 +253,17 @@ def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
 
 def main():
     optstr = "hvqecaspunl:"
-    optlist = ['help', 'dry-run', 'loglevel=', 'no-cache']
+    optlist = ['help', 'dry-run', 'loglevel=', 'no-cache', 
+                'send-all', 'fetch-all', 'all']
     SCRIPT_PATH = os.path.abspath(os.path.dirname(sys.argv[0]))
     # Default settings
     # Will be altered depending on passed options
     verbose = False
     dryrun = False
     send_cache = True
+    # These lists contain all elements that might be sent or fetched.
+    possible_send_elements = [Events, Configuration, Software,]
+    possible_fetch_elements = [Allocations, Users, Projects,]
     # Information to send
     send_elements = []
     # Fetch information from server
@@ -311,6 +312,17 @@ def main():
             log_level = LOG_LEVELS.get(arg.lower(), logging.WARNING)
         elif opt in ('-l', '--no-cache'):
             send_cache = False
+        elif opt == '--send-all':
+            send_elements.extend(possible_send_elements)
+            possible_send_elements = []
+        elif opt  == '--fetch-all':
+            fetch_elements.extend(possible_fetch_elements)
+            possible_fetch_elements = []
+        elif opt == '--all':
+            fetch_elements.extend(possible_fetch_elements)
+            possible_fetch_elements = []
+            send_elements.extend(possible_send_elements)
+            possible_send_elements = []
 
     log_file = datetime.datetime.strftime(datetime.datetime.now(), 
                 "/var/log/mapi/metadoc.client.%Y-%m-%d.log")
@@ -356,6 +368,8 @@ def main():
     dtd = lxml.etree.DTD(dtd_file)
 
     for element in send_elements:
+        if element in possible_send_elements:
+            possible_send_elements.remove(element)
         send_element(element, vals, send_cache, dryrun, verbose, False)
 
     # Checking if we have any cached items that should be sent
