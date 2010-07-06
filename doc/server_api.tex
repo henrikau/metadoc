@@ -2,32 +2,32 @@
 \section{MetaDoc Server API}
 \label{sec:server_api}
 
-The MetaDoc server implements a REST-like API, however, there are certain
+The MetaDoc server implements a REST-like \gls{api}, however, there are certain
 differences from REST noted in section \ref{sec:diff_from_rest}.
 
-When the client performs a GET request on an availible URL, the server should 
-return an XML document, or a HTTP status code refering to an error. 
-The XML document should follow the MetaDoc DTD \cite{metadoc_dtd}. Each URL
-only returns data from the requested data type. This means that a request to
-\textbf{baseurl/allocations/} will return an MetaDoc XML document containing
-only an \texttt{<allocations>} directly on the \texttt{<MetaDoc>} root, with
-\texttt{<all\_entry>} tags as children of \texttt{<allocations>}. The client
-should disregard any information outside \texttt{<allocations>} when connecting
-to \textbf{baseurl/allocations/}. 
+When the client performs a GET request on an availible URL, the server should
+return an \gls{xml} document, or a HTTP status code refering to an error.  The
+\gls{xml} document should follow the MetaDoc \gls{dtd} \cite{metadoc_dtd}. Each
+URL only returns data from the requested data type. This means that a request
+to \textbf{baseurl/allocations/} will return an MetaDoc \gls{xml} document
+containing only an \texttt{<allocations>} directly on the \texttt{<MetaDoc>}
+root, with \texttt{<all\_entry>} tags as children of \texttt{<allocations>}.
+The client should disregard any information outside \texttt{<allocations>} when
+connecting to \textbf{baseurl/allocations/}. 
 
 In order to send data to the server, the client performs a POST request, with
-the POST data variable \texttt{metadoc} containing a MetaDoc XML document. The
-server will only accept data from the data type specified in the URL, and will
-disregard any other information. This means that a POST to
-\textbf{baseurl/events/} should be a MetaDoc XML document containing a 
+the POST data variable \texttt{metadoc} containing a MetaDoc \gls{xml}
+document. The server will only accept data from the data type specified in the
+URL, and will disregard any other information. This means that a POST to
+\textbf{baseurl/events/} should be a MetaDoc \gls{xml} document containing a
 \texttt{<events>} tag directly on the \texttt{<MetaDoc>} root, with any number
 of \texttt{<resourceUp>} and \texttt{<resourceDown>} tags as children of
 \texttt{<events>}. 
 
-When this data is sent to the server, the server should return a MetaDoc XML
-document containing a \texttt{<receipts>} tag, with a \texttt{<r\_entry>} tag
-for each element recieved that has an \textbf{id}-attribute. This allows for a
-very fine grained error reporting.
+When this data is sent to the server, the server should return a MetaDoc
+\gls{xml} document containing a \texttt{<receipts>} tag, with a
+\texttt{<r\_entry>} tag for each element recieved that has an
+\textbf{id}-attribute. This allows for a very fine grained error reporting.
 
 \subsection{Available URLs}
 
@@ -44,7 +44,7 @@ very fine grained error reporting.
 
 \subsection{Authentication}
 \label{sec:authentication}
-The site uses X.509 certificates to authenticate the client. In order for the
+The server uses X.509 certificates to authenticate the client. In order for the
 site to be authenticated properly, the server must be aware of the client's
 certificate prior to the request, and the correct owner of the certificate must
 be saved on the server. This \textit{must} be the same as the value for
@@ -54,12 +54,13 @@ be saved on the server. This \textit{must} be the same as the value for
 \subsection{Differences from REST}
 \label{sec:diff_from_rest}
 
-There are certain differences in the API compared to the REST specification. The 
-MetaDoc Server API makes use of HTTP POST where HTTP PUT should be used in 
-accordance with REST. This is due to limitations in standard Python libraries.
+There are certain differences in the \gls{api} compared to the REST
+specification. The MetaDoc Server \gls{api} makes use of HTTP POST where HTTP
+PUT should be used in accordance with REST. This is due to limitations in
+standard Python libraries.
 
 Because the MetaDoc Server does not give the client access to delete or replace
-data on the server, this does not create problems for the Server API. % FIXME
+data on the server, this does not create problems for the Server \gls{api}. %FIXME
 
 \subsection{Server HTTP responses}
 
@@ -75,11 +76,28 @@ returns, and why these status codes occour.
         \hline
         \textbf{Code} & \textbf{Official name} & \textbf{MAPI-Reason} \\
         \hline
+        200 & 200 OK & The server has processed the request and should return
+        an \gls{xml} document. \\
+        \hline
+        400 & 400 Bad Data & The data excepted from the client was not sent, or
+        the \gls{xml} document did not validate against the \gls{dtd} or was
+        malformed \gls{xml}. \\
+        \hline
         403 & 403 Forbidden & The client certificate was not recognized as an
-        authorative source for the site given in the XML document. \\
+        authorative source for the site given in the \gls{xml} document. \\
+        \hline
+        404 & 404 Not found & The URL the client is attempting to access is not
+        available on the server. Check host in \texttt{metadoc.conf}. If host
+        is correct, make sure client and server uses same version. See section
+        \ref{sec:version} for more information on version differences. \\ 
         \hline
         500 & 500 Server Error & The server failed to process the request. This
         does not include errors that return a receipt. \\
+        \hline
+        501 & 501 Not Implemented & The request method is not implemented for
+        this URL. This will happen if the client attempts to use a request
+        method that is not implemented for this URL, such as using the POST
+        request method against an URL that only supports GET. \\
         \hline
     \end{tabular}
     \label{tbl:http_status_codes}

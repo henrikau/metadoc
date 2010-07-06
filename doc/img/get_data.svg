@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="get_data.svg">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -40,7 +40,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="343.88811"
+     inkscape:cx="216.03097"
      inkscape:cy="867.96702"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -58,7 +58,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -66,55 +66,47 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <g
-       id="g3627"
-       transform="translate(-82.571426,-76.714279)">
-      <rect
-         ry="23.571426"
-         rx="23.57143"
-         y="130.07646"
-         x="93.571426"
-         height="98"
-         width="148"
-         id="rect3590"
-         style="fill:#f38630;fill-opacity:1;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-      <flowRoot
-         transform="translate(0.62513733,37.089105)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot3592"
-         xml:space="preserve"><flowRegion
-           id="flowRegion3594"><rect
-             y="134.50504"
-             x="120.71429"
-             height="32.142857"
-             width="117.14287"
-             id="rect3596" /></flowRegion><flowPara
-           id="flowPara3598">MetaDoc Client</flowPara></flowRoot>    </g>
-    <g
-       id="g3634"
-       transform="translate(-119.71429,-48.142868)">
-      <rect
-         ry="23.571426"
-         rx="23.571428"
-         y="101.50505"
-         x="520.71429"
-         height="98"
-         width="148"
-         id="rect3600"
-         style="fill:#f38630;fill-opacity:1;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-      <flowRoot
-         transform="translate(-1.1187134,9.8497248)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot3602"
-         xml:space="preserve"><flowRegion
-           id="flowRegion3604"><rect
-             y="133.07646"
-             x="547.14288"
-             height="53.571423"
-             width="124.99998"
-             id="rect3606" /></flowRegion><flowPara
-           id="flowPara3608">MetaDoc Server</flowPara></flowRoot>    </g>
-    <g
+    <rect
+       style="fill:#f38630;fill-opacity:0.66666669;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669000000001;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3590"
+       width="148"
+       height="98"
+       x="11"
+       y="53.362183"
+       rx="23.57143"
+       ry="23.571426" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3592"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(-81.946289,-39.625174)"><flowRegion
+         id="flowRegion3594"><rect
+           id="rect3596"
+           width="117.14287"
+           height="32.142857"
+           x="120.71429"
+           y="134.50504" /></flowRegion><flowPara
+         id="flowPara3598">MetaDoc Client</flowPara></flowRoot>    <rect
+       style="fill:#f38630;fill-opacity:0.66666669000000001;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3600"
+       width="148"
+       height="98"
+       x="401"
+       y="53.362183"
+       rx="23.571428"
+       ry="23.571426" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3602"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(-120.833,-38.293143)"><flowRegion
+         id="flowRegion3604"><rect
+           id="rect3606"
+           width="124.99998"
+           height="53.571423"
+           x="547.14288"
+           y="133.07646" /></flowRegion><flowPara
+         id="flowPara3608">MetaDoc Server</flowPara></flowRoot>    <g
        id="g3683">
       <path
          id="path3641"

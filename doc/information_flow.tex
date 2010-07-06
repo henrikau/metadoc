@@ -22,17 +22,18 @@ requests a user list. The steps are as follows:
     \item
         A request is sent to the server to retrieve the information.
     \item
-        The server creates an XML document with a list of users for the site.
+        The server creates an \gls{xml} document with a list of users for the
+        site.
         
-        The XML document sent is defined by the MetaDoc DTD.
+        The \gls{xml} document sent is defined by the MetaDoc \gls{dtd}.
     \item
-        \texttt{main.py} recieves the XML document, checks that it is valid
-        according to the DTD. 
+        \texttt{main.py} recieves the \gls{xml} document, checks that it is
+        valid according to the \gls{dtd}. 
     \item
-        If the XML document passes validation, an instance of
+        If the \gls{xml} document passes validation, an instance of
         \texttt{users.definition.Users} is created, and an instance of
         \texttt{users.entries.UserEntry} is created for each
-        \texttt{<user\_entry>} in the XML document.
+        \texttt{<user\_entry>} in the \gls{xml} document.
 
         \texttt{users.definition.Users} and \texttt{users.entries.UserEntry}
         may validate attributes and refuse to create any elements where

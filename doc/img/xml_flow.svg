@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="xml_flow.png">
+   sodipodi:docname="xml_flow.svg">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -82,7 +82,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="316.66656"
+     inkscape:cx="188.80942"
      inkscape:cy="749.80045"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
@@ -104,7 +104,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -151,56 +151,52 @@
      id="layer3"
      inkscape:label="Text"
      style="opacity:1">
-    <g
-       id="g4444"
-       transform="translate(254.99999,-128.57143)">
-      <rect
-         ry="18.043945"
-         rx="25.080873"
-         y="150.8318"
-         x="109.18392"
-         height="114.48933"
-         width="243.77504"
-         id="rect3803"
-         style="fill:#a7dbd8;fill-opacity:1;fill-rule:evenodd;stroke:#69d2e7;stroke-width:2.01243377;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <rect
-         ry="33.515373"
-         rx="37.854763"
-         y="177.43019"
-         x="120.78228"
-         height="81.292595"
-         width="223.43546"
-         id="rect2816"
-         style="fill:#f38630;fill-opacity:1;fill-rule:evenodd;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <flowRoot
-         transform="translate(69.999996,144.28571)"
-         style="font-size:12px;font-style:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot3590"
-         xml:space="preserve"><flowRegion
-           id="flowRegion3592"><rect
-             style="font-size:12px;writing-mode:lr-tb"
-             y="41.647896"
-             x="67.85714"
-             height="164.28571"
-             width="323.57141"
-             id="rect3594" /></flowRegion><flowPara
-           id="flowPara3596">&lt;users&gt;</flowPara><flowPara
-           id="flowPara3598"> &lt;user_entry username=&quot;...&quot;/&gt;</flowPara><flowPara
-           id="flowPara3606"> &lt;user_entry username=&quot;...&quot;/&gt;</flowPara><flowPara
-           id="flowPara4429">&lt;/users&gt;</flowPara></flowRoot>      <flowRoot
-         transform="translate(94.999994,35)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot3805"
-         xml:space="preserve"><flowRegion
-           id="flowRegion3807"><rect
-             style="font-size:12px"
-             y="120.93361"
-             x="95.714287"
-             height="40"
-             width="136.42857"
-             id="rect3809" /></flowRegion><flowPara
-           id="flowPara3811">XML Document</flowPara></flowRoot>    </g>
+    <rect
+       style="fill:#a7dbd8;fill-opacity:0.66666669;fill-rule:evenodd;stroke:#69d2e7;stroke-width:2.01243376999999990;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669000000001;stroke-dasharray:none"
+       id="rect3803"
+       width="243.77504"
+       height="114.48933"
+       x="364.1839"
+       y="22.260372"
+       rx="25.080873"
+       ry="18.043945" />
+    <rect
+       style="fill:#f38630;fill-opacity:0.66666669000000001;fill-rule:evenodd;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669;stroke-dasharray:none"
+       id="rect2816"
+       width="223.43546"
+       height="81.292595"
+       x="375.78226"
+       y="48.858761"
+       rx="37.854763"
+       ry="33.515373" />
     <flowRoot
+       xml:space="preserve"
+       id="flowRoot3590"
+       style="font-size:12px;font-style:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(324.99999,15.71428)"><flowRegion
+         id="flowRegion3592"><rect
+           id="rect3594"
+           width="323.57141"
+           height="164.28571"
+           x="67.85714"
+           y="41.647896"
+           style="font-size:12px;writing-mode:lr-tb" /></flowRegion><flowPara
+         id="flowPara3596">&lt;users&gt;</flowPara><flowPara
+         id="flowPara3598"> &lt;user_entry username=&quot;...&quot;/&gt;</flowPara><flowPara
+         id="flowPara3606"> &lt;user_entry username=&quot;...&quot;/&gt;</flowPara><flowPara
+         id="flowPara4429">&lt;/users&gt;</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3805"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(349.99998,-93.57143)"><flowRegion
+         id="flowRegion3807"><rect
+           id="rect3809"
+           width="136.42857"
+           height="40"
+           x="95.714287"
+           y="120.93361"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara3811">XML Document</flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot3877"
        style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:40px"><flowRegion
@@ -210,58 +206,49 @@
            height="113.57143"
            x="302.85715"
            y="29.505039" /></flowRegion><flowPara
-         id="flowPara3883"></flowPara></flowRoot>    <g
-       id="g3895"
-       transform="translate(7.1428574,-22.142857)"
-       style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
-      <g
-         id="g3971"
-         style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none">
-        <rect
-           style="fill:#a7dbd8;fill-opacity:1;fill-rule:evenodd;stroke:#69d2e7;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-           id="rect3865"
-           width="191.80782"
-           height="62.522083"
-           x="29.096094"
-           y="49.315422"
-           rx="26.301401"
-           ry="21.547459" />
-        <rect
-           style="fill:#f38630;fill-opacity:1;fill-rule:evenodd;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-           id="rect3867"
-           width="162.50897"
-           height="36.08041"
-           x="44.816936"
-           y="70.750549"
-           rx="29.351839"
-           ry="18.040205" />
-        <flowRoot
-           xml:space="preserve"
-           id="flowRoot3869"
-           style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-           transform="translate(-233.57143,50)"><flowRegion
-             id="flowRegion3871"><rect
-               id="rect3873"
-               width="50"
-               height="17.142855"
-               x="336.42856"
-               y="1.6478958"
-               style="font-size:12px" /></flowRegion><flowPara
-             id="flowPara3875">Server</flowPara></flowRoot>        <flowRoot
-           xml:space="preserve"
-           id="flowRoot3885"
-           style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-           transform="translate(-215.71429,58.571429)"><flowRegion
-             id="flowRegion3887"><rect
-               id="rect3889"
-               width="100.71428"
-               height="17.857141"
-               x="312.85715"
-               y="23.790752"
-               style="font-size:12px" /></flowRegion><flowPara
-             id="flowPara3891">..../users/</flowPara></flowRoot>      </g>
-    </g>
+         id="flowPara3883" /></flowRoot>    <rect
+       style="fill:#a7dbd8;fill-opacity:0.66666669;fill-rule:evenodd;stroke:#69d2e7;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669000000001;stroke-dasharray:none"
+       id="rect3865"
+       width="191.80782"
+       height="62.522083"
+       x="36.238953"
+       y="27.172565"
+       rx="26.301401"
+       ry="21.547459" />
+    <rect
+       style="fill:#f38630;fill-opacity:0.66666669;fill-rule:evenodd;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669000000001;stroke-dasharray:none"
+       id="rect3867"
+       width="162.50897"
+       height="36.08041"
+       x="51.959793"
+       y="48.607693"
+       rx="29.351839"
+       ry="18.040205" />
     <flowRoot
+       xml:space="preserve"
+       id="flowRoot3869"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(-226.42857,27.857143)"><flowRegion
+         id="flowRegion3871"><rect
+           id="rect3873"
+           width="50"
+           height="17.142855"
+           x="336.42856"
+           y="1.6478958"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara3875">Server</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3885"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(-208.57143,36.428572)"><flowRegion
+         id="flowRegion3887"><rect
+           id="rect3889"
+           width="100.71428"
+           height="17.857141"
+           x="312.85715"
+           y="23.790752"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara3891">..../users/</flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot4046"
        style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:12"><flowRegion
@@ -272,207 +259,197 @@
            x="391.42856"
            y="485.93362"
            style="font-size:12" /></flowRegion><flowPara
-         id="flowPara4052"></flowPara></flowRoot>    <g
-       id="g4631">
-      <rect
-         ry="41.506363"
-         rx="36.938969"
-         y="284.62253"
-         x="34.441628"
-         height="258.02127"
-         width="285.87839"
-         id="rect3717"
-         style="fill:#a7dbd8;fill-opacity:1;fill-rule:evenodd;stroke:#69d2e7;stroke-width:2.01388311;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <rect
-         ry="29.83576"
-         rx="30.92248"
-         y="467.53271"
-         x="58.027645"
-         height="59.658947"
-         width="245.37321"
-         id="rect4000"
-         style="fill:#f38630;fill-opacity:1;stroke:#fa6900;stroke-width:2.11455894;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <rect
-         ry="42.16938"
-         rx="41.781628"
-         y="321.10294"
-         x="50.883633"
-         height="113.94703"
-         width="256.80417"
-         id="rect3638"
-         style="fill:#f38630;fill-opacity:1;fill-rule:evenodd;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <flowRoot
-         transform="translate(28.57143,17.142856)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot3679"
-         xml:space="preserve"><flowRegion
-           id="flowRegion3681"><rect
-             style="font-size:12px"
-             y="308.79074"
-             x="88.571426"
-             height="20.000013"
-             width="133.57143"
-             id="rect3683" /></flowRegion><flowPara
-           id="flowPara3685">users.definition.Users</flowPara></flowRoot>      <flowRoot
-         transform="translate(-13.57142,19.285713)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot3689"
-         xml:space="preserve"><flowRegion
-           id="flowRegion3691"><rect
-             style="font-size:12px"
-             y="328.07648"
-             x="94.285713"
-             height="73.571434"
-             width="221.42856"
-             id="rect3693" /></flowRegion><flowPara
-           id="flowPara3695">xml_tag_name = &quot;users&quot;</flowPara><flowPara
-           id="flowPara3699">update_handler = UpdateUsers</flowPara><flowPara
-           id="flowPara3701">url = &quot;users&quot;</flowPara><flowPara
-           id="flowPara3697">self.legal_elements = (UserEntry,)</flowPara><flowPara
-           id="flowPara4304">self.sub_elements = []</flowPara></flowRoot>      <flowRoot
-         transform="translate(-47.14285,22.142857)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot3763"
-         xml:space="preserve"><flowRegion
-           id="flowRegion3765"><rect
-             style="font-size:12px"
-             y="274.50504"
-             x="147.85715"
-             height="17.14287"
-             width="165"
-             id="rect3767" /></flowRegion><flowPara
-           id="flowPara3769">metaelement.MetaElement</flowPara></flowRoot>      <flowRoot
-         transform="translate(-314.28571,-16.428572)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot4054"
-         xml:space="preserve"><flowRegion
-           id="flowRegion4056"><rect
-             style="font-size:12px"
-             y="485.21933"
-             x="418.57141"
-             height="16.428541"
-             width="144.28574"
-             id="rect4058" /></flowRegion><flowPara
-           id="flowPara4060">users.entries.UserEntry</flowPara></flowRoot>      <flowRoot
-         transform="translate(-315.71428,-17.142858)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot4062"
-         xml:space="preserve"><flowRegion
-           id="flowRegion4064"><rect
-             style="font-size:12px"
-             y="503.07648"
-             x="388.57144"
-             height="64.999992"
-             width="213.57146"
-             id="rect4066" /></flowRegion><flowPara
-           id="flowPara4068">xml_tag_name = &quot;user_entry&quot;</flowPara><flowPara
-           id="flowPara4629">self.attributes = {'username': &quot;...&quot;}</flowPara></flowRoot>    </g>
-    <g
-       id="g4767">
-      <rect
-         ry="32.821659"
-         rx="47.545513"
-         y="393.68369"
-         x="382.75003"
-         height="142.35706"
-         width="323.78561"
-         id="rect4306"
-         style="fill:#a7dbd8;fill-opacity:1;stroke:#69d2e7;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <rect
-         ry="34.42704"
-         rx="50.387287"
-         y="432.30072"
-         x="401.36707"
-         height="92.265823"
-         width="285.83725"
-         id="rect4280"
-         style="fill:#f38630;fill-opacity:1;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <flowRoot
-         transform="translate(348.57142,87.857147)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot4282"
-         xml:space="preserve"><flowRegion
-           id="flowRegion4284"><rect
-             style="font-size:12px"
-             y="363.79074"
-             x="96.428574"
-             height="18.571424"
-             width="208.57144"
-             id="rect4286" /></flowRegion><flowPara
-           id="flowPara4288">custom.updateusers.UpdateUsers</flowPara></flowRoot>      <flowRoot
-         transform="translate(327.14285,87.857147)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot4290"
-         xml:space="preserve"><flowRegion
-           id="flowRegion4292"><rect
-             style="font-size:12px"
-             y="388.07648"
-             x="99.285713"
-             height="110.71429"
-             width="202.85715"
-             id="rect4294" /></flowRegion><flowPara
-           id="flowPara4298">process():</flowPara><flowPara
-           id="flowPara4302">  self.items</flowPara></flowRoot>      <text
-         id="text4308"
-         y="419.50504"
+         id="flowPara4052" /></flowRoot>    <rect
+       style="fill:#a7dbd8;fill-opacity:0.66666669;fill-rule:evenodd;stroke:#69d2e7;stroke-width:2.01388311000000009;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669000000001;stroke-dasharray:none"
+       id="rect3717"
+       width="285.87839"
+       height="258.02127"
+       x="34.441628"
+       y="284.62253"
+       rx="36.938969"
+       ry="41.506363" />
+    <rect
+       style="fill:#f38630;fill-opacity:0.66666669000000001;stroke:#fa6900;stroke-width:2.11455894000000022;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669;stroke-dasharray:none"
+       id="rect4000"
+       width="245.37321"
+       height="59.658947"
+       x="58.027645"
+       y="467.53271"
+       rx="30.92248"
+       ry="29.83576" />
+    <rect
+       style="fill:#f38630;fill-opacity:0.66666669000000001;fill-rule:evenodd;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669;stroke-dasharray:none"
+       id="rect3638"
+       width="256.80417"
+       height="113.94703"
+       x="50.883633"
+       y="321.10294"
+       rx="41.781628"
+       ry="42.16938" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3679"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(28.57143,17.142856)"><flowRegion
+         id="flowRegion3681"><rect
+           id="rect3683"
+           width="133.57143"
+           height="20.000013"
+           x="88.571426"
+           y="308.79074"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara3685">users.definition.Users</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3689"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(-13.57142,19.285713)"><flowRegion
+         id="flowRegion3691"><rect
+           id="rect3693"
+           width="221.42856"
+           height="73.571434"
+           x="94.285713"
+           y="328.07648"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara3695">xml_tag_name = &quot;users&quot;</flowPara><flowPara
+         id="flowPara3699">update_handler = UpdateUsers</flowPara><flowPara
+         id="flowPara3701">url = &quot;users&quot;</flowPara><flowPara
+         id="flowPara3697">self.legal_elements = (UserEntry,)</flowPara><flowPara
+         id="flowPara4304">self.sub_elements = []</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3763"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(-47.14285,22.142857)"><flowRegion
+         id="flowRegion3765"><rect
+           id="rect3767"
+           width="165"
+           height="17.14287"
+           x="147.85715"
+           y="274.50504"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara3769">metaelement.MetaElement</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4054"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(-314.28571,-16.428572)"><flowRegion
+         id="flowRegion4056"><rect
+           id="rect4058"
+           width="144.28574"
+           height="16.428541"
+           x="418.57141"
+           y="485.21933"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara4060">users.entries.UserEntry</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4062"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(-315.71428,-17.142858)"><flowRegion
+         id="flowRegion4064"><rect
+           id="rect4066"
+           width="213.57146"
+           height="64.999992"
+           x="388.57144"
+           y="503.07648"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara4068">xml_tag_name = &quot;user_entry&quot;</flowPara><flowPara
+         id="flowPara4629">self.attributes = {'username': &quot;...&quot;}</flowPara></flowRoot>    <rect
+       style="fill:#a7dbd8;fill-opacity:0.66666669;stroke:#69d2e7;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669000000001;stroke-dasharray:none"
+       id="rect4306"
+       width="323.78561"
+       height="142.35706"
+       x="382.75003"
+       y="393.68369"
+       rx="47.545513"
+       ry="32.821659" />
+    <rect
+       style="fill:#f38630;fill-opacity:0.66666669000000001;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669;stroke-dasharray:none"
+       id="rect4280"
+       width="285.83725"
+       height="92.265823"
+       x="401.36707"
+       y="432.30072"
+       rx="50.387287"
+       ry="34.42704" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4282"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(348.57142,87.857147)"><flowRegion
+         id="flowRegion4284"><rect
+           id="rect4286"
+           width="208.57144"
+           height="18.571424"
+           x="96.428574"
+           y="363.79074"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara4288">custom.updateusers.UpdateUsers</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4290"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(327.14285,87.857147)"><flowRegion
+         id="flowRegion4292"><rect
+           id="rect4294"
+           width="202.85715"
+           height="110.71429"
+           x="99.285713"
+           y="388.07648"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara4298">process():</flowPara><flowPara
+         id="flowPara4302">  self.items</flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="462.14285"
+       y="419.50504"
+       id="text4308"><tspan
+         sodipodi:role="line"
+         id="tspan4310"
          x="462.14285"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         xml:space="preserve"><tspan
-           y="419.50504"
-           x="462.14285"
-           id="tspan4310"
-           sodipodi:role="line">custom.abstract.MetaInput</tspan></text>
-    </g>
-    <g
-       id="g4459"
-       transform="translate(49.285711,117.14286)">
-      <rect
-         ry="31.460308"
-         rx="45.96125"
-         y="100.19381"
-         x="383.54593"
-         height="142.19388"
-         width="267.90817"
-         id="rect4386"
-         style="fill:#a7dbd8;fill-opacity:1;stroke:#69d2e7;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <rect
-         ry="26.608513"
-         rx="39.285179"
-         y="128.17697"
-         x="399.38623"
-         height="101.94183"
-         width="238.37041"
-         id="rect4100"
-         style="fill:#f38630;fill-opacity:1;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <flowRoot
-         transform="translate(-1.4285714,0)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot4102"
-         xml:space="preserve"><flowRegion
-           id="flowRegion4104"><rect
-             style="font-size:12px"
-             y="138.79076"
-             x="417.14285"
-             height="78.571411"
-             width="223.57143"
-             id="rect4106" /></flowRegion><flowPara
-           id="flowPara4108">&lt;!ELEMENT users (user_entry+)&gt;</flowPara><flowPara
-           id="flowPara4110">&lt;!ELEMENT user_entry EMPTY&gt;</flowPara><flowPara
-           id="flowPara4112">&lt;!ATTLIST user_entry</flowPara><flowPara
-           id="flowPara4116">      username CDATA #REQUIRED&gt;</flowPara><flowPara
-           id="flowPara4114" /></flowRoot>      <flowRoot
-         transform="translate(57.857143,10)"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-         id="flowRoot4388"
-         xml:space="preserve"><flowRegion
-           id="flowRegion4390"><rect
-             y="95.933609"
-             x="417.14285"
-             height="17.857143"
-             width="84.285713"
-             id="rect4392" /></flowRegion><flowPara
-           id="flowPara4394">MetaDoc.dtd</flowPara></flowRoot>    </g>
-    <g
+         y="419.50504">custom.abstract.MetaInput</tspan></text>
+    <rect
+       style="fill:#a7dbd8;fill-opacity:0.66666669;stroke:#69d2e7;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669000000001;stroke-dasharray:none"
+       id="rect4386"
+       width="267.90817"
+       height="142.19388"
+       x="432.83163"
+       y="217.33667"
+       rx="45.96125"
+       ry="31.460308" />
+    <rect
+       style="fill:#f38630;fill-opacity:0.66666669000000001;stroke:#fa6900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.66666669;stroke-dasharray:none"
+       id="rect4100"
+       width="238.37041"
+       height="101.94183"
+       x="448.67194"
+       y="245.31982"
+       rx="39.285179"
+       ry="26.608513" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4102"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(47.85714,117.14286)"><flowRegion
+         id="flowRegion4104"><rect
+           id="rect4106"
+           width="223.57143"
+           height="78.571411"
+           x="417.14285"
+           y="138.79076"
+           style="font-size:12px" /></flowRegion><flowPara
+         id="flowPara4108">&lt;!ELEMENT users (user_entry+)&gt;</flowPara><flowPara
+         id="flowPara4110">&lt;!ELEMENT user_entry EMPTY&gt;</flowPara><flowPara
+         id="flowPara4112">&lt;!ATTLIST user_entry</flowPara><flowPara
+         id="flowPara4116">      username CDATA #REQUIRED&gt;</flowPara><flowPara
+         id="flowPara4114" /></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4388"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       transform="translate(107.14285,127.14286)"><flowRegion
+         id="flowRegion4390"><rect
+           id="rect4392"
+           width="84.285713"
+           height="17.857143"
+           x="417.14285"
+           y="95.933609" /></flowRegion><flowPara
+         id="flowPara4394">MetaDoc.dtd</flowPara></flowRoot>    <g
        id="g4497"
        style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
        transform="translate(17.857143,-10)">

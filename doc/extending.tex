@@ -8,7 +8,7 @@ detail in the following sections.
 
 \begin{enumerate}
     \item
-        Extend the MetaDoc DTD with the definition of the data.
+        Extend the MetaDoc \gls{dtd} with the definition of the data.
     \item
         A definition file explaining the data on the client.
     \item
@@ -24,19 +24,20 @@ detail in the following sections.
         Configuring the server to send or recieve the intended data.
 \end{enumerate}
 
-Figure \ref{fig:connection_example} shows an example of how the data for
-projects is defined, and the connection between classes that are used when data
-about projects is recieved from the server.
+Figure \ref{fig:connection_example} on page \pageref{fig:connection_example}
+shows an example of how the data for projects is defined, and the connection
+between classes that are used when data about projects is recieved from the
+server.
 
 
 \subsection{Altering DTD}
-\textit{The XML document follows certain conventions that should be followed when
-extending the DTD. These conventions are explained in more detail in section
-\ref{sec:xmldoc}.}
+\textit{The \gls{xml} document follows certain conventions that should be
+followed when extending the \gls{dtd}. These conventions are explained in more
+detail in section \ref{sec:xmldoc}.}
 
-Before you alter the DTD you should know exactly what data should be sent.
-Create an \texttt{<!ELEMENT>} with a descriptive name of the data sent. As an
-example, \texttt{<users>} is used for a list of users. 
+Before you alter the \gls{dtd} you should know exactly what data should be
+sent.  Create an \texttt{<!ELEMENT>} with a descriptive name of the data sent.
+As an example, \texttt{<users>} is used for a list of users. 
 
 Add any attributes necessary to describe the set of data. If the data is a list
 of entries, such as a list of users, create an \texttt{<!ELEMENT>} as a
@@ -49,7 +50,7 @@ information for each entry, create a descriptive \texttt{<!ELEMENT>} for each
 as a sub-element of each entry to contain the text. Otherwise the text may be
 placed directly inside the entry element itself. 
 
-As an example, the MetaDoc DTD \cite{metadoc_dtd} defines
+As an example, the MetaDoc \gls{dtd} \cite{metadoc_dtd} defines
 \texttt{project\_entry}, where \texttt{remarks} and \texttt{description} are
 allowed sub-elements that contain any text. Meanwhile, \texttt{resourceUp} and
 \texttt{resourceDown} places the text directly inside the tag itself, as not
@@ -70,14 +71,14 @@ Add the entry class(es) to \texttt{self.legal\_element\_types} of the \\
 \texttt{metaelement.MetaElement} sub class defining the main element. 
 
 \texttt{metaelement.MetaElement} sub classes may define a
-\texttt{clean\_<attribute name>()} for each attribute on the element. This method
-will recieve the attribute value, and should return the attribute value after
-any potential cleaning is done on it. Please note that \textit{all} attribute
-values \textit{must} be strings, so if any value set as an attribute might be
-set as anything other than a string, the clean-function is the place to convert
-it. If the attribute contains a value that is not allowed, a sub class of
-\texttt{metaelement.IllegalAttributeError} should be raised that defines the
-error that has occoured. 
+\texttt{clean\_<attribute name>()} for each attribute on the element. This
+method will recieve the attribute value, and should return the attribute value
+after any potential cleaning is done on it. Please note that \textit{all}
+attribute values \textit{must} be strings, so if any value set as an attribute
+might be set as anything other than a string, the clean-function is the place
+to convert it. If the attribute contains a value that is not allowed, a sub
+class of \texttt{metaelement.IllegalAttributeError} should be raised that
+defines the error that has occoured. 
 
 The \texttt{metaelement.MetaElement} defines some methods that are commonly
 used in cleaning methods, such as converting a \texttt{date} object into an
@@ -104,6 +105,7 @@ information on these classes.
 
 
 \subsection{Versioning}
+\label{sec:version}
 MetaDoc passes a \textbf{version} attribute on it's root element,
 \texttt{<MetaDoc>} when sending information between client and server. This
 version is a string on the form ''\texttt{X}.\texttt{Y}.\texttt{Z}'', where
@@ -111,9 +113,9 @@ version is a string on the form ''\texttt{X}.\texttt{Y}.\texttt{Z}'', where
 indicate different levels of breakage. 
 
 When \texttt{X} is changed, changes are made such that the current information
-passed is changed in some way. This may be changes to the DTD where any of the
-currently passed information is affected (addition/removal of attributes,
-changes to how attribute values are presented or should be parsed,
+passed is changed in some way. This may be changes to the \gls{dtd} where any
+of the currently passed information is affected (addition/removal of
+attributes, changes to how attribute values are presented or should be parsed,
 addition/removal of sub-elements). If the client or server encounters a
 document with a different value of \texttt{X} in the version number, it should
 \textit{not} accept the data, as it cannot be sure it will handle it correctly.

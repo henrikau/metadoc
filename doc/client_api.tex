@@ -5,17 +5,17 @@
 The MetaDoc client calls a specified function based on the data passed between
 client and server. Only one type of data should be sent per document, and both
 the client and the server only checks for the expected type of data in the
-recieved XML document. 
+recieved \gls{xml} document. 
 
-Each data type has a named container element within the XML document, which
-there should only be one of per document. If a list of data is passed between
-server and client, the list should be placed inside a container element. The
-name of the container element is used in naming modules and classes in order to
-ease readability of code. 
+Each data type has a named container element within the \gls{xml} document,
+which there should only be one of per document. If a list of data is passed
+between server and client, the list should be placed inside a container
+element. The name of the container element is used in naming modules and
+classes in order to ease readability of code. 
 
 An example of such a container is \texttt{users}, which holds
-\texttt{user\_entry} elements. An example of a MetaDoc XML document with a list
-of users is shown in listing \ref{lst:userlistexample}.
+\texttt{user\_entry} elements. An example of a MetaDoc \gls{xml} document with
+a list of users is shown in listing \ref{lst:userlistexample}.
 
 \scriptcode[lst:userlistexample]{User list XML example}{examples/xml/container.xml}{XML}
 
@@ -25,13 +25,13 @@ the other way around.
 
 \subsection{Sending data}
 \label{sec:customizing_client_send}
-Before data can be sent, the XML document must be assembled. Because there is
-not always a standard way to populate this data on every site, a custom class
-is created. This class should be found under
+Before data can be sent, the \gls{xml} document must be assembled. Because
+there is not always a standard way to populate this data on every site, a
+custom class is created. This class should be found under
 \texttt{custom.site<name>.Site<Name>}, where \texttt{<name>} is the name of the
-container element in the XML, and \texttt{<Name>} is the name capitalized (e.g.
-\texttt{config} would use \texttt{custom.siteconfig.SiteConfig}). This class
-should inherit from \\ \texttt{custom.abstract.MetaOutput}. 
+container element in the \gls{xml}, and \texttt{<Name>} is the name capitalized
+(e.g.  \texttt{config} would use \texttt{custom.siteconfig.SiteConfig}). This
+class should inherit from \\ \texttt{custom.abstract.MetaOutput}. 
 
 When the client is ready to fetch these items, the function \texttt{populate()}
 in this class is called. This function will gather the information to send,
@@ -44,16 +44,16 @@ below.
 
 \scriptcode{custom.siteposts}{examples/metaelements/custom/siteposts.py}{python}
 
-The client will then take care of packing data to XML, sending the data to the
-server, processing the receipt returned from the server and caching any data
-that was not accepted by the server. For more information on caching, see
+The client will then take care of packing data to \gls{xml}, sending the data
+to the server, processing the receipt returned from the server and caching any
+data that was not accepted by the server. For more information on caching, see
 section \ref{sec:caching}.
 
 \subsection{Recieving data}
 \label{sec:customizing_client_recieve}
 The client will take care of fetching the data from the server, unpacking the
-XML and creating objects based on the type of data recieved. Once this is done,
-a function called \texttt{process()} will be called on the class
+\gls{xml} and creating objects based on the type of data recieved. Once this is
+done, a function called \texttt{process()} will be called on the class
 \texttt{custom.update<name>.Update<Name>}. When this function is called, the
 object's \texttt{self.items} should be a list of \\
 \texttt{<name>.definition.<Name>} objects.

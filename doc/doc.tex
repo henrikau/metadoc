@@ -3,7 +3,6 @@
 \usepackage[utf8x]{inputenc}
 \usepackage{listings}
 \usepackage{graphicx}
-\usepackage{glossaries}
 \usepackage[dvips]{hyperref}
 \hypersetup{bookmarks = true}
 \hypersetup{pdftitle = MetaDoc Client Documentation}
@@ -43,14 +42,20 @@
         \addtocounter{scriptcounter}{1}}
 
 \newcommand\inlinecode[1]{{ \texttt{\small #1} }}
+
+% Note that for glossary list to work, `makeglossaries doc` must be run
+\usepackage{glossaries}
+\makeglossaries
 \newacronym{hpc}{HPC}{High Performance Computing}
 \newacronym{xml}{XML}{Extensible Markup Language}
+\newacronym{mapi}{MAPI}{MetaDoc API}
+\newacronym{dtd}{DTD}{Document Type Definition}
+\newacronym{api}{API}{Application programming interface}
+\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
 
 \title{MetaDoc Client Documentation\\\small{Version 0.1.0}}
 \author{Bjørnar Grip Fjær}
 \date{\today}
-
-% Data type = config/software/events
 
 \begin{document}
 \maketitle
@@ -84,7 +89,11 @@
 
 \listoffigures
 
+\listoftables
+
 \lstlistoflistings
+
+\printglossaries
 
 \input{app_error_list}
 

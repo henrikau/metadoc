@@ -2,7 +2,7 @@
 \section{Useful classes and modules}
 \label{sec:useful_classes}
 The MetaDoc client defines a series of classes and modules that are used to
-define the XML data passed between client and server. 
+define the \gls{xml} data passed between client and server. 
 
 \texttt{MetaElement} refers to \texttt{metaelement.MetaElement}, and
 \texttt{MetaDoc} refers to \\ \texttt{metadoc.MetaDoc}.
@@ -10,33 +10,33 @@ define the XML data passed between client and server.
 \subsection{MetaDoc}
 The class \texttt{MetaDoc} is used to define the document itself. It provides
 functionality to alter the document structure, find elements within the
-document and generate XML data from the document. It contains a series of
+document and generate \gls{xml} data from the document. It contains a series of
 \texttt{MetaElement} sub classes that defines the content within the document.
 
 \subsection{MetaElement}
 \texttt{MetaElement} is used to define content within the document.  The class
 is ment to be a parent class for other classes that defines particular
-elements. An element is equal to an XML tag, such as \texttt{<users>} or
-\texttt{<resourceUp>} in a MetaDoc XML document. An instance of such a sub
-class is used to define a particular tag in the XML document, with attributes
-and content.  
+elements. An element is equal to an \gls{xml} tag, such as \texttt{<users>} or
+\texttt{<resourceUp>} in a MetaDoc \gls{xml} document. An instance of such a
+sub class is used to define a particular tag in the \gls{xml} document, with
+attributes and content.  
 
 \subsubsection{Class variables}
 
 \paragraph{xml\_tag\_name}
 Each \texttt{MetaElement} sub class should define a class variable \\
-\textbf{xml\_tag\_name}, that should be a string containing the name of the XML
-tag the class describes. For the sub class defining the \texttt{<users>} tag,
-this should be set to ``users``. 
+\textbf{xml\_tag\_name}, that should be a string containing the name of the
+\gls{xml} tag the class describes. For the sub class defining the
+\texttt{<users>} tag, this should be set to ``users``. 
 
 \paragraph{url}
 A \texttt{MetaElement} sub class that defines a main container element, that
 is, an element that is placed as a direct child of the root node
-\texttt{<MetaDoc>} in the XML document, should also define a class variable
-\textbf{url} that is a string containing the particular part of the URL that is
-used to send or retrieve information for the data type passed. If the type of
-data is a list of users, and it should retrieve the list of users from the url
-\textbf{/users/}, the \textbf{url} class variable should be set to
+\texttt{<MetaDoc>} in the \gls{xml} document, should also define a class
+variable \textbf{url} that is a string containing the particular part of the
+URL that is used to send or retrieve information for the data type passed. If
+the type of data is a list of users, and it should retrieve the list of users
+from the url \textbf{/users/}, the \textbf{url} class variable should be set to
 ``users``.
 
 The classes that define a main container element should also define either the
@@ -70,24 +70,25 @@ function is called. \texttt{populate()} should populate the instance's
 \subsubsection{Allowed sub\_elements}
 There are certain restrictions on what classes can be placed within a
 \texttt{MetaElement} sub class instance's \textbf{self.sub\_elements}, because
-not every XML tag can have any other XML tag as children. A
+not every \gls{xml} tag can have any other \gls{xml} tag as children. A
 \texttt{MetaElement} sub class therefor defines a \\
 \textbf{self.legal\_element\_types}. This should be a list of
-\texttt{MetaElement} sub classes that are allowed to be children of the XML
-current \texttt{MetaElement} sub class. 
+\texttt{MetaElement} sub classes that are allowed to be children of the
+\gls{xml} current \texttt{MetaElement} sub class. 
 
 As an example, if \texttt{Users} is a \texttt{MetaElement} sub class defining
-the \texttt{<users>} XML tag, and \texttt{UserEntry} is a \texttt{MetaElement}
-sub class defining the \texttt{<user\_entry>} XML tag, which can be a child of
-\texttt{<users>} in the XML document, a \texttt{Users} instance would have
-\texttt{UserEntry} in it's \textbf{self.legal\_element\_types}.
+the \texttt{<users>} \gls{xml} tag, and \texttt{UserEntry} is a
+\texttt{MetaElement} sub class defining the \texttt{<user\_entry>} \gls{xml}
+tag, which can be a child of \texttt{<users>} in the \gls{xml} document, a
+\texttt{Users} instance would have \texttt{UserEntry} in it's
+\textbf{self.legal\_element\_types}.
 
 \subsubsection{Tag attributes}
 A tag may have attributes set. These should be defined in the
 \texttt{MetaElement} sub class' \texttt{\_\_init\_\_()} function. They
-\textit{must} have the same name as the attribute has in the XML document. If
-an attribute is optional in the XML element, it should also be optional in
-\texttt{\_\_init\_\_()}. 
+\textit{must} have the same name as the attribute has in the \gls{xml}
+document. If an attribute is optional in the \gls{xml} element, it should also
+be optional in \texttt{\_\_init\_\_()}. 
 
 The sub class should in it's \texttt{\_\_init\_\_()} function figure out which
 attributes are available and which are not, and pass these on to the
@@ -125,15 +126,15 @@ server to set as the \textbf{id} attribute so that the server can properly
 identify the entry when returning a receipt. 
 
 \texttt{get\_id()} returns a string with an increasing number prefixed by an
-underscore (\_). The underscore is present because XML does not allow a number
-as an \textbf{id} attribute. 
+underscore (\_). The underscore is present because \gls{xml} does not allow a
+number as an \textbf{id} attribute. 
 
 \subsection{Examples}
 
 \subsubsection{Connection figure}
 Figure \ref{fig:connection_example} shows an example of how these connections
-work. Here the definition of projects is shown, with connections to the XML
-document, DTD, server URL and \textbf{update\_handler}.
+work. Here the definition of projects is shown, with connections to the
+\gls{xml} document, \gls{dtd}, server URL and \textbf{update\_handler}.
 
 \begin{figure}[h!]
     \includegraphics[width=\textwidth]{img/example}

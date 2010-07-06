@@ -2,14 +2,15 @@
 \section{Overview}
 \label{sec:overview}
 Usage of the MetaDoc client is done mainly through the use of \texttt{main.py}.
-\texttt{main.py} takes care of sending and retrieving data to and from the 
-server, caching any data that could not be sent, and validating XML data 
+\texttt{main.py} takes care of sending and retrieving data to and from the
+server, caching any data that could not be sent, and validating \gls{xml} data
 recieved.
 
 \subsection{Configuration}
 \label{sec:metadoc_conf}
 The MetaDoc client uses a configuration file \texttt{metadoc.conf}. This file
-\textit{must} be placed in the same folder as the client itself. 
+\textit{must} be placed in the same folder as the client itself. Listing
+\ref{lst:config} provides an example of a basic configuration file.
 
 The configuration is in INI format and defines a section named
 \texttt{MetaDoc}.
@@ -42,6 +43,8 @@ The configuration is in INI format and defines a section named
 
 \texttt{main.py} will create a initial configuration file if one is missing
 when it starts. This can be used as the basis for a configuration file. 
+
+\scriptcode[lst:config]{Example of a basic configuration file}{examples/configuration/metadoc.conf}{}
 
 \subsection{Handles}
 \label{sec:handles}
