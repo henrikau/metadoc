@@ -23,7 +23,7 @@ import utils
 import datetime
 
 class MetaElement(object):
-    """ MetaElement - an individual element in the MetaDoc tree.
+    """MetaElement - an individual element in the MetaDoc tree.
 
     An element roughly equates to a tag in the XML document. It contains 
     information about which subelements and attributes are allwoed. 
@@ -45,9 +45,14 @@ class MetaElement(object):
                             # sent when another call to send this type is run.
 
     def __init__(self, name, attributes = {}):
-        """ Initializes a MetaElement. 
+        """Initializes a MetaElement. 
         
         Sets the elements name (usually xml_tag_name) and attributes. 
+
+        @param name: Name of the element.
+        @type name: String
+        @param attributes: Attributes for the element.
+        @type attributes: dict
 
         """
         self.attributes = attributes
@@ -57,24 +62,35 @@ class MetaElement(object):
         self.text = None
 
     def __str__(self):
-        """ We want the string representation of MetaElements to be its 
+        """We want the string representation of MetaElements to be its 
         XML tag. 
+        
+        """
+        return "<%s>" % self.name
+
+    def get_name(self):
+        """Gets the name of the current element.
+        
+        @return: String containing name of element.
         
         """
         return self.name
 
-    def get_name(self):
-        """ Return the name of the element. """
-        return self.name
-
     def get_attributes(self):
-        """ Returns the attributes of the element. """
+        """Get the attributes of the element. 
+        
+        @return: dict containing element attributes.
+        
+        """
         return self.attributes
 
     def get_xml_element(self, with_id=True):
-        """ element is an lxml.etree.Element with the values. 
-        
-        It can be a hierarchy 
+        """Convert element into lxml.etree.Element.
+
+        @param with_id: Indicates whether attribute B{id} of element and sub 
+                        elements should be included.
+        @type with_id: bool
+        @return: lxml.etree.Element or None if unable to convert.
         
         """
         temp_id = False
@@ -119,7 +135,13 @@ class MetaElement(object):
         return element
 
     def add_element(self, element):
-        """ Add an entry to the element, this is typically a sub-entry. """
+        """Add an entry to the element, this is typically a sub entry. 
+        
+        @param element: Element that should be added as a sub element of this.
+        @type element: L{MetaElement} sub class
+        @return: bool indicating whether element was added or not.
+        
+        """
         logging.debug("Adding element \"%s\" to \"%s\"." % 
                 (element.xml_tag_name, self.xml_tag_name))
         valid_element = False
@@ -142,14 +164,22 @@ class MetaElement(object):
                 logging.debug(("Recieved valid element \"%s\" to append "
                     "to \"%s\".") % (element.xml_tag_name, self.xml_tag_name))
                 self.sub_elements.append(element)
+                return True
+            else:
+                return False
 
     def add_elements(self, elements):
-        """ Adds a list of elements. """
+        """Adds a list of elements. 
+        
+        @param elements: List of elements to be added to this.
+        @type elements: list of L{MetaElement} sub classes
+        
+        """
         for element in elements:
             self.add_element(element)
 
     def remove_element(self, element):
-        """ Removes an element from list of sub-elements. """
+        """ Removes an element from list of sub elements. """
         if element in self.sub_elements:
             try:
                 self.sub_elements.remove(element)

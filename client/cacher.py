@@ -22,14 +22,21 @@ import sys
 
 class Cacher(object):
     def __init__(self, element_type, metadoc = None):
-        """ Receives a metadoc.MetaDoc that should be cached. """
+        """Creates a Cacher object. 
+        
+        @param element_type: Name of element that should be cached.
+        @type element_type: String
+        @param metadoc: L{MetaDoc<metadoc.MetaDoc>} that should be cached.
+        @type metadoc: L{metadoc.MetaDoc}
+
+        """
         self.metadoc = metadoc
         self.file_path = "/var/cache/mapi/%s.xml" % element_type
         self.element_type = element_type
-        if not os.path.isdir("cache"):
+        if not os.path.isdir("/var/cache/mapi"):
             logging.info("Cache directory not present, attempting to create.")
             try:
-                os.mkdir("cache")
+                os.mkdir("/var/cache/mapi")
             except IOError, e:
                 logging.error(("Unable to create cache directory. "
                     "Please check access rights. (%s)") % e)
@@ -50,7 +57,12 @@ class Cacher(object):
                 cache_file.close()
 
     def get_cache(self):
-        """ Returns a lxml.etree.Element of self.element_type """
+        """ 
+        
+        @return: lxml.etree.Element of self.element_type, or None if 
+                    cache does not exist.
+        
+        """
         cache_string = self._get_cache_string()
         if not cache_string:
             return None
@@ -63,7 +75,11 @@ class Cacher(object):
         return element.find(self.element_type)
 
     def remove_cache(self):
-        """ Removes the file containing the cached data. """
+        """ Removes the file containing the cached data. 
+        
+        @return: Boolean indicating successful removal of file.
+
+        """
         logging.info("Removing cached file \"%s\"." % self.file_path)
         try:
             # We've retrived the cached data, let's remove it so it wont 
@@ -81,9 +97,10 @@ class Cacher(object):
             return True
 
     def _get_cache_string(self):
-        """ Returns cached data, if any. 
+        """Check whether there is any cached data and convert it to
+        string if available.
         
-        Returns a string with the XML document if existent.
+        @return: String with the XML document, or None if no cache exists.
 
         """
         if not os.path.isfile(self.file_path):

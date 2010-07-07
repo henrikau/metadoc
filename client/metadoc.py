@@ -22,23 +22,37 @@ import version
 import sys
 
 class MetaDoc:
-    """ Class for handling the MetaDoc.
+    """Class for handling the MetaDoc.
 
     A nice way of adding information and exporting to the MetaDoc-XML standard.
 
     """
     def __init__(self, site_name):
+        """Sets the site name for the document and initializes the document's
+        sub elements.
+
+        @param site_name: Name of site described in document.
+        @type site_name: String
+
+        """
         self.site_name = site_name
         self.metaelements = []
 
     def _create_root(self):
+        """Creates an lxml.etree.Element used as root for the document. """
         self.root = None
         self.root = lxml.etree.Element("MetaDoc",
                                         version=version.__version__,
                                         site_name=self.site_name)
 
     def reg_meta_element(self, me):
-        """Add a new element to the base MetaDoc element. """
+        """Add a new element to the base MetaDoc element. 
+        
+        @param me: Element to be added to the MetaDoc.
+        @type me: L{MetaElement} sub class
+        @return: bool indicating whether element was added.
+        
+        """
         if not me:
             return False
         if me.get_name():
@@ -46,15 +60,18 @@ class MetaDoc:
         return True
 
     def get_xml(self, with_id=True, pretty=False):
-        """Return the XML-string of the registred information.
+        """Generates a XML representation of the MetaDoc base on the MetaDoc 
+        itself and any elements in self.metaelements.
 
-        The result should be valid XML and ready to export to the recipient.
+        @param with_id: Indicates whether elements inside the MetaDoc should 
+                        include their B{id} attribute.
+        @type with_id: bool
 
-        If `with_id` is set to false, all attributes named id will be removed 
-        from the document.
+        @param pretty: Indicates whether the returned string should include 
+                        spacing for easier reading.
+        @type pretty: bool
 
-        If `pretty` is set to true, the document will contain white space
-        to make the document more readable.
+        @return: XML String representation of the MetaDoc.
 
         """
         self._create_root()
@@ -68,7 +85,14 @@ class MetaDoc:
                 xml_declaration=True)
 
     def find_id(self, locate_id):
-        """ Attempts to locate the element with a given ID. """
+        """Attempts to locate the element with a given ID inside the document. 
+        
+        @param locate_id: ID of element to be located.
+        @type locate_id: String
+        @return: L{MetaElement} sub class if element exists, or None
+                if it doesn't.
+        
+        """
         for me in self.metaelements:
             element = me.find_id(locate_id)
             if element:
@@ -76,7 +100,13 @@ class MetaDoc:
         return None
 
     def remove_element(self, element):
-        """ Attempts to remove element from sub-elements. """
+        """Attempts to remove element from sub elements. 
+        
+        @param element: Element that should be removed from the document.
+        @type element: L{MetaElement} sub class
+        @return: bool indicating whether element was found or not.
+        
+        """
         if element in self.metaelements:
             try:
                 self.metaelements.remove(element)
@@ -91,9 +121,13 @@ class MetaDoc:
     def has_content(self):
         """Checks to see if there is any real content inside the MetaDoc.
 
-        First checks whether it has any subelements itself, if not, no content 
+        First checks whether it has any sub elements itself, if not, no content 
         is present. 
-        If there are subelements, must check to see if they contain any content.
+        If there are sub elements, must check to see if they contain any 
+        content.
+
+        @return: bool indicating whether document has content or not.
+
         """
         for me in self.metaelements:
             if me.has_content():
@@ -101,9 +135,14 @@ class MetaDoc:
         return False
 
     def check_response(self, xml_response):
-        """ Function that checks the response from server.
-        xml_response should be the XML response from the server when self was 
-        sent.
+        """Function that checks the response from server.
+
+        Can raise: L{InvalidXMLResponseError}, L{NoReceiptReturnedError} and 
+        L{NotAllAcceptedError}.
+
+        @param xml_response: Should be the XML response from the server when 
+        self (this MetaDoc) was sent.
+        @type xml_response: String
 
         """
         try:

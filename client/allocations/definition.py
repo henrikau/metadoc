@@ -21,12 +21,16 @@ from custom.updateallocations import UpdateAllocations
 from allocations.entries import AllocationEntry
 
 class Allocations(metaelement.MetaElement):
-    """ Allocations - the granted resources for a project. """
+    """Allocations - the granted resources for a project. """
     xml_tag_name = "allocations"
     update_handler = UpdateAllocations
     url = "allocations"
 
     def __init__(self):
-        """ Defines sub-elements for the allocations XML tag. """
+        """Defines legal_sub_elements for the allocations XML tag. 
+        
+        Allowed sub elements are L{AllocationEntry}.
+
+        """
         super(Allocations, self).__init__(Allocations.xml_tag_name)
         self.legal_element_types = (AllocationEntry,)

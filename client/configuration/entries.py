@@ -20,15 +20,18 @@ import metaelement
 from utils import UniqueID
 
 class ConfigEntry(metaelement.MetaElement):
-    """ ConfigEntry - Size of each element of hardware. """
+    """ConfigEntry - Size of each element of hardware. """
     xml_tag_name = "config_entry"
     def __init__(self, element, metric, volume):
-        """ Creates a config_entry 
-        
-        param:
-        element         : The element described (nodes, cores, totalDisk, etc)
-        metric          : The metric used to measure element (count, MB, GB, TB)
-        volume          : Number of <metric> for the element described. Can be int or str.
+        """Creates a config_entry 
+
+        @param element: The element described. 
+        @type element: String: nodes, cores, totalDisk, usedDisk, totalSwap, 
+                usedSwap, totalMemory, usedMemory.
+        @param metric: The metric used to measure element.
+        @type metric: String: count, MB, GB, TB.
+        @param volume: Number of metric for the element described.
+        @type volume: int, String
 
         """
         u = UniqueID()
@@ -44,18 +47,36 @@ class ConfigEntry(metaelement.MetaElement):
                                 'usedDisk','totalSwap','usedSwap',
                                  'totalMemory','usedMemory')
     def clean_element(self, element):
-        """ Checks that the element attribute contains an allowed value. """
+        """Checks that the element attribute contains an allowed value. 
+        
+        Raises an L{IllegalAttributeValueError} on illegal value.
+
+        @param element: Element described.
+        @type element: String
+        @return: String
+        
+        """
         self._clean_allowed_values(element, self.legal_element, 'element', self.xml_tag_name, False)
         return element
     def clean_metric(self, metric):
-        """ Checks that the metric attribute contains an allowed value. """
+        """Checks that the metric attribute contains an allowed value. 
+        
+        Raises an L{IllegalAttributeValueError} on illegal value.
+
+        @param metric: Metric used.
+        @type metric: String
+        @return: String
+        
+        """
         self._clean_allowed_values(metric, self.legal_metric, 'metric', self.xml_tag_name, False)
         return metric
     def clean_volume(self, volume):
         """ Converts volume to string if integer, and checks that the passed 
         variable is either string or int.
 
-        Allows for unicode strings.
+        @param volume: Amount of metric for element.
+        @type volume: int, String
+        @return: String
 
         """
         if isinstance(volume, int):

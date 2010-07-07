@@ -26,10 +26,12 @@ class ResourceUpEntry(metaelement.MetaElement):
         """Initializes the MetaElement and specifies legal values for 
         attributes.
 
-        param:
-        dateUp          : Date the system came up
-        reason          : Reason for going down
-        remarks         : Any special remarks
+        @param dateUp: Date the system came up
+        @type dateUp: date, datetime, int, float, RFC3339 String
+        @param reason: Reason for going down
+        @type reason: String
+        @param remarks: Any special remarks
+        @type remarks: String
 
         """
         u = UniqueID()
@@ -48,7 +50,15 @@ class ResourceUpEntry(metaelement.MetaElement):
             self.text = remarks
 
     def clean_dateUp(self, dateUp):
-        """ Makes sure the date is in the correct format """
+        """Makes sure the date is in the correct format.
+        
+        Raises an L{IllegalAttributeValueError} on illegal value.
+
+        @param dateUp: Date the system came up.
+        @type dateUp: date, datetime, int, float, RFC3339 String
+        @return: RFC3339 String
+        
+        """
         return self._clean_date(dateUp, 'dateUp', self.xml_tag_name)
 
 class ResourceDownEntry(metaelement.MetaElement):
@@ -59,12 +69,16 @@ class ResourceDownEntry(metaelement.MetaElement):
         """Initializes the MetaElement and specifies legal values for 
         attributes.
         
-        param:
-        reason          : Reason for going down
-        dateDown        : Date the system went down
-        dateUp          : Date the system will come/came up
-        shareDown       : Share (percentage) of system down
-        remarks         : Any special remarks
+        @param reason: Reason for going down.
+        @type reason: String
+        @param dateDown: Date the system went down
+        @type dateDown: date, datetime, int, float, RFC3339 String
+        @param dateUp: Date the system will come/came up
+        @type dateUp: date, datetime, int, float, RFC3339 String
+        @param shareDown: Share (percentage) of system down
+        @type shareDown: String, int, float
+        @param remarks: Any special remarks
+        @type remarks: String
 
         """
         u = UniqueID()
@@ -83,14 +97,37 @@ class ResourceDownEntry(metaelement.MetaElement):
         if remarks:
             self.text = remarks
     def clean_dateDown(self, dateDown):
-        """ Checks that `dateDown` is correct format. """
+        """Checks that dateDown is RFC3339 String or converts date, datetime,
+        int or float to RFC3339 string. 
+        
+        Raises L{IllegalAttributeValueError} on illegal value.
+
+        @param dateDown: Date the system went down.
+        @type dateDown: date, datetime, int, float, RFC3339 String.
+        @return: RFC3339 String
+        
+        """
         return self._clean_date(dateDown, 'dateDown', self.xml_tag_name)
     def clean_dateUp(self, dateUp):
-        """ Checks that `dateUp` is correct format. """
+        """ Checks that dateUp is RFC3339 String or converts date, datetime,
+        int or flat to RFC3339 String. 
+        
+        
+        Raises L{IllegalAttributeValueError} on illegal value.
+
+        @param dateUp: Date the system went down.
+        @type dateUp: date, datetime, int, float, RFC3339 String.
+        @return: RFC3339 String
+
+        """
         return self._clean_date(dateUp, 'dateUp', self.xml_tag_name)
     def clean_shareDown(self, share_down):
-        """ Checks that `shareDown` is correct format. 
-        Converts to string if int or float.
+        """ Checks that shareDown is string or converts from int or float
+        to string. 
+
+        @param share_down: Share of resource that is down.
+        @type share_down: int, float, String
+        @return: String
         
         """
         if isinstance(share_down, int):

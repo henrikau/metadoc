@@ -21,13 +21,17 @@ from custom.siteconfiguration import SiteConfiguration
 from configuration.entries import ConfigEntry
 
 class Configuration(metaelement.MetaElement):
-    """ Configuration - Configuration of site hardware. """
+    """Configuration of site hardware. """
     xml_tag_name = "config"
     site_handler = SiteConfiguration
     url = "config"
     resend_cache = False
 
     def __init__(self):
-        """ Defines legal sub-elements for config_entry XML tag. """
+        """Defines legal_sub_elements for config_entry XML tag. 
+        
+        Allowed sub elements are: L{ConfigEntry}.
+        
+        """
         super(Configuration, self).__init__(Configuration.xml_tag_name)
         self.legal_element_types = (ConfigEntry,)

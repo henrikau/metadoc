@@ -20,7 +20,7 @@ from custom.siteevents import SiteEvents
 from events.entries import ResourceUpEntry, ResourceDownEntry
 
 class Events(metaelement.MetaElement):
-    """ Register Events and pack it in XML. """
+    """Register Events and pack it in XML. """
     xml_tag_name = "events"
     site_handler = SiteEvents
     url = "events"
@@ -28,9 +28,9 @@ class Events(metaelement.MetaElement):
     def __init__(self):
         """Initializes the MetaElement and specifies legal values for 
         attributes. 
-        
-        Allows for both ResourceUpEntry and ResourceDownEntry sub-elements.
 
+        Allowed sub elements are: L{ResourceUpEntry}, L{ResourceDownEntry}.
+        
         """
         super(Events, self).__init__(Events.xml_tag_name)
         self.legal_element_types = (ResourceUpEntry, ResourceDownEntry,)

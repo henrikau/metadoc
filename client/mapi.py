@@ -15,33 +15,35 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with MetaDoc.  If not, see <http://www.gnu.org/licenses/>.
-"""mapi.py - Runs the synchronization procedure
+"""Runs the synchronization procedure
 
-Information sent and recieved depends on handles passed to mapi.py.
-If mapi.py is run without any handles it will attempt to send any cached 
-information to the server.
+Description
+===========
+    Information sent and recieved depends on handles passed to mapi.py.
+    If mapi.py is run without any handles it will attempt to send any cached 
+    information to the server.
 
-Usage:
-
--h, --help              Displays this help message
--v, --verbose           Verbose mode, outputs loads of stuff
--q, --quiet             Quiet mode, outputs nothing except
-                        critical errors
--e                      Send event data
--c                      Send config data
--s                      Send software data
--u                      Fetch user data
--a                      Fetch allocation data
--p                      Fetch project data
--l <log level>          Sets log level, availible levels are:
---loglevel=<log level>  debug, info, warning, error, critical
--n, --no-cache          Will not send any cached data.
---dry-run               Does a dry run, not sending or fetching any data.
-                        Run with verbose to see input and output that would be
-                        sent.
---all                   Sends and fetches all data, equal to -ecsuap.
---send-all              Sends all data, equal to -ecs.
---fetch-all             Fetches all data, equal to -uap.
+Usage
+=====
+    -h, --help              Displays this help message
+    -v, --verbose           Verbose mode, outputs loads of stuff
+    -q, --quiet             Quiet mode, outputs nothing except
+                            critical errors
+    -e                      Send event data
+    -c                      Send config data
+    -s                      Send software data
+    -u                      Fetch user data
+    -a                      Fetch allocation data
+    -p                      Fetch project data
+    -l <log level>          Sets log level, availible levels are:
+    --loglevel=<log level>  debug, info, warning, error, critical
+    -n, --no-cache          Will not send any cached data.
+    --dry-run               Does a dry run, not sending or fetching any data.
+                            Run with verbose to see input and output that would 
+                            be sent.
+    --all                   Sends and fetches all data, equal to -ecsuap.
+    --send-all              Sends all data, equal to -ecs.
+    --fetch-all             Fetches all data, equal to -uap.
 
 """
 import ConfigParser
@@ -98,6 +100,10 @@ def testConfig(vals):
     """Tests configuration file to see that it contains the necessary 
     information to run the script.
 
+    @param vals: Dictionary of configuration values.
+    @type vals: dict
+    @return: bool indicating proper configuration.
+
     """
     if 'valid' in vals:
         if vals['valid'].lower() == "false" or vals['valid'].lower() == "no":
@@ -152,10 +158,21 @@ def testConfig(vals):
     return True
 
 def get_element_processor(element, send_cache, verbose, dryrun):
-    """Gets an instance of `element` that contains cached data, depending on 
+    """Gets an instance of element that contains cached data, depending on 
     arguments passed.
 
-    Will skip any cached data if `send_cache` is False or `dryrun` is True.
+    Will skip any cached data if send_cache is False or dryrun is True.
+
+    @param element: Element class that should be fetched.
+    @type element: L{MetaElement} sub class.
+    @param send_cache: Indicates whether cache should be included.
+    @type send_cache: bool
+    @param verbose: Indicates whether or not the script runs in verbose mode.
+    @type verbose: bool
+    @param dryrun: Indicates whether the script is doing a dry run.
+    @type dryrun: bool
+    @return: L{MetaElement} sub class. The sub class is given by the element 
+            parameter.
 
     """
     if dryrun or not send_cache:
@@ -191,10 +208,24 @@ def get_element_processor(element, send_cache, verbose, dryrun):
     return element_processor
 
 def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
-    """Attempts to gather and send information defined by `element` to server.
+    """Attempts to gather and send information defined by element to server.
 
-    If `send_cache` or `dryrun` is False, cache will be ignored.
-    If `cache_only` is True, only cache is checked and no new data is gathered.
+    If send_cache or dryrun is False, cache will be ignored.
+    If cache_only is True, only cache is checked and no new data is gathered.
+
+
+    @param element: Element class that should be fetched.
+    @type element: L{MetaElement} sub class.
+    @param conf: Configuration dictionary.
+    @type conf: dict
+    @param send_cache: Indicates whether cache should be included.
+    @type send_cache: bool
+    @param dryrun: Indicates whether the script is doing a dry run.
+    @type dryrun: bool
+    @param verbose: Indicates whether or not the script runs in verbose mode.
+    @type verbose: bool
+    @param cache_only: Indicates whether to send only cache for this element.
+    @type cache_only: bool
 
     """
     if dryrun and cache_only:
@@ -274,6 +305,7 @@ def send_element(element, conf, send_cache, dryrun, verbose, cache_only):
         logging.info(("No data to send for \"%s\".") % element.xml_tag_name)
 
 def main():
+    """Main execution. """
     optstr = "hvqecaspunl:"
     optlist = ['help', 'dry-run', 'loglevel=', 'no-cache', 
                 'send-all', 'fetch-all', 'all']
