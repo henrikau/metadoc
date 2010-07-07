@@ -192,13 +192,13 @@
 <!-- ########################################################## -->
 <!ELEMENT events    ((resourceDown|resourceUp)*)>
 
-<!ELEMENT resourceUp    (remarks?)>
+<!ELEMENT resourceUp    (#PCDATA)>
 <!ATTLIST resourceUp
       id        ID      #REQUIRED
       dateUp    CDATA   #REQUIRED
       reason    CDATA   #IMPLIED>
 
-<!ELEMENT resourceDown    (remarks?)>
+<!ELEMENT resourceDown    (#PCDATA)>
 <!ATTLIST resourceDown
       id        ID      #REQUIRED
       reason    CDATA   #REQUIRED
@@ -266,7 +266,7 @@
 <!--        client to help finding the root of the problem.     -->
 <!-- ########################################################## -->
 <!ELEMENT receipt (r_entry+)>
-<!ELEMENT r_entry (PCDATA?)>
+<!ELEMENT r_entry (#PCDATA)>
 <!ATTLIST r_entry
         id    ID        #REQUIRED
       code    CDATA     #REQUIRED
