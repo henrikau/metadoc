@@ -48,22 +48,28 @@ def check_response(element_tag, md, xml_data, cache_data=True):
     try:
         md.check_response(xml_data)
     except metadoc.NoReceiptReturnedError, nr:
-        logging.error("Server returned no receipt. Caching data.")
+        logging.error("Server returned no receipt for \"%s\" data." % 
+                        element_tag)
         if cache_data:
+            logging.info("Caching data for \"%s\"." % element_tag)
             Cacher(element_tag, md)
         else:
             logging.warning("--no-cache handle passed, not caching data.")
     except metadoc.InvalidXMLResponseError, ir:
-        logging.error("Server returned invalid receipt. Caching data.")
+        logging.error("Server returned invalid receipt for \"%s\" data." %
+                        element_tag)
         if cache_data:
+            logging.info("Caching data for \"%s\"." % element_tag)
             Cacher(element_tag, md)
         else:
             logging.warning("--no-cache handle passed, not caching data.")
     except metadoc.NotAllAcceptedError, nar:
-        logging.error("Not all elements accepted. Caching not accepted data.")
+        logging.error("Not all elements accepted for \"%s\" data." % 
+                        element_tag)
         sys.stderr.write("Not all elements were accepted by the server.\n")
         sys.stderr.write("Check MetaDoc Client log file for more information.")
         if cache_data:
+            logging.info("Caching data for \"%s\"." % element_tag)
             Cacher(element_tag, md)
         else:
             logging.warning("--no-cache handle passed, not caching data.")
