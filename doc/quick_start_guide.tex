@@ -3,7 +3,7 @@
 \usepackage[utf8x]{inputenc}
 \usepackage{listings}
 \usepackage{graphicx}
-\usepackage[dvips]{hyperref}
+\usepackage[pdftex]{hyperref}
 \usepackage{glossaries}
 \hypersetup{bookmarks = true}
 \hypersetup{pdftitle = MetaDoc Quick start guide}
@@ -53,19 +53,53 @@ This guide is meant to provide a quick introduction to using MetaDoc and the
 \gls{mapi}. For more complete information about MetaDoc, please refer to the
 MetaDoc Documentation \cite{mdoc}.
 
+\section{Needed information}
+Before starting to install the MetaDoc client you need some information about
+the MetaDoc server your client should connect to. The following information is
+needed:
+
+\begin{itemize}
+    \item
+        The host (URL) of the MetaDoc server
+    \item
+        The version of MetaDoc the server is running
+\end{itemize}
+
+You also need a way to securely transport your certificate to the server.
+
 \section{Retrieving the MetaDoc client}
 Before you start you need a version of the MetaDoc client. You can download the
-latest version from the MetaDoc GitHub repository \cite{downloads}.
+client from the MetaDoc GitHub repository \cite{downloads}. Please make sure
+you download the same version as the one running on the server. 
 
 Extract the client to the wanted destination. 
 
 \section{Setting up folders}
 The MetaDoc client uses two system folders, namely \texttt{/var/log/mapi/} and
-\texttt{/var/cache/mapi/} for log files and cache files, respectively. Make
+\\ \texttt{/var/cache/mapi/} for log files and cache files, respectively. Make
 sure to create these folders, and make sure the user running the MetaDoc client
 has access to \textbf{read} and \textbf{write} to these folders. 
 
+\section{Creating a X.509 certificate}
+\label{sec:cert_gen}
+MetaDoc uses X.509 certificates to identify the client on the server, and
+ensure that the data is safely encrypted. 
+
+The following command generates such a certificate. The value for \verb@-subj@
+is not important, but dropping it will cause \verb@openssl@ to prompt for these
+values.
+
+\begin{verbatim}
+openssl req -x509 -newkey rsa:2048 -keyout client.key -out client.crt 
+-nodes -subj "/C=NO/O=example.org/CN=localhost"
+\end{verbatim}
+
+The file \verb@client.crt@ must be sent to the server where it is bound to the
+site. This should be the same site name set in the configuration value
+\textbf{site\_name} (see section \ref{sec:config}).
+
 \section{Configuring the MetaDoc client}
+\label{sec:config}
 The MetaDoc client uses a configuration file called \texttt{metadoc.conf} in
 the same folder as the client itself. You can create a sample configuration
 file by running \texttt{mapi.py} without any parameters. 
@@ -75,10 +109,12 @@ The configuration file contains the following settings:
 \begin{description}
     \item[host] URI of a server responding to the MetaDoc server API
         \cite{mdoc}.
-    \item[key]  Location of file containing the private key for the client.
-    \item[cert] Location of file containing the certificate for the client key.
+    \item[key]  Location of file containing the private key for the client
+    (client.key from section \ref{sec:cert_gen}).
+    \item[cert] Location of file containing the certificate for the client key
+    (client.crt from section \ref{sec:cert_gen}).
     \item[site\_name]   Name of the site. This must correspond to the site name
-        set on the server for the given key.
+        set on the server for the given certificate.
     \item[ca\_certs]    Location of file containing CA certificates that sign
         the key for the MetaDoc server.
     \item[trailing\_slash]   Whether the server uses a trailing slash on URIs,
