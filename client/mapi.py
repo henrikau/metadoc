@@ -438,6 +438,8 @@ def main():
                     utils.check_version(return_data.attrib.get("version"))
                     valid = dtd.validate(return_data)
                     if valid:
+                        logging.debug(("Data returned from \"%s\" validated to "
+                                        "DTD.") % url)
                         found_elements = return_data.findall(
                                         element.xml_tag_name
                                         )
