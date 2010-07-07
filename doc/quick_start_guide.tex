@@ -63,6 +63,8 @@ needed:
         The host (URL) of the MetaDoc server
     \item
         The version of MetaDoc the server is running
+    \item
+        Whether the server uses a trailing slash on URIs
 \end{itemize}
 
 You also need a way to securely transport your certificate to the server.
@@ -117,8 +119,8 @@ The configuration file contains the following settings:
         set on the server for the given certificate.
     \item[ca\_certs]    Location of file containing CA certificates that sign
         the key for the MetaDoc server.
-    \item[trailing\_slash]   Whether the server uses a trailing slash on URIs,
-        should be set to True for now.
+    \item[trailing\_slash]   Whether the server uses a trailing slash on URIs.
+        Should be set to True or False.
     \item[valid]    Defaults to False to avoid the script from running with
         default configuration. Should be set to True or removed once properly
         configured.
