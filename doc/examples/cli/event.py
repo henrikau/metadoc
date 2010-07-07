@@ -18,6 +18,10 @@
 """Registers an event through a command line interface that can be sent 
 through MetaDoc client.
 
+events.py makes use of the MetaDoc client's caching system to add events to
+the cache. This way, any events added will be sent the next time mapi.py is
+run without the --no-cache or -n handles.
+
 mapi.py should be run afterwards in order to send data to server.
 
 Please remember to enclose argument strings with spaces in quotes, such as 
