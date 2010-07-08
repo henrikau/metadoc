@@ -26,8 +26,7 @@ class ConfigEntry(metaelement.MetaElement):
         """Creates a config_entry 
 
         @param element: The element described. 
-        @type element: String: nodes, cores, totalDisk, usedDisk, totalSwap, 
-                usedSwap, totalMemory, usedMemory.
+        @type element: String: nodes, cores, disk, swap, memory.
         @param metric: The metric used to measure element.
         @type metric: String: count, MB, GB, TB.
         @param volume: Number of metric for the element described.
@@ -43,9 +42,7 @@ class ConfigEntry(metaelement.MetaElement):
         }
         super(ConfigEntry, self).__init__(ConfigEntry.xml_tag_name, self.attributes)
         self.legal_metric = ('count', 'MB', 'GB', 'TB')
-        self.legal_element = ('cores','nodes','totalDisk',
-                                'usedDisk','totalSwap','usedSwap',
-                                 'totalMemory','usedMemory')
+        self.legal_element = ('cores','nodes','disk','swap','memory')
     def clean_element(self, element):
         """Checks that the element attribute contains an allowed value. 
         

@@ -241,9 +241,7 @@
 <!ELEMENT config_entry EMPTY>
 <!ATTLIST config_entry
       id        ID    #REQUIRED
-      element    (cores|nodes|totalDisk|
-             usedDisk|totalSwap|usedSwap|
-             totalMemory|usedMemory)
+      element    (cores|nodes|disk|swap|memory)
                 #REQUIRED
       metric    (count|MB|GB|TB)
                 #REQUIRED

@@ -32,12 +32,9 @@ class SiteConfiguration(MetaOutput):
         a = [
                 ('cores', 'count'), 
                 ('nodes', 'count'),
-                ('totalDisk', 'TB'),
-                ('usedDisk', 'TB'),
-                ('totalSwap', 'GB'),
-                ('usedSwap', 'GB'),
-                ('totalMemory', 'MB'),
-                ('usedMemory', 'MB')
+                ('disk', 'TB'),
+                ('swap', 'GB'),
+                ('memory', 'MB'),
             ]
         for i in xrange(5):
             t = random.randint(0,len(a)-1)
