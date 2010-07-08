@@ -20,6 +20,7 @@ import datetime
 import time
 import re
 import version
+import sys
 
 import metadoc
 from cacher import Cacher
