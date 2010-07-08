@@ -196,7 +196,10 @@ class MetaElement(object):
             return False
 
     def has_content(self):
-        """Checks whether there are any subelements or text in this element.
+        """Checks whether there are any sub elements or text in this element.
+
+        @return: bool indicating whether there are any sub elements in this 
+                element, or if this element contains text.
 
         """
         if len(self.sub_elements) > 0:
@@ -206,10 +209,12 @@ class MetaElement(object):
         return False
 
     def clean(self):
-        """ Runs clean functions on every attribute if they exist. 
+        """Runs clean functions on every attribute if they exist. 
         
-        clean functions raise `IllegalAttributeError` when unable to clean 
-        attribute values properly.
+        clean functions raise L{IllegalAttributeError} (or sub class) when 
+        unable to clean attribute values properly.
+
+        @return: bool indicating whether this element is valid or not.
 
         """
         valid = True
@@ -231,7 +236,14 @@ class MetaElement(object):
                     "\"%s\".") % (attribute, self.xml_tag_name))
         return valid
     def find_id(self, locate_id):
-        """ Attempts to find element with a given ID inside element. """
+        """Attempts to find element with a given ID inside element. 
+        
+        @param locate_id: ID to look for.
+        @type locate_id: String
+        @return: L{MetaElement} sub class instance of element with the ID, 
+                or None if no such element exist in this element.
+        
+        """
         # Is this the element?
         if "id" in self.attributes.keys():
             if self.attributes.get("id") == locate_id:
@@ -246,11 +258,22 @@ class MetaElement(object):
         return None
 
     def _clean_date(self, date, attribute_name, element):
-        """ Helper function that will clean a date. Returns a string in valid 
+        """Helper function that will clean a date. Returns a string in valid 
         RFC3339 form (with seconds granularity).
 
-        Can take dates in time.time(), datetime.datetime or string form.
-        String form must be valid RFC3339.
+        @param date: Date to clean. Will convert either int, float, date or 
+                    datetime to RFC3339 string.
+        @type date: date, datetime, int, float, RFC3339 String
+        
+        @param attribute_name: Name of attribute being cleaned. Used for 
+                            potential error message.
+        @type attribute_name: string
+
+        @param element: Name of element being cleaned. Used for potential
+                        error message.
+        @type element: string
+
+        @return: string of RFC3339 date.
 
         """
         if isinstance(date, float) or isinstance(date, int) \
